@@ -1,0 +1,58 @@
+//
+//  Array.hpp
+//  cpp_utils
+//
+//  Created by Vladas Zakrevskis on 6/07/18.
+//  Copyright © 2018 VladasZ. All rights reserved.
+//
+
+#pragma once
+
+#include <memory>
+#include <vector>
+#include <functional>
+
+#include "System.hpp"
+
+template <class T>
+class Array : public std::vector<T> {
+    using __array = std::vector<T>;
+public:
+    using __array::__array;
+
+    using Ptr       = std::shared_ptr<T>;
+    using Predicate = std::function<bool(const T&)>;
+    using Callback  = std::function<void(const Array<T>&)>;
+
+	auto indexOf(const T& object) {
+		return std::find(this->begin(), this->end(), object);
+	}
+
+	void remove(const T& object) {
+		auto iter = std::find(this->begin(), this->end(), object);
+		if (iter == this->end())
+			return;
+		this->erase(iter);
+	}
+
+    void removeIf(const Predicate &predicate) {
+        erase(std::remove_if(this->begin(), this->end(),  predicate, this->end()));
+    }
+
+    template <class ...Args>
+    void append(Args ...args) {
+        this->insert(this->end(), std::initializer_list<T> { args... });
+    }
+
+	void insertAt(size_t index, const T& object) {
+        this->emplace(this->begin() + index, object);
+	}
+
+    T random() const {
+        return this->at(System::random((int)this->size()));
+    }
+    
+    size_t bytes_size() const {
+        return sizeof(T) * this->size();
+    }
+};
