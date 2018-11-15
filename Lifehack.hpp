@@ -8,4 +8,4 @@
 
 #pragma once
 
-#define UNPRIVATE(var) reinterpret_cast<typeof(*this)*>(var)
+#define UNPRIVATE(var) reinterpret_cast<decltype(this)>(var)
