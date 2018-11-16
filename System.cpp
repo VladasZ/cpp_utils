@@ -6,25 +6,15 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef APPLE
-#include <unistd.h>
-#include "CallObj.h"
-#elif  WINDOWS
-#include <ctime>
-#include <Windows.h>
-#endif
+#include <thread>
+
+using namespace std;
 
 #include "Log.hpp"
 #include "System.hpp"
 
 void System::sleep(float interval) {
-#ifdef APPLE
-  usleep(interval * 1000000);
-#elif WINDOWS
-  Sleep(DWORD(interval * 1000));
-#else 
-  NOT_IMPLEMENTED;
-#endif
+    this_thread::sleep_for(chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
 }
 
 int System::random() {
