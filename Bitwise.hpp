@@ -10,7 +10,6 @@
 #include <type_traits>
 #include <string>
 
-#define BITWISE_ENABLE_PRINT true
 
 namespace bitwise {
 
@@ -62,11 +61,5 @@ namespace bitwise {
 		return result;
 	}
 
-#if BITWISE_ENABLE_PRINT 
-	template <class T>
-	void print(const T& value) {
-		std::cout << to_string(value) << std::endl;
-	}
-#endif
 
 }
