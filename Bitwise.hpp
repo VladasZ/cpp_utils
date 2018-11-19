@@ -16,12 +16,14 @@ namespace bitwise {
 	template <class T>
 	constexpr size_t size = sizeof(T) * 8;
 
-	template <uint8_t bit_size, bool _signed = false>
-	using fits = typename std::conditional<bit_size <= 8, typename std::conditional<_signed, int8_t, uint8_t>::type,
-		typename std::conditional<bit_size <= 16, typename std::conditional<_signed, int16_t, uint16_t>::type,
-		typename std::conditional<bit_size <= 32, typename std::conditional<_signed, int32_t, uint32_t>::type,
-		typename std::conditional<_signed, int64_t, uint64_t>::type>::type>::type>::type;
+	template <class T>
+	constexpr auto& to_number(const T& value) { return *static_cast<const uint64_t*>(static_cast<const void*>(&value)); };
 
+	template <uint8_t bit_size, bool _signed = false>
+	using fits = typename std::conditional<bit_size <=  8, typename std::conditional<_signed,  int8_t,  uint8_t>::type,
+		         typename std::conditional<bit_size <= 16, typename std::conditional<_signed, int16_t, uint16_t>::type,
+		         typename std::conditional<bit_size <= 32, typename std::conditional<_signed, int32_t, uint32_t>::type,
+		                                                   typename std::conditional<_signed, int64_t, uint64_t>::type>::type>::type>::type;
 
 	constexpr auto flag(uint8_t index, bool value = 1) {
 		return static_cast<uint64_t>(value) << index;
@@ -29,7 +31,7 @@ namespace bitwise {
 
 	template <class T>
 	constexpr bool get_byte(uint8_t index, const T& value) {
-		return static_cast<bool>(value & flag(index));
+		return static_cast<bool>(to_number(value) & flag(index));
 	}
 
 	template <class T>
@@ -43,23 +45,20 @@ namespace bitwise {
 	template <uint8_t begin, uint8_t end, uint8_t span = end - begin, class T>
 	constexpr auto get_part(const T& value) {
 		fits<span> result(0);
-		for (int i = 0; i < span; i++) {
+		for (int i = 0; i < span; i++) 
 			result = set_byte(result, i, get_byte(begin + i, value));
-		}
 		return result;
 	}
 
 	template <class T>
 	std::string to_string(const T& value) {
-		static_assert(size<T> < 64, "bitwise::to_string value is too big");
+		static_assert(size<T> <= 64, "bitwise::to_string value is too big");
 		std::string result;
 		for (int i = size<T> - 1; i >= 0; i--) {
-			result += std::to_string(static_cast<bool>(value & static_cast<T>(1) << i));
+			result += std::to_string(get_byte(i, value));
 			if (i % 8 == 0)
 				result += " ";
 		}
 		return result;
 	}
-
-
 }
