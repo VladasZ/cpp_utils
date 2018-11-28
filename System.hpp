@@ -8,11 +8,8 @@
 
 #pragma once
 
-#include "Singletone.hpp"
-
-class System : Static {
-public:
-    static void sleep(float interval);
-    static int random();
-    static int random(int range);
+namespace System {
+    void sleep(float interval);
+    int random();
+    int random(int range);
 };

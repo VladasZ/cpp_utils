@@ -10,8 +10,7 @@
 
 #include "Singletone.hpp"
 
-class Time : Static {
-public:
-    static long long now();
-    static int interval();
+namespace Time {
+    long long now();
+    int interval();
 };
