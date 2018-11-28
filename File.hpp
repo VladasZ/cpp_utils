@@ -11,12 +11,12 @@
 class File {
 
   size_t _size = 0;
-  char* _data = nullptr;
+  char*  _data = nullptr;
 
 public:
 
-  size_t getSize() const;
-  char* getData() const;
+  size_t size() const;
+  char*  data() const;
 
   File() = default;
   File(const char* path);

@@ -18,7 +18,7 @@
 #define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
 
-#define __FILENAME__ String((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)).fileName()
+#define __FILENAME__ String((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)).file_name()
 
 #define LOCATION_INFO __FILENAME__, __func__, __LINE__
 #define LOCATION_PARAMETERS std::string fileName, const char* function, int line

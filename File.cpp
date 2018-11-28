@@ -27,10 +27,10 @@ File::~File() {
     delete[] _data;
 }
 
-size_t File::getSize() const {
+size_t File::size() const {
     return _size;
 }
 
-char* File::getData() const {
+char* File::data() const {
     return _data;
 }

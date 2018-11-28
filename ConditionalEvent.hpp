@@ -43,7 +43,7 @@ public:
     }
     
     void unsubscribe(SubscriberType* subscriber) {
-        subscribers.removeIf([&](SubscriberType* _sub) { return _sub == subscriber; });
+        subscribers.remove_if([&](SubscriberType* _sub) { return _sub == subscriber; });
     }
     
     void operator()(Params... parameters) const {

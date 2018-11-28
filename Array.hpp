@@ -24,7 +24,7 @@ public:
     using Predicate = std::function<bool(const T&)>;
     using Callback  = std::function<void(const Array<T>&)>;
 
-	auto indexOf(const T& object) {
+	auto index_of(const T& object) {
 		return std::find(this->begin(), this->end(), object);
 	}
 
@@ -35,7 +35,7 @@ public:
 		this->erase(iter);
 	}
 
-    void removeIf(const Predicate &predicate) {
+    void remove_if(const Predicate &predicate) {
         erase(std::remove_if(this->begin(), this->end(),  predicate, this->end()));
     }
 
@@ -44,7 +44,7 @@ public:
         this->insert(this->end(), std::initializer_list<T> { args... });
     }
 
-	void insertAt(size_t index, const T& object) {
+	void insert_at(size_t index, const T& object) {
         this->emplace(this->begin() + index, object);
 	}
 

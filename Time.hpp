@@ -8,8 +8,9 @@
 
 #pragma once
 
-class Time {
-    Time();
+#include "Singletone.hpp"
+
+class Time : Static {
 public:
     static long long now();
     static int interval();

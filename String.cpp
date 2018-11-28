@@ -11,7 +11,7 @@
 
 #include "String.hpp"
 
-String String::fileName() const {
+String String::file_name() const {
 	if (empty()) return "";
 	auto len   = length();
 	auto index = find_last_of("/\\");
@@ -27,7 +27,7 @@ String String::fileName() const {
 	return substr(index + 1, len - index);
 }
 
-String String::fromFloat(float val, int precision) {
+String String::from_float(float val, int precision) {
   std::stringstream stream;
   stream << std::fixed << std::setprecision(precision) << val;
   return stream.str();
