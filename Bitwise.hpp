@@ -16,14 +16,21 @@ namespace bitwise {
 	template <class T>
 	constexpr size_t size = sizeof(T) * 8;
 
-	template <class T>
-	constexpr auto& to_number(const T& value) { return *static_cast<const uint64_t*>(static_cast<const void*>(&value)); };
-
 	template <uint8_t bit_size, bool _signed = false>
 	using fits = typename std::conditional<bit_size <=  8, typename std::conditional<_signed,  int8_t,  uint8_t>::type,
 		         typename std::conditional<bit_size <= 16, typename std::conditional<_signed, int16_t, uint16_t>::type,
 		         typename std::conditional<bit_size <= 32, typename std::conditional<_signed, int32_t, uint32_t>::type,
 		                                                   typename std::conditional<_signed, int64_t, uint64_t>::type>::type>::type>::type;
+
+	template <class T>
+	constexpr auto& to_number(const T& value) { 
+		return *static_cast<const fits<size<T>>*>(static_cast<const void*>(&value)); 
+	};
+
+	template <class T, class NumberType>
+	constexpr auto& to_type(const NumberType& value) {
+		return *static_cast<const T*>(static_cast<const void*>(&value));
+	}
 
 	constexpr auto flag(uint8_t index, bool value = 1) {
 		return static_cast<uint64_t>(value) << index;
@@ -36,10 +43,10 @@ namespace bitwise {
 
 	template <class T>
 	constexpr T set_byte(const T& value, uint8_t index, bool byte = 1) {
-		T result = value;
+		auto result = to_number(value);
 		result &= ~flag(index);
 		result |= flag(index, byte);
-		return result;
+		return to_type<T>(result);
 	}
 
 	template <uint8_t begin, uint8_t end, uint8_t span = end - begin, class T>
