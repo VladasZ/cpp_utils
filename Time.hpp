@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "Singletone.hpp"
-
 namespace Time {
     long long now();
     int interval();

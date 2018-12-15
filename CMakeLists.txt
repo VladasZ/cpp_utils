@@ -17,7 +17,7 @@ add_library(${PROJECT_NAME}
   Bitwise.hpp
   Lifehack.hpp
   Dictionary.hpp
-  Singletone.hpp
+  Singleton.hpp
   ExceptionCatch.hpp
   ConditionalEvent.hpp
 )
