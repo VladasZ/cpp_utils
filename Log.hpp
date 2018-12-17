@@ -1,4 +1,4 @@
-//
+﻿//
 //  Log.hpp
 //  cpp_utils
 //
@@ -20,9 +20,9 @@
 #define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
 
-#define __FILENAME__ String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
+#define UTILS_INTERNAL_FILENAME String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
 
-#define LOCATION_INFO __FILENAME__, __func__, __LINE__
+#define LOCATION_INFO UTILS_INTERNAL_FILENAME, __func__, __LINE__
 #define LOCATION_PARAMETERS std::string fileName, const char* function, int line
 
 #if LOG_LOCATION_ENABLED
@@ -31,23 +31,23 @@
 #define LOCATION(file, func, line) << " "
 #endif
 
-#define __log(message, type, file, func, line)\
+#define UTILS_INTERNAL_LOG(message, type, file, func, line)\
 std::cout << "[" << type << "]" \
 LOCATION(file, func, line)\
 << message << std::endl;
 
-#define __logI(message, file, func, line) __log(message, "INFO",    file, func, line)
-#define __logW(message, file, func, line) __log(message, "WARNING", file, func, line)
+#define UTILS_INTERNAL_LOG_INFO(message, file, func, line) UTILS_INTERNAL_LOG(message, "INFO",    file, func, line)
+#define UTILS_INTERNAL_LOG_WARNING(message, file, func, line) UTILS_INTERNAL_LOG(message, "WARNING", file, func, line)
 
 #if LOG_ERRORS
-#define __logE(message, file, func, line) __log(message, "ERROR",   file, func, line)
+#define UTILS_INTERNAL_LOG_ERROR(message, file, func, line) UTILS_INTERNAL_LOG(message, "ERROR",   file, func, line)
 #else
 #define __logE(message, file, func, line)
 #endif
 
-#define Log(message)     __logI(message, __FILENAME__, __func__, __LINE__)
-#define Warning(message) __logW(message, __FILENAME__, __func__, __LINE__)
-#define Error(message)   __logE(message, __FILENAME__, __func__, __LINE__)
+#define Log(message)     UTILS_INTERNAL_LOG_INFO(message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
+#define Warning(message) UTILS_INTERNAL_LOG_WARNING(message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
+#define Error(message)   UTILS_INTERNAL_LOG_ERROR(message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
 #define Endl std::cout << std::endl
 
 #define PING Warning("")
