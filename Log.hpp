@@ -13,7 +13,9 @@
 
 #include "String.hpp"
 
-#ifdef DEBUG
+#define LOG_ENABLED
+
+#ifdef LOG_ENABLED
 
 #define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
