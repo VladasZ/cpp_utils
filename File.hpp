@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <stddef.h>
+
 class File {
 
   size_t _size = 0;

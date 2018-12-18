@@ -12,7 +12,7 @@
 #include "System.hpp"
 
 void System::sleep(float interval) {
-    // std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
+     std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
 }
 
 int System::random() {
@@ -22,7 +22,7 @@ int System::random() {
   static bool flag = true;
   if (flag) {
 	flag = false;
-	srand((unsigned int)time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
   }
   return rand();
 #endif

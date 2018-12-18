@@ -24,16 +24,16 @@ public:
     using Predicate = std::function<bool(const T&)>;
     using Callback  = std::function<void(const Array<T>&)>;
 
-	auto index_of(const T& object) {
-		return std::find(this->begin(), this->end(), object);
-	}
+    auto index_of(const T& object) {
+        return std::find(this->begin(), this->end(), object);
+    }
 
-	void remove(const T& object) {
-		auto iter = std::find(this->begin(), this->end(), object);
-		if (iter == this->end())
-			return;
-		this->erase(iter);
-	}
+    void remove(const T& object) {
+        auto iter = std::find(this->begin(), this->end(), object);
+        if (iter == this->end())
+            return;
+        this->erase(iter);
+    }
 
     void remove_if(const Predicate &predicate) {
         erase(std::remove_if(this->begin(), this->end(),  predicate, this->end()));
@@ -44,12 +44,12 @@ public:
         this->insert(this->end(), std::initializer_list<T> { args... });
     }
 
-	void insert_at(size_t index, const T& object) {
+    void insert_at(size_t index, const T& object) {
         this->emplace(this->begin() + index, object);
-	}
+    }
 
     T random() const {
-        return this->at(System::random((int)this->size()));
+        return this->at(System::random(static_cast<int>(this->size())));
     }
     
     size_t bytes_size() const {

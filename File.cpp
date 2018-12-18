@@ -11,12 +11,12 @@
 
 File::File(const char* path) {
     FILE* file = fopen(path, "rb");
-    if (file == 0) {
+    if (file == nullptr) {
         Error("Failed to open file: " << path);
         return;
     }
     fseek(file, 0, SEEK_END);
-    _size = ftell(file);
+    _size = static_cast<size_t>(ftell(file));
     fseek(file, 0, SEEK_SET);
     _data = new char[_size];
     fread(_data, 1, _size, file);
