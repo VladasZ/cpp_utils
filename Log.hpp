@@ -8,6 +8,10 @@
 
 #pragma once
 
+#ifdef __arm__
+#include "mbed.h"
+#endif
+
 #include <string.h>
 #include <iostream>
 
@@ -52,6 +56,10 @@ LOCATION(file, func, line)\
 
 #define PING Warning("")
 #define UNEXPECTED Error("")
+
+#ifdef __arm__
+extern Serial *_serial_transmitter;
+#endif
 
 #else
 

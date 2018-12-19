@@ -10,6 +10,8 @@
 
 #include <stddef.h>
 
+namespace ut {
+
 class File {
 
   size_t _size = 0;
@@ -24,3 +26,5 @@ public:
   File(const char* path);
   ~File();
 };
+
+}

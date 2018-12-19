@@ -6,13 +6,21 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#ifdef __arm__
+#include "mbed.h"
+#else
 #include <thread>
+#endif
 
 #include "Log.hpp"
 #include "System.hpp"
 
 void System::sleep(float interval) {
-     std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
+#ifdef __arm__
+  wait(interval);
+#else
+  std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
+#endif
 }
 
 int System::random() {
