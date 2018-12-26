@@ -10,6 +10,14 @@
 
 #ifdef __arm__
 #include "mbed.h"
+
+static Serial *_serial_transmitter =
+  []{
+	auto serial = new Serial(USBTX, USBRX);
+	serial->baud(57600);
+	return serial;
+  }();
+
 #endif
 
 #include <string.h>

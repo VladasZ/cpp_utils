@@ -8,9 +8,3 @@
 
 #include "Log.hpp"
 
-Serial *_serial_transmitter =
-  []{
-	auto serial = new Serial(USBTX, USBRX);
-	serial->baud(57600);
-	return serial;
-  }();
