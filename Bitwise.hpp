@@ -6,6 +6,7 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#pragma once
 
 #include <type_traits>
 #include <string>
@@ -58,7 +59,7 @@ namespace bitwise {
     }
 
     template <class T>
-    std::string to_string(const T& value) {
+    static std::string to_string(const T& value) {
         static_assert(size<T> <= 64, "bitwise::to_string value is too big");
         std::string result;
         for (int i = size<T> - 1; i >= 0; i--) {
