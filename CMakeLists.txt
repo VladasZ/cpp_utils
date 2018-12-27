@@ -13,7 +13,6 @@ add_library(${PROJECT_NAME}
   System.hpp
   System.cpp
   String.hpp
-  String.cpp
   Bitwise.hpp
   Lifehack.hpp
   Dictionary.hpp
