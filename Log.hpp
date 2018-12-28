@@ -11,10 +11,10 @@
 #ifdef __arm__
 #include "mbed.h"
 
-static Serial *_serial_transmitter =
+static Serial *serial_transmitter =
   []{
 	auto serial = new Serial(USBTX, USBRX);
-	serial->baud(57600);
+	serial->baud(230400);
 	return serial;
   }();
 
@@ -29,7 +29,7 @@ static Serial *_serial_transmitter =
 
 #ifdef LOG_ENABLED
 
-#define LOG_LOCATION_ENABLED true
+#define LOG_LOCATION_ENABLED false
 #define LOG_ERRORS true
 
 #define UTILS_INTERNAL_FILENAME String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
@@ -44,7 +44,7 @@ static Serial *_serial_transmitter =
 #endif
 
 #define UTILS_INTERNAL_LOG(message, type, file, func, line)\
-std::cout << "[" << type << "]" \
+  std::cout /*"[" << type << "]"*/					   \
 LOCATION(file, func, line)\
 << message << std::endl;
 

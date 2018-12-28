@@ -22,7 +22,6 @@ public:
 
     using Ptr       = std::shared_ptr<T>;
     using Predicate = std::function<bool(const T&)>;
-    using Callback  = std::function<void(const Array<T>&)>;
 
     auto index_of(const T& object) {
         return std::find(this->begin(), this->end(), object);
@@ -35,7 +34,7 @@ public:
         this->erase(iter);
     }
 
-    void remove_if(const Predicate &predicate) {
+    void remove_if(const Predicate& predicate) {
         erase(std::remove_if(this->begin(), this->end(),  predicate, this->end()));
     }
 

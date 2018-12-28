@@ -28,7 +28,7 @@ namespace String {
 	}
     return str.substr(index + 1, len - index);
   }
-  std::string from_float(float val, int precision = 2) {
+  static std::string from_float(float val, int precision = 2) {
 	std::stringstream stream;
 	stream << std::fixed << std::setprecision(precision) << val;
 	return stream.str();
