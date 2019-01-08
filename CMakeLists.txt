@@ -14,9 +14,8 @@ add_library(${PROJECT_NAME}
   System.cpp
   String.hpp
   Bitwise.hpp
-  Lifehack.hpp
-  Dictionary.hpp
   Singleton.hpp
+  Dictionary.hpp
   ExceptionCatch.hpp
   ConditionalEvent.hpp
 )
