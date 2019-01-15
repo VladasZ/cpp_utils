@@ -29,7 +29,7 @@ static Serial *serial_transmitter =
 
 #ifdef LOG_ENABLED
 
-#define LOG_LOCATION_ENABLED false
+#define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
 
 #define UTILS_INTERNAL_FILENAME String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
