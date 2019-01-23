@@ -1,5 +1,5 @@
 //
-//  Singletone.hpp
+//  Singleton.hpp
 //  cpp_utils
 //
 //  Created by Vladas Zakrevskis on 28/11/17.
@@ -9,26 +9,26 @@
 #pragma once
 
 class Static {
-	Static() = delete;
+    Static() = delete;
 };
 
 template <typename T>
 class Singleton {
 public:
-	static T& instance() {
-		static T _instance;
-		static bool is_initialized = false;
-		if (!is_initialized) {
-			is_initialized = false;
-			_instance.initialize();
-		}
-		return   _instance;
-	}
+    static T& instance() {
+        static T _instance;
+        static bool is_initialized = false;
+        if (!is_initialized) {
+            is_initialized = false;
+            _instance.initialize();
+        }
+        return   _instance;
+    }
 protected:
-	 Singleton() { }
-        virtual ~Singleton() { }
-	virtual void initialize() { }
+    Singleton() { }
+    virtual ~Singleton() { }
+    virtual void initialize() { }
 public:
-	Singleton           (const Singleton&) = delete;
-	Singleton& operator=(const Singleton&) = delete;
+    Singleton           (const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
 };
