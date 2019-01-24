@@ -44,3 +44,11 @@ int System::random(int range) {
 #endif
 }
 
+const char* System::user_name() {
+#ifdef _WIN32
+    return "System::user_name() is not implemented fot this platform";
+#else
+    return getenv("USER");
+#endif
+}
+

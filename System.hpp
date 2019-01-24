@@ -12,4 +12,5 @@ namespace System {
     void sleep(float interval);
     int random();
     int random(int range);
+    const char* user_name();
 };
