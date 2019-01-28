@@ -24,7 +24,7 @@ namespace String {
 	  if (len   == 0)                 return str;
 	  if (index == 0)                 return str.substr(        1, len - 1        );
 	  if (index == std::string::npos) return str.substr(        0, len            );
-	  return str.substr(index + 1, len - index - 1);
+      return                                 str.substr(index + 1, len - index - 1);
 	}
     return str.substr(index + 1, len - index);
   }

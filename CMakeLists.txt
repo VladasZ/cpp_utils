@@ -9,7 +9,6 @@ add_library(${PROJECT_NAME}
   File.hpp
   File.cpp
   Array.hpp
-  Event.hpp
   System.hpp
   System.cpp
   String.hpp
