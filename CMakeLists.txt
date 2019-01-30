@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME}
   System.cpp
   String.hpp
   Bitwise.hpp
+  LogData.hpp
   Singleton.hpp
   Dictionary.hpp
   ExceptionCatch.hpp
