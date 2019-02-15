@@ -12,6 +12,7 @@ add_library(${PROJECT_NAME}
   System.hpp
   System.cpp
   String.hpp
+  Result.hpp
   Bitwise.hpp
   LogData.hpp
   Singleton.hpp
