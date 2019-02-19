@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(cpp_utils)
 
-add_subdirectory(source/sand)
 add_subdirectory(source/cpp_utils)
+add_subdirectory(source/cpp_utils_test)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   foreach(var ${GIT_DEPENDENCIES})
