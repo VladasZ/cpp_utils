@@ -1,22 +1,17 @@
+cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR)
+
+include(${CMAKE_BINARY_DIR}/build_info.cmake)
+include(${BUILD_SCRIPT_PATH})
+
+set(CMAKE_CXX_STANDARD 17)
 
 project(cpp_utils)
-include_directories(${PROJECT_SOURCE_DIR})
 
-add_library(${PROJECT_NAME}
-  Log.hpp
-  Time.hpp
-  Time.cpp
-  File.hpp
-  File.cpp
-  Array.hpp
-  System.hpp
-  System.cpp
-  String.hpp
-  Result.hpp
-  Bitwise.hpp
-  LogData.hpp
-  Singleton.hpp
-  Dictionary.hpp
-  ExceptionCatch.hpp
-  ConditionalEvent.hpp
-)
+add_subdirectory(source/sand)
+add_subdirectory(source/cpp_utils)
+
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+  foreach(var ${GIT_DEPENDENCIES})
+	add_subdirectory(${var} "${var}/dep_build")
+  endforeach()
+endif()
