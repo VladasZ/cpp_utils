@@ -10,10 +10,6 @@
 
 #include "Image.hpp"
 
-Image::Size::Size(float width, float height) : width(width), height(height) {
-
-}
-
 Image::Image(const std::string& path) {
 
     int width;
@@ -29,16 +25,25 @@ Image::Image(const std::string& path) {
     if (_data == nullptr)
         throw std::string() + "Failed to load image: " + path;
 
-    _size     = { static_cast<float>(width), static_cast<float>(height) };
+    _width    = static_cast<float>(width);
+    _height   = static_cast<float>(height);
     _channels = static_cast<uint8_t>(channels);
 }
 
-Image::Image(void* data, const Size& size, uint8_t channels) : _data(data), _size(size),  _channels(channels) {
+Image::Image(void* data, float width, float height, uint8_t channels) : _data(data), _width(width), _height(height),  _channels(channels) {
 
 }
 
 Image::~Image() {
     _free_data();
+}
+
+float Image::width() const {
+    return _width;
+}
+
+float Image::height() const {
+    return _height;
 }
 
 void* Image::data() const {

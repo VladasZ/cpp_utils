@@ -13,27 +13,21 @@
 
 class Image {
 
-public:
-
-    struct Size {
-        float width  = 0;
-        float height = 0;
-        Size() = default;
-        Size(float, float);
-    };
-
 protected:
 
     void*   _data;
-    Size    _size;
+    float   _width;
+    float   _height;
     uint8_t _channels;
 
 public:
 
     explicit Image(const std::string& path);
-    explicit Image(void* data, const Size& size, uint8_t channels);
+    explicit Image(void* data, float width, float height, uint8_t channels);
     virtual ~Image();
 
+    float       width()         const;
+    float       height()        const;
     void*       data()          const;
     uint8_t     channels()      const;
     bool        is_monochrome() const;
