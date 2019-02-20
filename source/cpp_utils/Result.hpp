@@ -8,12 +8,20 @@
 
 #pragma once
 
+#include <limits>
+
 template <class T>
 class Result {
+    using This = Result<T>;
+    static inline float min_error = std::numeric_limits<float>::max();
 public:
+    const bool has_minimal_error;
     const float error = 0;
     T result;
-    Result(float error, const T& result) : error(error), result(result) { }
+    Result(float error, const T& result) : error(error), result(result), has_minimal_error(error < This::min_error) {
+        if (has_minimal_error)
+            This::min_error = error;
+    }
 };
 
 
