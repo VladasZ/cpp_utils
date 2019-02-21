@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <string>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -22,6 +23,11 @@ public:
 
     using Ptr       = std::shared_ptr<T>;
     using Predicate = std::function<bool(const T&)>;
+
+    Array(const std::vector<T>& vector) {
+        for (const auto& obj : vector)
+            this->push_back(obj);
+    }
 
     auto index_of(const T& object) {
         return std::find(this->begin(), this->end(), object);
@@ -53,5 +59,14 @@ public:
     
     size_t bytes_size() const {
         return sizeof(T) * this->size();
+    }
+
+    std::string to_string() const {
+        std::string result;
+        for (auto val : *this)
+            result += std::to_string(val) + ", ";
+        result.pop_back();
+        result.pop_back();
+        return result;
     }
 };
