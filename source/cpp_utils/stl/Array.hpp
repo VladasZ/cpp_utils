@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <string>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -59,14 +58,5 @@ public:
     
     size_t bytes_size() const {
         return sizeof(T) * this->size();
-    }
-
-    std::string to_string() const {
-        std::string result;
-        for (auto val : *this)
-            result += std::to_string(val) + ", ";
-        result.pop_back();
-        result.pop_back();
-        return result;
     }
 };

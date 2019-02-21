@@ -13,6 +13,7 @@
 #include <iomanip>
 
 namespace String {
+
   static std::string file_name(const std::string& str) {
     if (str.empty()) return "";
     auto len   = str.length();
@@ -28,10 +29,21 @@ namespace String {
 	}
     return str.substr(index + 1, len - index);
   }
+
   static std::string from_float(float val, int precision = 2) {
 	std::stringstream stream;
 	stream << std::fixed << std::setprecision(precision) << val;
 	return stream.str();
+  }
+
+  template<class T>
+  static std::string from_container(const T& container) {
+      std::string result;
+      for (auto val : container)
+          result += std::to_string(val) + ", ";
+      result.pop_back();
+      result.pop_back();
+      return result;
   }
 }
 
