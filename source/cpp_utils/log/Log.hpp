@@ -23,7 +23,7 @@ static Serial *serial_transmitter =
 #include <string.h>
 #include <iostream>
 
-#include "String.hpp"
+#include "../stl/String.hpp"
 
 #define LOG_ENABLED
 
