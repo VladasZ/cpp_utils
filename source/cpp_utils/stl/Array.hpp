@@ -60,3 +60,13 @@ public:
         return sizeof(T) * this->size();
     }
 };
+
+namespace array {
+
+template <class T>
+[[maybe_unused]]
+static size_t bytes_size(const T& array) {
+    return sizeof(typename T::value_type) * array.size();
+}
+
+}
