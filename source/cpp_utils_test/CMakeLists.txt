@@ -6,5 +6,3 @@ add_catalog_recursive(${PROJECT_SOURCE_DIR} /source SOURCE)
 add_executable(${PROJECT_NAME} ${SOURCE})
 
 link_project(cpp_utils)
-
-link_project_at_path(SOIL ${soil_path})
