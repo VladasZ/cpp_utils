@@ -63,10 +63,16 @@ public:
 
 namespace array {
 
-template <class T>
+template <class ArrayType>
 [[maybe_unused]]
-static size_t bytes_size(const T& array) {
-    return sizeof(typename T::value_type) * array.size();
+static size_t bytes_size(const ArrayType& array) {
+    return sizeof(typename ArrayType::value_type) * array.size();
+}
+
+template <class Type, class ArrayType>
+[[maybe_unused]]
+static size_t size_in(const ArrayType& array) {
+    return bytes_size(array) / sizeof(Type);
 }
 
 }
