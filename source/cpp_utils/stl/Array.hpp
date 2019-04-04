@@ -40,7 +40,7 @@ public:
     }
 
     void remove_if(const Predicate& predicate) {
-        erase(std::remove_if(this->begin(), this->end(),  predicate, this->end()));
+        erase(std::remove_if(this->begin(), this->end(), predicate, this->end()));
     }
 
     template <class ...Args>
@@ -73,6 +73,28 @@ template <class Type, class ArrayType>
 [[maybe_unused]]
 static size_t size_in(const ArrayType& array) {
     return bytes_size(array) / sizeof(Type);
+}
+
+template <class ArrayType, class Type = typename ArrayType::value_type, class Predicate = std::function<bool(Type, Type)>>
+[[maybe_unused]]
+static auto max(const ArrayType& array, Predicate predicate = [](auto a, auto b) { return a > b; }) {
+    auto max = std::numeric_limits<Type>::min();
+    for (auto value : array) {
+        if (predicate(value, max))
+            max = value;
+    }
+    return max;
+}
+
+template <class ArrayType, class Type = typename ArrayType::value_type, class Predicate = std::function<bool(Type, Type)>>
+[[maybe_unused]]
+static auto min(const ArrayType& array, Predicate predicate = [](auto a, auto b) { return a < b; }) {
+    auto min = std::numeric_limits<Type>::max();
+    for (auto value : array) {
+        if (predicate(value, min))
+            min = value;
+    }
+    return min;
 }
 
 }
