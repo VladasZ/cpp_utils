@@ -31,24 +31,25 @@ static size_t size_in(const Array& array) {
 
 template <class Array, class Type = typename Array::value_type, class Predicate = std::function<bool(Type, Type)>>
 [[maybe_unused]]
-static auto max(const Array& array, Predicate predicate = [](auto a, auto b) { return a > b; }) {
-    auto max = std::numeric_limits<Type>::min();
+static auto find(const Array& array, Predicate predicate) {
+    auto val = std::numeric_limits<Type>::min();
     for (auto value : array) {
-        if (predicate(value, max))
-            max = value;
+        if (predicate(value, val))
+            val = value;
     }
-    return max;
+    return val;
 }
 
-template <class Array, class Type = typename Array::value_type, class Predicate = std::function<bool(Type, Type)>>
+template <class Array>
 [[maybe_unused]]
-static auto min(const Array& array, Predicate predicate = [](auto a, auto b) { return a < b; }) {
-    auto min = std::numeric_limits<Type>::max();
-    for (auto value : array) {
-        if (predicate(value, min))
-            min = value;
-    }
-    return min;
+static auto max(const Array& array) {
+    return find(array, [](auto a, auto b) { return a > b; });
+}
+
+template <class Array>
+[[maybe_unused]]
+static auto min(const Array& array) {
+    return find(array, [](auto a, auto b) { return a < b; });
 }
 
 template <class Array>
