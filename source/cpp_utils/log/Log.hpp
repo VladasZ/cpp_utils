@@ -23,7 +23,7 @@
 #include <string.h>
 #include <iostream>
 
-#include "../stl/String.hpp"
+#include "../stl/StringUtils.hpp"
 
 #define LOG_ENABLED
 
@@ -32,7 +32,7 @@
 #define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
 
-#define UTILS_INTERNAL_FILENAME String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
+#define UTILS_INTERNAL_FILENAME cu::string::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
 
 #define LOCATION_INFO UTILS_INTERNAL_FILENAME, __func__, __LINE__
 #define LOCATION_PARAMETERS const std::string& fileName, const char* function, int line
