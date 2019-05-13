@@ -9,15 +9,14 @@
 #pragma once
 
 #ifdef __arm__
-//#include "mbed.h"
-//
-//static Serial *serial_transmitter =
-//  []{
-//    auto serial = new Serial(USBTX, USBRX);
-//    serial->baud(230400);
-//    return serial;
-//  }();
+#include "mbed.h"
 
+static Serial *serial_transmitter =
+  []{
+    auto serial = new Serial(USBTX, USBRX);
+    serial->baud(230400);
+    return serial;
+  }();
 #endif
 
 #include <string.h>
