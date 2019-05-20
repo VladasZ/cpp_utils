@@ -62,4 +62,16 @@ static void print(const Array& array) {
 template <class Array>
 static constexpr auto static_size = std::tuple_size<Array>::value;
 
+template <class TargetArray, class Array>
+[[maybe_unused]]
+static auto convert(const Array& array) {
+    using ArrayValue = typename Array::value_type;
+    using TargetValue = typename TargetArray::value_type;
+
+    const auto target_array_size = array.size() * (sizeof(ArrayValue) / sizeof(TargetValue));
+    auto data = reinterpret_cast<const TargetValue*>(array.data());
+    return TargetArray { data, data + target_array_size };
 }
+
+}
+
