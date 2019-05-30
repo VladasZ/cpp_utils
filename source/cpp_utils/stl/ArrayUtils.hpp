@@ -73,5 +73,24 @@ static auto convert(const Array& array) {
     return TargetArray { data, data + target_array_size };
 }
 
+template <class Array,
+          class ValueType = typename Array::value_type>
+[[maybe_unused]]
+static void remove(Array& array, const ValueType& value) {
+    auto position = std::find(array.begin(), array.end(), value);
+    if (position != array.end())
+        array.erase(position);
+}
+
+template <class Array,
+          class ArrayToRemove,
+          std::enable_if_t<std::is_same_v<Array::value_type, ArrayToRemove::value_type>> = 0
+          >
+[[maybe_unused]]
+static void remove(Array& array, const ArrayToRemove& objects_to_remove) {
+    for (auto object : objects_to_remove)
+        remove(array, object);
+}
+
 }
 
