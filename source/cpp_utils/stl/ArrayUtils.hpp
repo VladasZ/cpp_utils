@@ -92,5 +92,14 @@ static void remove(Array& array, const ArrayToRemove& objects_to_remove) {
         remove(array, object);
 }
 
+template <class T>
+class backwards {
+    T& _arr;
+public:
+    backwards(T &arr) : _arr(arr) { }
+    auto begin() { return _arr.rbegin(); }
+    auto end() { return _arr.rend(); }
+};
+
 }
 
