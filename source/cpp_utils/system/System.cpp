@@ -23,7 +23,7 @@ void System::sleep(float interval) {
 #endif
 }
 
-int System::random() {
+unsigned int System::random() {
 #ifdef APPLE
   return arc4random();
 #else
@@ -36,7 +36,7 @@ int System::random() {
 #endif
 }
 
-int System::random(int range) {
+unsigned int System::random(unsigned int range) {
 #ifdef APPLE
   return arc4random_uniform(range);
 #else 
@@ -44,9 +44,11 @@ int System::random(int range) {
 #endif
 }
 
-const char* System::user_name() {
+std::string System::user_name() {
 #ifdef _WIN32
     return "System::user_name() is not implemented fot this platform";
+#elif IOS_BUILD
+    return "NOT_IMPLEMENTED";
 #else
     return getenv("USER");
 #endif

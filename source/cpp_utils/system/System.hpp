@@ -8,9 +8,11 @@
 
 #pragma once
 
+#include <string>
+
 namespace System {
     void sleep(float interval);
-    int random();
-    int random(int range);
-    const char* user_name();
+    unsigned int random();
+    unsigned random(unsigned int range);
+    std::string user_name();
 };
