@@ -12,6 +12,8 @@
 #include <vector>
 #include <iostream>
 #include <functional>
+#include <type_traits>
+
 
 #include "System.hpp"
 
@@ -84,7 +86,7 @@ static void remove(Array& array, const ValueType& value) {
 
 template <class Array,
           class ArrayToRemove,
-          std::enable_if_t<std::is_same_v<Array::value_type, ArrayToRemove::value_type>> = 0
+          std::enable_if_t<std::is_same_v<typename Array::value_type, typename ArrayToRemove::value_type>> = 0
           >
 [[maybe_unused]]
 static void remove(Array& array, const ArrayToRemove& objects_to_remove) {
