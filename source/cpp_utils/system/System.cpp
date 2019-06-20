@@ -48,7 +48,7 @@ std::string System::user_name() {
 #ifdef _WIN32
     return "System::user_name() is not implemented fot this platform";
 #elif IOS_BUILD
-    return "NOT_IMPLEMENTED";
+    return "System::user_name() is not implemented fot this platform";
 #else
     return getenv("USER");
 #endif
