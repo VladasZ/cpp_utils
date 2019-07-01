@@ -12,6 +12,11 @@
 #include <thread>
 #endif
 
+#ifdef WINDOWS
+#include <windows.h>
+#include <Lmcons.h>
+#endif
+
 #include "Log.hpp"
 #include "System.hpp"
 
@@ -45,8 +50,11 @@ unsigned int System::random(unsigned int range) {
 }
 
 std::string System::user_name() {
-#ifdef _WIN32
-    return "System::user_name() is not implemented fot this platform";
+#ifdef WINDOWS
+	char username[UNLEN + 1];
+	DWORD username_len = UNLEN + 1;
+	GetUserName(username, &username_len);
+    return username;
 #elif IOS_BUILD
     return "System::user_name() is not implemented fot this platform";
 #else
