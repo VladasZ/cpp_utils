@@ -6,7 +6,13 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
-namespace cu::utils {
+#pragma once
+
+#include <functional>
+
+namespace cu {
+
+  using Callback = std::function<void()>;
 
   template <class T>
   void increment_with_limit(T& value, size_t limit = 10) {
