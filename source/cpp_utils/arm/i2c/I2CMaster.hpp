@@ -16,6 +16,7 @@ namespace cu {
 
 	int _current_address = 0;
 	void* _interface;
+
 	
   public:
 
@@ -23,14 +24,20 @@ namespace cu {
 
 	void set_write_address(int);
 
-	int write(const char* data, int length);
-	int read(char* data, int length);
+	int write_string(const std::string&);
 	
 	template <class T>
 	int write(const T& data) {
+	  // if constexpr ()
 	  return write(&data, sizeof(T));
 	}
 
+	int read(char* data, int length);
+
+  private:
+
+	int _write(const char* data, int length);
+	
   };
 
 }

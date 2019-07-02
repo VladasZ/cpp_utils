@@ -13,8 +13,8 @@
 namespace cu::I2C {
 
   enum Command : uint8_t {
-      spes,
-	  spes,
+      None,
+	  WriteString,
 	  spes,
   };
   

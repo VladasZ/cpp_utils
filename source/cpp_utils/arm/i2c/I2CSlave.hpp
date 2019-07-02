@@ -10,12 +10,15 @@
 #ifdef __arm__
 
 #include "Utils.hpp"
+#include "I2CCommands.hpp"
 
 namespace cu {
 
 class I2CSlave {
 
   void* _interface;
+
+  I2C::Command _command = I2C::Command::None;
   
 public:
 
