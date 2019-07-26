@@ -8,42 +8,38 @@
 
 #pragma once
 
+#include <vector>
 #include <functional>
 
-#include "Array.hpp"
-
-template<class SubscriberType, class ...Params>
+template<class Object, class ...Params>
 class ConditionalEvent {
     
 public:
-    using EventCallbackType = std::function<void(Params...)>;
-    using EventConditionType = std::function<bool(SubscriberType*, Params...)>;
+    using Callback = std::function<void(Params...)>;
+    using Condition = std::function<bool(SubscriberType*, Params...)>;
 
 private:
 
-    struct Subscriber {
-        SubscriberType* object = nullptr;
-        EventCallbackType action;
-
-        Subscriber(SubscriberType* object, EventCallbackType action) : object(object), action(action) { }
+    struct Container {
+        Object* object;
+        Callback action;
+        Container(Object* object, Callback action) : object(object), action(action) { }
     };
     
-    Array<Subscriber> subscribers;
+    std::vector<Container> subscribers;
     
-    EventConditionType _condition = [](SubscriberType*, Params...) { return true; };
+    Condition _condition;
     
 public:
     
-    ConditionalEvent() = default;
-
-    ConditionalEvent(EventConditionType condition) : _condition(condition) { }
+    ConditionalEvent(Condition condition) : _condition(condition) { }
     
-    void subscribe(SubscriberType* subscriber, EventCallbackType action) {
+    void subscribe(Object* subscriber, Callback action) {
         subscribers.emplace_back(subscriber, action);
     }
     
-    void unsubscribe(SubscriberType* subscriber) {
-        subscribers.remove_if([&](SubscriberType* _sub) { return _sub == subscriber; });
+    void unsubscribe(Object* subscriber) {
+        subscribers.remove_if([&](Container* _sub) { return _sub.object == subscriber; });
     }
     
     void operator()(Params... parameters) const {

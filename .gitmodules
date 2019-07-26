@@ -1,3 +1,0 @@
-[submodule "build_tools"]
-	path = build_tools
-	url = https://github.com/VladasZ/build_tools.git

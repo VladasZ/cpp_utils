@@ -15,22 +15,22 @@ template<class ...Params>
 class Event {
     
 public:
-    using EventCallbackType = std::function<void(Params...)>;
-    using EventType = Event<Params...>;
+    using Callback = std::function<void(Params...)>;
+    using This = Event<Params...>;
     
 private:
-    std::vector<EventCallbackType> subscribers;
-    std::vector<EventType*> linked_events;
+    std::vector<Callback> subscribers;
+    std::vector<This*> linked_events;
 
 public:
     
     Event() = default;
 
-    void subscribe(EventCallbackType action) {
+    void subscribe(Callback action) {
         subscribers.push_back(action);
     }
     
-    void link(EventType& event) {
+    void link(This& event) {
         linked_events.push_back(&event);
     }
     
@@ -41,19 +41,3 @@ public:
             event->operator()(parameters...);
     }
 };
-
-
-template<>
-class Event<> {
-
-public:
-
-    using EventCallbackType = std::function<void()>;
-    std::vector<EventCallbackType> subscribers;
-
-    Event() = default;
-
-    void subscribe(EventCallbackType action) { subscribers.emplace_back(action); }
-    void operator()() const { for (const auto& subscriber : subscribers) subscriber(); }
-};
-
