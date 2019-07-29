@@ -28,20 +28,20 @@ void System::sleep(float interval) {
 #endif
 }
 
-unsigned int System::random() {
+unsigned System::random() {
 #ifdef APPLE
   return arc4random();
 #else
-  static bool flag = true;
-  if (flag) {
-	flag = false;
-    srand(static_cast<unsigned int>(time(nullptr)));
+  static bool first_call = true;
+  if (first_call) {
+	first_call = false;
+    srand(static_cast<unsigned>(time(nullptr)));
   }
   return rand();
 #endif
 }
 
-unsigned int System::random(unsigned int range) {
+unsigned System::random(unsigned range) {
 #ifdef APPLE
   return arc4random_uniform(range);
 #else 

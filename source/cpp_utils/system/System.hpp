@@ -12,7 +12,7 @@
 
 namespace System {
     void sleep(float interval);
-    unsigned int random();
-    unsigned random(unsigned int range);
+    unsigned random();
+    unsigned random(unsigned range);
     std::string user_name();
 };
