@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include <string>
+#include "Path.hpp"
 
-namespace System {
+namespace cu::System {
     void sleep(float interval);
     unsigned random();
     unsigned random(unsigned range);
-    std::string user_name();
+    Path user_name();
 };

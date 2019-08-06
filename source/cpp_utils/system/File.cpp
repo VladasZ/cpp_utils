@@ -9,8 +9,9 @@
 #include "Log.hpp"
 #include "File.hpp"
 
+using namespace cu;
 
-ut::File::File(const char* path) {
+File::File(const char* path) {
     FILE* file = fopen(path, "rb");
     if (file == nullptr) {
         Error("Failed to open file: " << path);
@@ -24,14 +25,14 @@ ut::File::File(const char* path) {
     fclose(file);
 }
 
-ut::File::~File() {
+File::~File() {
     delete[] _data;
 }
 
-size_t ut::File::size() const {
+size_t File::size() const {
     return _size;
 }
 
-char* ut::File::data() const {
+char* File::data() const {
     return _data;
 }

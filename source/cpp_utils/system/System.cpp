@@ -20,6 +20,8 @@
 #include "Log.hpp"
 #include "System.hpp"
 
+using namespace cu;
+
 void System::sleep(float interval) {
 #ifdef __arm__
   wait(interval);
@@ -49,7 +51,7 @@ unsigned System::random(unsigned range) {
 #endif
 }
 
-std::string System::user_name() {
+Path System::user_name() {
 #ifdef WINDOWS
 	char username[UNLEN + 1];
 	DWORD username_len = UNLEN + 1;
