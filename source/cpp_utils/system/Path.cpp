@@ -7,3 +7,12 @@
 //
 
 #include "Path.hpp"
+
+using namespace cu;
+
+Path Path::operator / (const Path& path) const {
+    auto result = *this;
+    result += "/";
+    result += path;
+    return result;
+}

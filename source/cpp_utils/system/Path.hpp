@@ -17,6 +17,8 @@ namespace cu {
     public:
         
         using std::string::string;
+                
+        Path operator / (const Path&) const;
         
     };
     
