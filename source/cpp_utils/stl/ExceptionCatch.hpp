@@ -10,6 +10,7 @@
 
 #include <string>
 
+[[maybe_unused]]
 static std::string what(const std::exception_ptr& eptr = std::current_exception()) {
     if (!eptr) { throw std::bad_exception(); }
     try   { rethrow_exception(eptr); }
