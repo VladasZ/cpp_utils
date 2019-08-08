@@ -10,6 +10,10 @@
 
 using namespace cu;
 
+Path::Path(const std::string& str) : std::string(str) {
+    
+}
+
 Path Path::operator / (const Path& path) const {
     auto result = *this;
     result += "/";
