@@ -26,14 +26,14 @@ namespace bitwise {
     template <class T>
     constexpr auto& to_number(const T& value) {
         return *static_cast<const fits<size<T>>*>(static_cast<const void*>(&value));
-    };
+    }
 
     template <class T, class NumberType>
     constexpr auto& to_type(const NumberType& value) {
         return *static_cast<const T*>(static_cast<const void*>(&value));
     }
 
-    constexpr auto flag(uint8_t index, bool value = 1) {
+    constexpr auto flag(uint8_t index, bool value = true) {
         return static_cast<uint64_t>(value) << index;
     }
 
@@ -43,7 +43,7 @@ namespace bitwise {
     }
 
     template <class T>
-    constexpr T set_byte(const T& value, uint8_t index, bool byte = 1) {
+    constexpr T set_byte(const T& value, uint8_t index, bool byte = true) {
         auto result = to_number(value);
         result &= ~flag(index);
         result |= flag(index, byte);

@@ -11,4 +11,4 @@
 namespace Time {
     long long now();
     int interval();
-};
+}

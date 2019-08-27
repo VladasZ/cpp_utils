@@ -45,7 +45,7 @@ static Serial *serial_transmitter =
 #define UTILS_INTERNAL_LOG(message, type, file, func, line)\
   std::cout /*"[" << type << "]"*/					   \
 LOCATION(file, func, line)\
-<< message << std::endl;
+<< message << std::endl
 
 #define UTILS_INTERNAL_LOG_INFO(message, file, func, line)    UTILS_INTERNAL_LOG(message, "INFO",    file, func, line)
 #define UTILS_INTERNAL_LOG_WARNING(message, file, func, line) UTILS_INTERNAL_LOG(message, "WARNING", file, func, line)

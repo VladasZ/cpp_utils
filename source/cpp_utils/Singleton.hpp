@@ -25,8 +25,8 @@ public:
         return   _instance;
     }
 protected:
-    Singleton() { }
-    virtual ~Singleton() { }
+    Singleton() = default;
+    virtual ~Singleton() = default;
     virtual void initialize() { }
 public:
     Singleton           (const Singleton&) = delete;
