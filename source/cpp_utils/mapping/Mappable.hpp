@@ -52,15 +52,15 @@ namespace mapping {
 
         static T _parse(const JSON& json) {
             T object;
-            cu::iterate_tuple(T::properties(), [&](auto property) {
+            T::iterate_properties([&](auto property) {
                 extract(object.*property.pointer, property, json);
             });
             return object;
         }
 
         JSON _to_json() const {
-            nlohmann::json json;
-            cu::iterate_tuple(T::properties(), [&](auto property) {
+            JSON json;
+            T::iterate_properties([&](auto property) {
                 pack(static_cast<const T*>(this)->*property.pointer, property, json);
             });
             return json;
@@ -77,10 +77,26 @@ namespace mapping {
         }
 
         static void print_properties() {
-            cu::iterate_tuple(T::properties(), [](auto property) {
+            T::iterate_properties([](auto property) {
                 std::cout << property.to_string() << std::endl;
             });
         }
+
+        template<class Array>
+        static std::string array_to_json(const Array& array) {
+            static_assert(std::is_same_v<typename Array::value_type, T>);
+            auto result = JSON::array();
+            for (auto value : array)
+                result.push_back(value._to_json());
+            return result.dump();
+        }
+
+        template<class Closure>
+        static void iterate_properties(Closure&& closure) {
+            cu::iterate_tuple(T::properties(), closure);
+        }
+
+        //SQLITE
 
         static std::string create_table_command() {
             std::string command = "CREATE TABLE IF NOT EXISTS ";
@@ -88,7 +104,7 @@ namespace mapping {
             command += T::class_name();
             command += " (\n";
 
-            cu::iterate_tuple(T::properties(), [&](auto property) {
+            T::iterate_properties([&](auto property) {
                 command += property.name + " " + property.database_type_name() + ",\n";
             });
 
@@ -105,17 +121,15 @@ namespace mapping {
             std::string columns;
             std::string values;
 
-            cu::iterate_tuple(T::properties(), [&](auto property) {
+            T::iterate_properties([&](auto property) {
                 columns += property.name + ", ";
 
                 auto value = static_cast<const T*>(this)->*property.pointer;
 
-                if constexpr (property.is_string) {
+                if constexpr (property.is_string)
                     values += std::string() + "\'" + value + "\',";
-                }
-                else {
+                else
                     values += std::to_string(value) + ",";
-                }
             });
 
             columns.pop_back();
@@ -127,6 +141,7 @@ namespace mapping {
             "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
             "VALUES(" + values + ");";
         }
+
     };
 
 }

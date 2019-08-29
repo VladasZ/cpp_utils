@@ -16,28 +16,32 @@ namespace mapping {
     class Property {
     public:
 
-        constexpr static bool is_string = std::is_same_v<Member, std::string>;
+        using Pointer = Member Class::*;
 
-        const std::string class_name = typeid(Class).name();
+        constexpr static bool is_string  = std::is_same_v<Member, std::string>;
+        constexpr static bool is_float   = std::is_floating_point_v<Member>;
+        constexpr static bool is_integer = std::is_integral_v<Member>;
+
+        const std::string class_name  = typeid(Class).name();
         const std::string member_name = typeid(Member).name();
 
-        using Pointer = Member Class::*;
         const std::string name;
         const Pointer pointer;
         const Member default_value;
 
-        constexpr Property(const std::string &name, Pointer pointer, const Member& def)
-                :
-                name(name), pointer(pointer), default_value(def) { }
+        constexpr Property(const std::string &name, Pointer pointer, const Member& def) :
+                name(name), pointer(pointer), default_value(def) {
+            static_assert(is_string || is_float || is_integer, "Invalid property type");
+        }
 
         std::string database_type_name() const {
-            if constexpr (std::is_same_v<Member, std::string>) {
+            if constexpr (is_string) {
                 return "TEXT";
             }
-            else if (std::is_floating_point_v<Member>) {
+            else if (is_float) {
                 return "REAL";
             }
-            else if (std::is_integral_v<Member>) {
+            else if (is_integer) {
                 return "INTEGER";
             }
             else {
