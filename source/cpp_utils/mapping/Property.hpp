@@ -16,6 +16,8 @@ namespace mapping {
     class Property {
     public:
 
+        constexpr static bool is_string = std::is_same_v<Member, std::string>;
+
         const std::string class_name = typeid(Class).name();
         const std::string member_name = typeid(Member).name();
 
@@ -23,9 +25,25 @@ namespace mapping {
         const std::string name;
         const Pointer pointer;
         const Member default_value;
-        Property(const std::string &name, Pointer pointer, const Member& def)
+
+        constexpr Property(const std::string &name, Pointer pointer, const Member& def)
                 :
                 name(name), pointer(pointer), default_value(def) { }
+
+        std::string database_type_name() const {
+            if constexpr (std::is_same_v<Member, std::string>) {
+                return "TEXT";
+            }
+            else if (std::is_floating_point_v<Member>) {
+                return "REAL";
+            }
+            else if (std::is_integral_v<Member>) {
+                return "INTEGER";
+            }
+            else {
+                Fatal("Invalid member type: " << typeid(Member).name());
+            }
+        }
 
         std::string to_string() const {
             return std::string() +
@@ -41,4 +59,4 @@ namespace mapping {
 
 }
 
-#define PROPERTY(name, type, default_value) mapping::make_property(#name,  &type::name, default_value)
+#define PROPERTY(name, default_value) mapping::make_property(#name,  &This::name, default_value)
