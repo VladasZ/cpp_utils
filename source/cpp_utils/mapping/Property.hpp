@@ -27,10 +27,9 @@ namespace mapping {
 
         const std::string name;
         const Pointer pointer;
-        const Member default_value;
 
-        constexpr Property(const std::string &name, Pointer pointer, const Member& def) :
-                name(name), pointer(pointer), default_value(def) {
+        constexpr Property(const std::string& name, Pointer pointer) :
+                name(name), pointer(pointer) {
             static_assert(is_string || is_float || is_integer, "Invalid property type");
         }
 
@@ -56,11 +55,11 @@ namespace mapping {
 
     };
 
-    template<class Class, class Member, class Default>
-    static const auto make_property(const std::string& name, Member Class::* pointer, const Default& def) {
-        return Property<Class, Member>(name, pointer, def);
+    template<class Class, class Member>
+    static const auto make_property(const std::string& name, Member Class::* pointer) {
+        return Property<Class, Member>(name, pointer);
     }
 
 }
 
-#define PROPERTY(name, default_value) mapping::make_property(#name,  &This::name, default_value)
+#define PROPERTY(name) mapping::make_property(#name,  &This::name)

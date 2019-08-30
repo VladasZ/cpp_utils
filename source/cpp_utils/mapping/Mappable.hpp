@@ -40,7 +40,7 @@ namespace mapping {
 
         template <class Member, class Property>
         static void extract(Member& member, const Property& property, const JSON& json) {
-            member = json.value<Member>(property.name, property.default_value);
+            member = json.value<Member>(property.name, Member { });
         }
 
         //Packing
@@ -140,6 +140,10 @@ namespace mapping {
             return std::string() +
             "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
             "VALUES(" + values + ");";
+        }
+
+        static std::string select_command() {
+            return "SELECT * from " + T::class_name() + ";";
         }
 
     };
