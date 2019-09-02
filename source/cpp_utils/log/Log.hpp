@@ -58,7 +58,7 @@ LOCATION(file, func, line)\
 
 #define Log(message)     UTILS_INTERNAL_LOG_INFO   (message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
 #define Warning(message) UTILS_INTERNAL_LOG_WARNING(message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
-#define Error(message)   UTILS_INTERNAL_LOG_ERROR  (message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
+#define _Error(message)   UTILS_INTERNAL_LOG_ERROR  (message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
 #define Endl std::cout << std::endl
 
 #define PING Warning("")
@@ -77,5 +77,5 @@ LOCATION(file, func, line)\
 
 #define Info(message) Log(message)
 #define Logvar(variable) Log(#variable << " : " << (variable))
-#define NOT_IMPLEMENTED Error("Not implemented")
-#define Fatal(message) { Error(message); std::terminate(); }
+#define NOT_IMPLEMENTED _Error("Not implemented")
+#define Fatal(message) { _Error(message); std::terminate(); }

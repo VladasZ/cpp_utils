@@ -17,6 +17,8 @@
 
 namespace mapping {
 
+    using JSON = nlohmann::json;
+
     template<class T> class Mappable;
 
     template <class Type>
@@ -34,8 +36,6 @@ namespace mapping {
 
     private:
 
-        using JSON = nlohmann::json;
-
         //Extraction
 
         template <class Member, class Property>
@@ -50,13 +50,6 @@ namespace mapping {
             json[property.name] = member;
         }
 
-        static T _parse(const JSON& json) {
-            T object;
-            T::iterate_properties([&](auto property) {
-                extract(object.*property.pointer, property, json);
-            });
-            return object;
-        }
 
         JSON _to_json() const {
             JSON json;
@@ -66,10 +59,29 @@ namespace mapping {
             return json;
         }
 
+        static T _parse_json(const JSON& json) {
+            T object;
+            T::iterate_properties([&](auto property) {
+                extract(object.*property.pointer, property, json);
+            });
+            return object;
+        }
+
+        static T _parse_string(const std::string& json) {
+            return parse(JSON::parse(json, nullptr, false));
+        }
+
+
     public:
 
-        static T parse(const std::string& json) {
-            return _parse(JSON::parse(json, nullptr, false));
+        template<class JSONType>
+        static T parse(const JSONType& json) {
+            if constexpr (std::is_same_v<JSONType, JSON>) {
+                return _parse_json(json);
+            }
+            else {
+                return _parse_string(json);
+            }
         }
 
         std::string to_json() const {

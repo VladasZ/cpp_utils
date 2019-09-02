@@ -14,7 +14,7 @@ using namespace cu;
 File::File(const char* path) {
     FILE* file = fopen(path, "rb");
     if (file == nullptr) {
-        Error("Failed to open file: " << path);
+        _Error("Failed to open file: " << path);
         return;
     }
     fseek(file, 0, SEEK_END);
