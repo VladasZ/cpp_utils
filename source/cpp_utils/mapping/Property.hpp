@@ -12,15 +12,17 @@
 
 namespace mapping {
 
-    template<class Class, class Member>
+    template<class Class, class _Member>
     class Property {
     public:
 
-        using Pointer = Member Class::*;
+        using Member = _Member;
+
+        using Pointer = _Member Class::*;
 
         constexpr static bool is_string  = std::is_same_v<Member, std::string>;
-        constexpr static bool is_float   = std::is_floating_point_v<Member>;
-        constexpr static bool is_integer = std::is_integral_v<Member>;
+        constexpr static bool is_float   = std::is_floating_point_v<_Member>;
+        constexpr static bool is_integer = std::is_integral_v<_Member>;
 
         const std::string class_name  = typeid(Class).name();
         const std::string member_name = typeid(Member).name();

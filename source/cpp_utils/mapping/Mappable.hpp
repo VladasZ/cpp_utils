@@ -150,14 +150,31 @@ namespace mapping {
             values.pop_back();
 
             return std::string() +
-            "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
-            "VALUES(" + values + ");";
+                   "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
+                   "VALUES(" + values + ");";
         }
 
         static std::string select_command() {
             return "SELECT * from " + T::class_name() + ";";
         }
 
+        static T empty() {
+            T result;
+            T::iterate_properties([&](auto property) {
+                result.*property.pointer = typename decltype(property)::Member { };
+            });
+            return result;
+        }
+
+        std::string edited_field() const {
+            std::string result;
+            T::iterate_properties([&](auto property) {
+                if (static_cast<const T*>(this)->*property.pointer != typename decltype(property)::Member { }) {
+                    result = property.name;
+                }
+            });
+            return result;
+        }
     };
 
 }
