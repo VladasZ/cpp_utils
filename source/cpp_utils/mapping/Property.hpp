@@ -21,8 +21,10 @@ namespace mapping {
         using Pointer = _Member Class::*;
 
         constexpr static bool is_string  = std::is_same_v<Member, std::string>;
-        constexpr static bool is_float   = std::is_floating_point_v<_Member>;
-        constexpr static bool is_integer = std::is_integral_v<_Member>;
+        constexpr static bool is_float   = std::is_same_v<Member, int        >;
+        constexpr static bool is_integer = std::is_same_v<Member, float      >;
+
+        static_assert(is_string || is_float || is_integer, "Invalid property type");
 
         const std::string class_name  = typeid(Class).name();
         const std::string member_name = typeid(Member).name();
@@ -32,7 +34,6 @@ namespace mapping {
 
         constexpr Property(const std::string& name, Pointer pointer) :
                 name(name), pointer(pointer) {
-            static_assert(is_string || is_float || is_integer, "Invalid property type");
         }
 
         std::string database_type_name() const {

@@ -12,6 +12,7 @@
 
 #include "json.hpp"
 
+#include "Value.hpp"
 #include "Property.hpp"
 #include "IterateTuple.hpp"
 
@@ -26,6 +27,12 @@ namespace mapping {
 
     template <class Type>
     using if_mappable = std::enable_if_t<is_mappable<Type>>;
+
+    template<class Type>
+    static constexpr bool supported =
+            std::is_same_v<Type, std::string> ||
+            std::is_same_v<Type, int        > ||
+            std::is_same_v<Type, float      >;
 
     template<class T>
     class Mappable {
@@ -54,7 +61,7 @@ namespace mapping {
         JSON _to_json() const {
             JSON json;
             T::iterate_properties([&](auto property) {
-                pack(static_cast<const T*>(this)->*property.pointer, property, json);
+                pack(_value(property), property, json);
             });
             return json;
         }
@@ -71,6 +78,10 @@ namespace mapping {
             return parse(JSON::parse(json, nullptr, false));
         }
 
+        template<class Prop>
+        auto _value(const Prop& property) const {
+            return static_cast<const T*>(this)->*property.pointer;
+        }
 
     public:
 
@@ -136,7 +147,7 @@ namespace mapping {
             T::iterate_properties([&](auto property) {
                 columns += property.name + ", ";
 
-                auto value = static_cast<const T*>(this)->*property.pointer;
+                auto value = _value(property);
 
                 if constexpr (property.is_string)
                     values += std::string() + "\'" + value + "\',";
@@ -169,10 +180,32 @@ namespace mapping {
         std::string edited_field() const {
             std::string result;
             T::iterate_properties([&](auto property) {
-                if (static_cast<const T*>(this)->*property.pointer != typename decltype(property)::Member { }) {
+                if (_value(property) != typename decltype(property)::Member { }) {
                     result = property.name;
                 }
             });
+            return result;
+        }
+
+        template<class Field>
+        Field get(const std::string& name) {
+            static_assert(supported<Field>, "Type is not supported");
+
+            Value result;
+            bool found = false;
+            T::iterate_properties([&](auto property) {
+                if (found) return;
+                if (property.name == name) {
+                    found = true;
+                    result = _value(property);
+                }
+            });
+
+            if (!found) {
+                throw std::string() +
+                      "No property: " + name + " in class " + T::class_name();
+            }
+
             return result;
         }
     };
