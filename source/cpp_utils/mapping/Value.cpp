@@ -43,6 +43,10 @@ Value::operator float() const {
     return std::stof(_data);
 }
 
+std::string Value::to_string() const {
+    return _data;
+}
+
 void Value::_check(Value::Type type) const {
 
     if (type == _type)

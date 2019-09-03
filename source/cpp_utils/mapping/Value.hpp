@@ -37,6 +37,8 @@ namespace mapping {
         operator int() const;
         operator float() const;
 
+        std::string to_string() const;
+
     private:
 
         void _check(Type type) const;

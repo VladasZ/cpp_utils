@@ -189,7 +189,8 @@ namespace mapping {
 
         template<class Field>
         Field get(const std::string& name) {
-            static_assert(supported<Field>, "Type is not supported");
+            static_assert(supported<Field> || std::is_same_v<Field, Value>,
+                    "Type is not supported");
 
             Value result;
             bool found = false;
