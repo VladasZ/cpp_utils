@@ -75,7 +75,6 @@ LOCATION(file, func, line)\
 
 #endif
 
-#define Info(message) Log(message)
 #define Logvar(variable) Log(#variable << " : " << (variable))
 #define NOT_IMPLEMENTED _Error("Not implemented")
 #define Fatal(message) { _Error(message); std::terminate(); }

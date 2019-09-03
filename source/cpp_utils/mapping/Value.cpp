@@ -43,6 +43,13 @@ Value::operator float() const {
     return std::stof(_data);
 }
 
+std::string Value::database_string() const {
+    if (_type == String) {
+        return "\'" + _data + "\'";
+    }
+    return _data;
+}
+
 std::string Value::to_string() const {
     return _data;
 }

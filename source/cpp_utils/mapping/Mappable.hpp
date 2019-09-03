@@ -165,8 +165,15 @@ namespace mapping {
                    "VALUES(" + values + ");";
         }
 
+        std::string select_where_command() const {
+            auto field = edited_field();
+            auto value = get<Value>(field).database_string();
+            return "SELECT * FROM " + T::class_name() +
+            " WHERE " + field + " = " + value + ";";
+        }
+
         static std::string select_command() {
-            return "SELECT * from " + T::class_name() + ";";
+            return "SELECT * FROM " + T::class_name() + ";";
         }
 
         static T empty() {
@@ -188,7 +195,7 @@ namespace mapping {
         }
 
         template<class Field>
-        Field get(const std::string& name) {
+        Field get(const std::string& name) const {
             static_assert(supported<Field> || std::is_same_v<Field, Value>,
                     "Type is not supported");
 
