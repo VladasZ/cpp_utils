@@ -169,7 +169,7 @@ namespace mapping {
             auto field = edited_field();
             auto value = get<Value>(field).database_string();
             return "SELECT * FROM " + T::class_name() +
-            " WHERE " + field + " = " + value + ";";
+                   " WHERE " + field + " = " + value + ";";
         }
 
         static std::string select_command() {
@@ -205,7 +205,7 @@ namespace mapping {
         template<class Field>
         Field get(const std::string& name) const {
             static_assert(supported<Field> || std::is_same_v<Field, Value>,
-                    "Type is not supported");
+                          "Type is not supported");
 
             if (name.empty()) {
                 throw std::runtime_error("Field get::No property name for class " + T::class_name());
@@ -227,6 +227,25 @@ namespace mapping {
 
             return result;
         }
+
+        static inline const std::string primary = []{
+            std::string result;
+            bool found = false;
+            T::iterate_properties([&](auto property) {
+                if (property.is_primary) {
+                    if (found) {
+                        throw std::runtime_error(
+                                "Class " + T::class_name() + " has 2 or more primary keys: " +
+                                result + " and " + property.name
+                                );
+                    }
+                    result = property.name;
+                    found = true;
+                }
+            });
+            return result;
+        }();
+
     };
 
 }

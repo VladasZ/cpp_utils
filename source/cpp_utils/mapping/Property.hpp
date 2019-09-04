@@ -32,8 +32,10 @@ namespace mapping {
         const std::string name;
         const Pointer pointer;
 
-        constexpr Property(const std::string& name, Pointer pointer) :
-                name(name), pointer(pointer) {
+        const bool is_primary;
+
+        constexpr Property(const std::string& name, Pointer pointer, bool is_primary) :
+                name(name), pointer(pointer), is_primary(is_primary) {
         }
 
         std::string database_type_name() const {
@@ -60,10 +62,17 @@ namespace mapping {
     };
 
     template<class Class, class Member>
-    static const auto make_property(const std::string& name, Member Class::* pointer) {
-        return Property<Class, Member>(name, pointer);
+    static const auto make_property(const std::string& name, Member Class::* pointer, bool is_primary = false) {
+        return Property<Class, Member>(name, pointer, is_primary);
     }
 
 }
 
-#define PROPERTY(name) mapping::make_property(#name,  &This::name)
+#define _PROPERTY_1(name)             mapping::make_property(#name, &This::name)
+#define _PROPERTY_2(name, is_primary) mapping::make_property(#name, &This::name, is_primary)
+
+#define _PROPERTY_X(x, name, is_primary, FUNC, ...)  FUNC
+
+#define PROPERTY(...)  _PROPERTY_X(,##__VA_ARGS__,\
+                       _PROPERTY_2(__VA_ARGS__),\
+                       _PROPERTY_1(__VA_ARGS__))
