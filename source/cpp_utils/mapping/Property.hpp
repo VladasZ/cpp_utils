@@ -47,7 +47,8 @@ namespace mapping {
                 return "INTEGER";
             }
             else {
-                throw std::string() + "Invalid member type: " + typeid(Member).name();
+                throw std::runtime_error(std::string() +
+                "Invalid member type: " + typeid(Member).name());
             }
         }
 

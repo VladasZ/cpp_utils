@@ -59,7 +59,7 @@ void Value::_check(Value::Type type) const {
     if (type == _type)
         return;
 
-    throw std::string() +
+    throw std::runtime_error(
         "Invalid mapping::Value conversion. Expected: " + type_to_string[_type] +
-        " got: " + type_to_string[type];
+        " got: " + type_to_string[type]);
 }

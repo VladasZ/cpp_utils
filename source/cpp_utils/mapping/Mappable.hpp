@@ -186,11 +186,19 @@ namespace mapping {
 
         std::string edited_field() const {
             std::string result;
+            bool found = false;
             T::iterate_properties([&](auto property) {
+                if (found) {
+                    return;
+                }
                 if (_value(property) != typename decltype(property)::Member { }) {
                     result = property.name;
+                    found = true;
                 }
             });
+            if (!found) {
+                throw std::runtime_error("No edited field found in class " + T::class_name());
+            }
             return result;
         }
 
@@ -198,6 +206,10 @@ namespace mapping {
         Field get(const std::string& name) const {
             static_assert(supported<Field> || std::is_same_v<Field, Value>,
                     "Type is not supported");
+
+            if (name.empty()) {
+                throw std::runtime_error("Field get::No property name for class " + T::class_name());
+            }
 
             Value result;
             bool found = false;
@@ -210,8 +222,7 @@ namespace mapping {
             });
 
             if (!found) {
-                throw std::string() +
-                      "No property: " + name + " in class " + T::class_name();
+                throw std::runtime_error("Field get::No property: " + name + " in class " + T::class_name());
             }
 
             return result;
