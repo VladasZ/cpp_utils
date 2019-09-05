@@ -83,6 +83,16 @@ namespace mapping {
             return static_cast<const T*>(this)->*property.pointer;
         }
 
+        template<class Prop>
+        std::string _database_value(const Prop& property) const {
+            if constexpr (Prop::is_string) {
+                return std::string() + "\'" + _value(property) + "\'";
+            }
+            else {
+                return std::to_string(_value(property));
+            }
+        }
+
     public:
 
         template<class JSONType>
@@ -119,89 +129,6 @@ namespace mapping {
             cu::iterate_tuple(T::properties(), closure);
         }
 
-        //SQLITE
-
-        static std::string create_table_command() {
-            std::string command = "CREATE TABLE IF NOT EXISTS ";
-
-            command += T::class_name();
-            command += " (\n";
-
-            T::iterate_properties([&](auto property) {
-                command += property.name + " " + property.database_type_name() + ",\n";
-            });
-
-            command.pop_back();
-            command.pop_back();
-
-            command += "\n);";
-
-            return command;
-        }
-
-        std::string insert_command() const {
-
-            std::string columns;
-            std::string values;
-
-            T::iterate_properties([&](auto property) {
-                columns += property.name + ", ";
-
-                auto value = _value(property);
-
-                if constexpr (property.is_string)
-                    values += std::string() + "\'" + value + "\',";
-                else
-                    values += std::to_string(value) + ",";
-            });
-
-            columns.pop_back();
-            columns.pop_back();
-
-            values.pop_back();
-
-            return std::string() +
-                   "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
-                   "VALUES(" + values + ");";
-        }
-
-        std::string select_where_command() const {
-            auto field = edited_field();
-            auto value = get<Value>(field).database_string();
-            return "SELECT * FROM " + T::class_name() +
-                   " WHERE " + field + " = " + value + ";";
-        }
-
-        static std::string select_command() {
-            return "SELECT * FROM " + T::class_name() + ";";
-        }
-
-        static T empty() {
-            T result;
-            T::iterate_properties([&](auto property) {
-                result.*property.pointer = typename decltype(property)::Member { };
-            });
-            return result;
-        }
-
-        std::string edited_field() const {
-            std::string result;
-            bool found = false;
-            T::iterate_properties([&](auto property) {
-                if (found) {
-                    return;
-                }
-                if (_value(property) != typename decltype(property)::Member { }) {
-                    result = property.name;
-                    found = true;
-                }
-            });
-            if (!found) {
-                throw std::runtime_error("No edited field found in class " + T::class_name());
-            }
-            return result;
-        }
-
         template<class Field>
         Field get(const std::string& name) const {
             static_assert(supported<Field> || std::is_same_v<Field, Value>,
@@ -228,7 +155,108 @@ namespace mapping {
             return result;
         }
 
-        static inline const std::string primary = []{
+        std::string edited_field() const {
+            std::string result;
+            bool found = false;
+            T::iterate_properties([&](auto property) {
+                if (found) {
+                    return;
+                }
+                if (_value(property) != typename decltype(property)::Member { }) {
+                    result = property.name;
+                    found = true;
+                }
+            });
+            if (!found) {
+                throw std::runtime_error("No edited field found in class " + T::class_name());
+            }
+            return result;
+        }
+
+        static T empty() {
+            T result;
+            T::iterate_properties([&](auto property) {
+                result.*property.pointer = typename decltype(property)::Member { };
+            });
+            return result;
+        }
+
+        virtual std::string to_string() const {
+            return to_json();
+        }
+
+        //SQLITE
+
+        static std::string create_table_command() {
+            std::string command = "CREATE TABLE IF NOT EXISTS ";
+
+            command += T::class_name();
+            command += " (\n";
+
+            T::iterate_properties([&](auto property) {
+                command += property.name + " " + property.database_type_name();
+                if (property.is_primary) {
+                    command += " UNIQUE";
+                }
+                command += ",\n";
+            });
+
+            command.pop_back();
+            command.pop_back();
+
+            command += "\n);";
+
+            return command;
+        }
+
+        std::string insert_command() const {
+
+            std::string columns;
+            std::string values;
+
+            T::iterate_properties([&](auto property) {
+                columns += property.name + ", ";
+                values += _database_value(property) + ",";
+            });
+
+            columns.pop_back();
+            columns.pop_back();
+
+            values.pop_back();
+
+            return std::string() +
+                   "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
+                   "VALUES(" + values + ");";
+        }
+
+        std::string update_command() const {
+            std::string command = "UPDATE " + T::class_name() + " SET ";
+            T::iterate_properties([&](auto property) {
+                command += property.name + " = " + _database_value(property) + ", ";
+            });
+            command.pop_back();
+            command.pop_back();
+            return command + " WHERE " + T::primary_key + " = " + get<Value>(T::primary_key).database_string() + ";";
+        }
+
+        std::string select_command() const {
+            auto primary_value = get<Value>(T::primary_key).database_string();
+            return "SELECT * FROM " + T::class_name() +
+            " WHERE " + T::primary_key + " = " + primary_value + ";";
+        }
+
+        std::string select_where_command() const {
+            auto field = edited_field();
+            auto value = get<Value>(field).database_string();
+            return "SELECT * FROM " + T::class_name() +
+                   " WHERE " + field + " = " + value + ";";
+        }
+
+        static std::string select_all_command() {
+            return "SELECT * FROM " + T::class_name() + ";";
+        }
+
+        static inline const std::string primary_key = []{
             std::string result;
             bool found = false;
             T::iterate_properties([&](auto property) {
