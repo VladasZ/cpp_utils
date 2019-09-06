@@ -7,7 +7,7 @@
 //
 
 
-#ifdef __arm__
+#ifdef MICROCONTROLLER_BUILD
 
 #include "mbed.h"
 #include "I2CSlave.hpp"

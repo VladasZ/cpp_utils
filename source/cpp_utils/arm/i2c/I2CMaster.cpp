@@ -6,7 +6,7 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
-#ifdef __arm__
+#ifdef MICROCONTROLLER_BUILD
 
 #include "mbed.h"
 #include "I2CMaster.hpp"

@@ -7,7 +7,10 @@
 //
 
 #pragma once
-#ifdef __arm__
+
+#include "System.hpp"
+
+#ifdef MICROCONTROLLER_BUILD
 
 #include "Utils.hpp"
 #include "I2CCommands.hpp"

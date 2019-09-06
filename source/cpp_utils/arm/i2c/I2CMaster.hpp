@@ -8,7 +8,9 @@
 
 #pragma once
 
-#ifdef __arm__
+#include "System.hpp"
+
+#ifdef MICROCONTROLLER_BUILD
 
 namespace cu {
 

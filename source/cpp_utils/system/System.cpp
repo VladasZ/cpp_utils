@@ -6,7 +6,7 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef __arm__
+#ifdef MICROCONTROLLER_BUILD
 #include "mbed.h"
 #else
 #include <thread>
@@ -23,7 +23,7 @@
 using namespace cu;
 
 void System::sleep(float interval) {
-#ifdef __arm__
+#ifdef MICROCONTROLLER_BUILD
   wait(interval);
 #else
   std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
@@ -60,7 +60,10 @@ Path System::user_name() {
 #elif IOS_BUILD
     return "System::user_name() is not implemented fot this platform";
 #else
-    return getenv("USER");
+    auto user = getenv("USER");
+    if (!user)
+        return Path("No USER enviroment variable.");
+    return Path(user);
+
 #endif
 }
-
