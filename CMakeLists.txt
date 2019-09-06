@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR)
 
-include(${BUILD_DIRECTORY}/build_info.cmake)
-include(${BUILD_SCRIPT_PATH})
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+	include(build/build_tools_generated.cmake)
+	include(${CMAKE_UTILS_PATH})
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
