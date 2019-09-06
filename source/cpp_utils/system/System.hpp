@@ -16,3 +16,12 @@ namespace cu::System {
     unsigned random(unsigned range);
     Path user_name();
 }
+
+#if __APPLE__
+#include "TargetConditionals.h"
+#if TARGET_IPHONE_SIMULATOR
+#define IOS_SIMULATOR
+#elif TARGET_OS_IPHONE
+#define IOS_DEVICE
+#endif
+#endif
