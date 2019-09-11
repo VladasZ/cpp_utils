@@ -25,9 +25,6 @@ namespace mapping {
     template <class Type>
     static constexpr bool is_mappable = std::is_base_of<Mappable<Type>, Type>::value;
 
-    template <class Type>
-    using if_mappable = std::enable_if_t<is_mappable<Type>>;
-
     template<class Type>
     static constexpr bool supported =
             std::is_same_v<Type, std::string> ||
@@ -56,7 +53,6 @@ namespace mapping {
         static void pack(const Member& member, const Property& property, JSON& json) {
             json[property.name] = member;
         }
-
 
         JSON _to_json() const {
             JSON json;

@@ -42,10 +42,10 @@ namespace mapping {
             if constexpr (is_string) {
                 return "TEXT";
             }
-            else if (is_float) {
+            else if constexpr (is_float) {
                 return "REAL";
             }
-            else if (is_integer) {
+            else if constexpr (is_integer) {
                 return "INTEGER";
             }
             else {

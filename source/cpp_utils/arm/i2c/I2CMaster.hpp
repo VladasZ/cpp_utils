@@ -30,7 +30,6 @@ namespace cu {
 	
 	template <class T>
 	int write(const T& data) {
-	  // if constexpr ()
 	  return write(&data, sizeof(T));
 	}
 

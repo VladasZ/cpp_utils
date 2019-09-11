@@ -56,6 +56,7 @@ namespace
   }
 
   /// convert litte vs big endian
+  [[maybe_unused]]
   inline uint64_t swap(uint64_t x)
   {
 #if defined(__GNUC__) || defined(__clang__)
