@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <iostream>
+#include <string>
 
 namespace mapping {
 
@@ -26,8 +26,8 @@ namespace mapping {
 
         static_assert(is_string || is_float || is_integer, "Invalid property type");
 
-        const std::string class_name  = typeid(Class).name();
-        const std::string member_name = typeid(Member).name();
+        const std::string class_name  = Class::class_name();
+        const std::string member_name = database_type_name();
 
         const std::string name;
         const Pointer pointer;

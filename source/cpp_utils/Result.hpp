@@ -10,10 +10,14 @@
 
 #include <string>
 
+#include "JSONMappable.hpp"
+
 namespace cu {
 
     template<class T>
     class Result {
+
+        static_assert(mapping::is_json_mappable<T>);
 
     public:
 
@@ -40,7 +44,7 @@ namespace cu {
             if (found) {
                 return std::string() + "\n" +
                        "Found result: " "\n"
-                       + result.to_string();
+                       + result.to_json();
             }
             return "Not found result";
         }

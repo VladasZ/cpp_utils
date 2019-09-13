@@ -10,20 +10,11 @@
 
 #include <iostream>
 
-#include "json.hpp"
-
 #include "Value.hpp"
 #include "Property.hpp"
 #include "IterateTuple.hpp"
 
 namespace mapping {
-
-    using JSON = nlohmann::json;
-
-    template<class T> class Mappable;
-
-    template <class Type>
-    static constexpr bool is_mappable = std::is_base_of<Mappable<Type>, Type>::value;
 
     template<class Type>
     static constexpr bool supported =
@@ -38,92 +29,14 @@ namespace mapping {
 
         using This = T;
 
-    private:
-
-        //Extraction
-
-        template <class Member, class Property>
-        static void extract(Member& member, const Property& property, const JSON& json) {
-            member = json.value<Member>(property.name, Member { });
-        }
-
-        //Packing
-
-        template <class Member, class Property>
-        static void pack(const Member& member, const Property& property, JSON& json) {
-            json[property.name] = member;
-        }
-
-        JSON _to_json() const {
-            JSON json;
-            T::iterate_properties([&](auto property) {
-                pack(_value(property), property, json);
-            });
-            return json;
-        }
-
-        static T _parse_json(const JSON& json) {
-            T object;
-            T::iterate_properties([&](auto property) {
-                extract(object.*property.pointer, property, json);
-            });
-            return object;
-        }
-
-        static T _parse_string(const std::string& json) {
-            return parse(JSON::parse(json, nullptr, false));
-        }
+    protected:
 
         template<class Prop>
         auto _value(const Prop& property) const {
-            return static_cast<const T*>(this)->*property.pointer;
-        }
-
-        template<class Prop>
-        std::string _database_value(const Prop& property) const {
-            if constexpr (Prop::is_string) {
-                return std::string() + "\'" + _value(property) + "\'";
-            }
-            else {
-                return std::to_string(_value(property));
-            }
+            return dynamic_cast<const T*>(this)->*property.pointer;
         }
 
     public:
-
-        template<class JSONType>
-        static T parse(const JSONType& json) {
-            if constexpr (std::is_same_v<JSONType, JSON>) {
-                return _parse_json(json);
-            }
-            else {
-                return _parse_string(json);
-            }
-        }
-
-        std::string to_json() const {
-            return _to_json().dump();
-        }
-
-        static void print_properties() {
-            T::iterate_properties([](auto property) {
-                std::cout << property.to_string() << std::endl;
-            });
-        }
-
-        template<class Array>
-        static std::string array_to_json(const Array& array) {
-            static_assert(std::is_same_v<typename Array::value_type, T>);
-            auto result = JSON::array();
-            for (auto value : array)
-                result.push_back(value._to_json());
-            return result.dump();
-        }
-
-        template<class Closure>
-        static void iterate_properties(Closure&& closure) {
-            cu::iterate_tuple(T::properties(), closure);
-        }
 
         template<class Field>
         Field get(const std::string& name) const {
@@ -140,7 +53,7 @@ namespace mapping {
                 if (found) return;
                 if (property.name == name) {
                     found = true;
-                    result = _value(property);
+                    result = this->template _value(property);
                 }
             });
 
@@ -169,87 +82,31 @@ namespace mapping {
             return result;
         }
 
+        Value primary_value() const {
+            return get<Value>(T::primary_key);
+        }
+
+        virtual std::string to_string() {
+            return T::class_name();
+        }
+
+        template<class Closure>
+        static void iterate_properties(Closure&& closure) {
+            cu::iterate_tuple(This::properties(), closure);
+        }
+
+        static void print_properties() {
+            T::iterate_properties([](auto property) {
+                std::cout << property.to_string() << std::endl;
+            });
+        }
+
         static T empty() {
             T result;
             T::iterate_properties([&](auto property) {
                 result.*property.pointer = typename decltype(property)::Member { };
             });
             return result;
-        }
-
-        virtual std::string to_string() const {
-            return to_json();
-        }
-
-        //SQLITE
-
-        static std::string create_table_command() {
-            std::string command = "CREATE TABLE IF NOT EXISTS ";
-
-            command += T::class_name();
-            command += " (\n";
-
-            T::iterate_properties([&](auto property) {
-                command += property.name + " " + property.database_type_name();
-                if (property.is_primary) {
-                    command += " UNIQUE";
-                }
-                command += ",\n";
-            });
-
-            command.pop_back();
-            command.pop_back();
-
-            command += "\n);";
-
-            return command;
-        }
-
-        std::string insert_command() const {
-
-            std::string columns;
-            std::string values;
-
-            T::iterate_properties([&](auto property) {
-                columns += property.name + ", ";
-                values += _database_value(property) + ",";
-            });
-
-            columns.pop_back();
-            columns.pop_back();
-
-            values.pop_back();
-
-            return std::string() +
-                   "INSERT INTO " + T::class_name() + " (" + columns + ")\n" +
-                   "VALUES(" + values + ");";
-        }
-
-        std::string update_command() const {
-            std::string command = "UPDATE " + T::class_name() + " SET ";
-            T::iterate_properties([&](auto property) {
-                command += property.name + " = " + _database_value(property) + ", ";
-            });
-            command.pop_back();
-            command.pop_back();
-            return command + " WHERE " + T::primary_key + " = " + get<Value>(T::primary_key).database_string() + ";";
-        }
-
-        std::string select_command() const {
-            auto primary_value = get<Value>(T::primary_key).database_string();
-            return "SELECT * FROM " + T::class_name() +
-            " WHERE " + T::primary_key + " = " + primary_value + ";";
-        }
-
-        std::string select_where_command() const {
-            auto field = edited_field();
-            auto value = get<Value>(field).database_string();
-            return "SELECT * FROM " + T::class_name() +
-                   " WHERE " + field + " = " + value + ";";
-        }
-
-        static std::string select_all_command() {
-            return "SELECT * FROM " + T::class_name() + ";";
         }
 
         static inline const std::string primary_key = []{
@@ -261,7 +118,7 @@ namespace mapping {
                         throw std::runtime_error(
                                 "Class " + T::class_name() + " has 2 or more primary keys: " +
                                 result + " and " + property.name
-                                );
+                        );
                     }
                     result = property.name;
                     found = true;
