@@ -12,6 +12,11 @@
 
 namespace mapping {
 
+    template<class T> class SQLiteMappable;
+
+    template <class Type>
+    static constexpr bool is_sqlite_mappable = std::is_base_of<SQLiteMappable<Type>, Type>::value;
+
     template<class T>
     class SQLiteMappable : public virtual Mappable<T> {
 

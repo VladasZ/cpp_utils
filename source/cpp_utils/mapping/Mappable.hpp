@@ -22,6 +22,11 @@ namespace mapping {
             std::is_same_v<Type, int        > ||
             std::is_same_v<Type, float      >;
 
+    template<class T> class Mappable;
+
+    template <class Type>
+    static constexpr bool is_mappable = std::is_base_of<Mappable<Type>, Type>::value;
+
     template<class T>
     class Mappable {
 
