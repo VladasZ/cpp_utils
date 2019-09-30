@@ -3,6 +3,7 @@
 //
 
 #include <map>
+#include <stdexcept>
 
 #include "Value.hpp"
 
