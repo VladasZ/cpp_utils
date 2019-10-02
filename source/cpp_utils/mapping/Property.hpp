@@ -32,10 +32,11 @@ namespace mapping {
         const std::string name;
         const Pointer pointer;
 
-        const bool is_primary;
+		const bool is_primary;
+		const bool is_secure;
 
-        constexpr Property(const std::string& name, Pointer pointer, bool is_primary) :
-                name(name), pointer(pointer), is_primary(is_primary) {
+        constexpr Property(const std::string& name, Pointer pointer, bool is_primary, bool is_secure) :
+			name(name), pointer(pointer), is_primary(is_primary), is_secure(is_secure) {
         }
 
         std::string database_type_name() const {
@@ -62,11 +63,12 @@ namespace mapping {
     };
 
     template<class Class, class Member>
-    static const auto make_property(const std::string& name, Member Class::* pointer, bool is_primary = false) {
-        return Property<Class, Member>(name, pointer, is_primary);
+    static const auto make_property(const std::string& name, Member Class::* pointer, bool is_primary = false, bool is_secure = false) {
+        return Property<Class, Member>(name, pointer, is_primary, is_secure);
     }
 
 }
 
-#define PROPERTY(name)    mapping::make_property(#name, &This::name)
-#define PRIMARY_KEY(name) mapping::make_property(#name, &This::name, true)
+#define PROPERTY(name)        mapping::make_property(#name, &This::name)
+#define PRIMARY_KEY(name)     mapping::make_property(#name, &This::name, true)
+#define SECURE_PROPERTY(name) mapping::make_property(#name, &This::name, false, true)

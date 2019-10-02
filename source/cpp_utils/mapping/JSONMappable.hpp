@@ -26,6 +26,10 @@ namespace mapping {
     template<class T>
     class JSONMappable : public virtual Mappable<T> {
 
+	public:
+
+		static inline bool skip_secure_properties = false;
+
     private:
 
         template <class Member, class Property>
@@ -35,6 +39,9 @@ namespace mapping {
 
         template <class Member, class Property>
         static void _pack(const Member& member, const Property& property, JSON& json) {
+			if (skip_secure_properties && property.is_secure) {
+				return;
+			}
             json[property.name] = member;
         }
 
