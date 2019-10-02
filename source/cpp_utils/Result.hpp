@@ -22,13 +22,14 @@ namespace cu {
     public:
 
         bool found;
+		bool not_found;
         T result;
 
-        Result() : found(false) {
+        Result() : found(false), not_found(!found) {
 
         }
 
-        Result(const T& result) : result(result), found(true) {
+        Result(const T& result) : result(result), found(true), not_found(!found) {
 
         }
 
