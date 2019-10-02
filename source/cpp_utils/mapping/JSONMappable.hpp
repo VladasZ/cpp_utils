@@ -41,8 +41,9 @@ namespace mapping {
         JSON _to_json() const {
             JSON json;
             T::iterate_properties([&](auto property) {
-                _pack(this->template _value(property), property, json);
-            });
+				//_pack(this->template _value(property), property, json);
+				_pack(this->_value(property), property, json);
+			});
             return json;
         }
 

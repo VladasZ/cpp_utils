@@ -58,8 +58,9 @@ namespace mapping {
                 if (found) return;
                 if (property.name == name) {
                     found = true;
-                    result = this->template _value(property);
-                }
+					//result = this->template _value(property);
+					result = this->_value(property);
+				}
             });
 
             if (!found) {
