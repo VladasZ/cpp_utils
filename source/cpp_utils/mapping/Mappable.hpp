@@ -17,7 +17,7 @@
 namespace mapping {
 
     template<class Type>
-    static constexpr bool supported =
+    static constexpr bool is_supported =
             std::is_same_v<Type, std::string> ||
             std::is_same_v<Type, int        > ||
             std::is_same_v<Type, float      >;
@@ -45,7 +45,7 @@ namespace mapping {
 
         template<class Field>
         Field get(const std::string& name) const {
-            static_assert(supported<Field> || std::is_same_v<Field, Value>,
+            static_assert(is_supported<Field> || std::is_same_v<Field, Value>,
                           "Type is not supported");
 
             if (name.empty()) {

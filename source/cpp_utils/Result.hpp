@@ -17,7 +17,7 @@ namespace cu {
     template<class T>
     class Result {
 
-        static_assert(mapping::is_json_mappable<T>);
+        static_assert(mapping::is_json_mappable<T> || mapping::is_supported<T>);
 
     public:
 
