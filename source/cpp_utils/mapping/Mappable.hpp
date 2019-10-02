@@ -37,16 +37,19 @@ namespace mapping {
     protected:
 
         template<class Prop>
-        auto _value(const Prop& property) const {
+        auto& _value(const Prop& property) const {
             return dynamic_cast<const T*>(this)->*property.pointer;
         }
+
+		template<class Prop>
+		auto& _set_value(const Prop& property) {
+			return dynamic_cast<T*>(this)->*property.pointer;
+		}
 
     public:
 
         template<class Field>
-        Field get(const std::string& name) const {
-            static_assert(is_supported<Field> || std::is_same_v<Field, Value>,
-                          "Type is not supported");
+        Field get(const std::string& name) const { static_assert(is_supported<Field> || std::is_same_v<Field, Value>);
 
             if (name.empty()) {
                 throw std::runtime_error("Field get::No property name for class " + T::class_name());
@@ -70,6 +73,31 @@ namespace mapping {
             return result;
         }
 
+		template<class Field>
+		Field set(const std::string& name, const Field& value) { static_assert(is_supported<Field> || std::is_same_v<Field, Value>);
+
+			if (name.empty()) {
+				throw std::runtime_error("Field set::No property name for class " + T::class_name());
+			}
+
+			Value val = value;
+
+			bool found = false;
+			T::iterate_properties([&](auto property) {
+				if (found) return;
+				if (property.name == name) {
+					found = true;
+					//result = this->template _value(property);
+					this->_set_value(property) = val;
+				}
+			});
+
+			if (!found) {
+				throw std::runtime_error("Field get::No property: " + name + " in class " + T::class_name());
+			}
+
+		}
+
         std::string edited_field() const {
             std::string result;
             bool found = false;
@@ -87,6 +115,23 @@ namespace mapping {
             }
             return result;
         }
+
+		void update_with(const T& other) {
+
+			if (primary_value().to_string() != other.primary_value().to_string()) {
+				throw std::runtime_error(
+					"Invalid update object: " + other.primary_value().to_string() + "\n" +
+					"Trying to update: " + primary_value().to_string() + "\n" +
+					"Class: " + T::class_name()
+				);
+			}
+
+			T::iterate_properties([&](auto property) {
+				using ValType = decltype(property)::Member;
+				this->set<ValType>(property.name, other.get<ValType>(property.name));
+			});
+
+		}
 
         Value primary_value() const {
             return get<Value>(T::primary_key);
