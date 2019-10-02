@@ -68,11 +68,5 @@ namespace mapping {
 
 }
 
-#define _PROPERTY_1(name)             mapping::make_property(#name, &This::name)
-#define _PROPERTY_2(name, is_primary) mapping::make_property(#name, &This::name, is_primary)
-
-#define _PROPERTY_X(x, name, is_primary, FUNC, ...)  FUNC
-
-#define PROPERTY(...)  _PROPERTY_X(,##__VA_ARGS__,\
-                       _PROPERTY_2(__VA_ARGS__),\
-                       _PROPERTY_1(__VA_ARGS__))
+#define PROPERTY(name)    mapping::make_property(#name, &This::name)
+#define PRIMARY_KEY(name) mapping::make_property(#name, &This::name, true)

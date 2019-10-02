@@ -117,7 +117,7 @@ namespace mapping {
         static inline const std::string primary_key = []{
             std::string result;
             bool found = false;
-            T::iterate_properties([&](auto property) {
+			Mappable<T>::iterate_properties([&](auto property) {
                 if (property.is_primary) {
                     if (found) {
                         throw std::runtime_error(

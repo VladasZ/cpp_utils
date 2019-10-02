@@ -23,11 +23,13 @@ namespace mapping {
         template<class Prop>
         std::string _database_value(const Prop& property) const {
             if constexpr (Prop::is_string) {
-                return std::string() + "\'" + this->template _value(property) + "\'";
-            }
+				//return std::string() + "\'" + this->template _value(property) + "\'";
+				return std::string() + "\'" + this->_value(property) + "\'";
+			}
             else {
-                return std::to_string(this->template _value(property));
-            }
+				//return std::to_string(this->template _value(property));
+				return std::to_string(this->_value(property));
+			}
         }
 
     public:
