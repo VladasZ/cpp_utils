@@ -37,6 +37,22 @@ namespace mapping {
         operator int() const;
         operator float() const;
 
+        template<class T>
+        T convert() const {
+            if constexpr (std::is_same_v<T, int>) {
+                _check(Int);
+                return this->operator float();
+            }
+            else if constexpr (std::is_same_v<T, float>) {
+                _check(Float);
+                return this->operator int();
+            }
+            else if constexpr (std::is_same_v<T, std::string>) {
+                _check(String);
+                return this->operator std::string();
+            }
+        }
+
         std::string database_string() const;
 
         std::string to_string() const;

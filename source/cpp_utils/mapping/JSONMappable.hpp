@@ -68,6 +68,10 @@ namespace mapping {
 
     public:
 
+        void print() const {
+            std::cout << to_json() << std::endl;
+        }
+
         template<class JSONType>
         static T parse(const JSONType& json) {
             if constexpr (std::is_same_v<JSONType, JSON>) {

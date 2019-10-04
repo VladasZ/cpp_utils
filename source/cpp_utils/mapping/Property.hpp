@@ -16,7 +16,7 @@ namespace mapping {
     class Property {
     public:
 
-        using Member = _Member;
+        using Member = std::remove_const_t<_Member>;
 
         using Pointer = _Member Class::*;
 

@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "Log.hpp"
 #include "Value.hpp"
 #include "Property.hpp"
 #include "IterateTuple.hpp"
@@ -38,13 +39,13 @@ namespace mapping {
 
     protected:
 
-        template<class Prop>
-        auto& _value(const Prop& property) const {
+        template<class Prop, class Member = typename Prop::Member>
+        const Member& _value(const Prop& property) const {
             return dynamic_cast<const T*>(this)->*property.pointer;
         }
 
-		template<class Prop>
-		auto& _set_value(const Prop& property) {
+        template<class Prop, class Member = typename Prop::Member>
+        Member& _set_value(const Prop& property) {
 			return dynamic_cast<T*>(this)->*property.pointer;
 		}
 
@@ -63,7 +64,6 @@ namespace mapping {
                 if (found) return;
                 if (property.name == name) {
                     found = true;
-					//result = this->template _value(property);
 					result = this->_value(property);
 				}
             });
@@ -76,7 +76,7 @@ namespace mapping {
         }
 
 		template<class Field>
-		Field set(const std::string& name, const Field& value) { static_assert(is_supported<Field> || std::is_same_v<Field, Value>);
+		void set(const std::string& name, const Field& value) { static_assert(is_supported<Field> || std::is_same_v<Field, Value>);
 
 			if (name.empty()) {
 				throw std::runtime_error("Field set::No property name for class " + T::class_name());
@@ -86,19 +86,17 @@ namespace mapping {
 
 			bool found = false;
 			T::iterate_properties([&](auto property) {
-				if (found) return;
+			    using Member = typename decltype(property)::Member;
+                if (found) return;
 				if (property.name == name) {
 					found = true;
-					throw "Not implemented needs fix";
-					//result = this->template _value(property);
-					//this->_TEMPLATE _set_value(property) = val;
+					this->_set_value(property) = val.convert<Member>();
 				}
 			});
 
-			if (!found) {
+            if (!found) {
 				throw std::runtime_error("Field get::No property: " + name + " in class " + T::class_name());
 			}
-
 		}
 
         std::string edited_field() const {
@@ -132,7 +130,6 @@ namespace mapping {
 			T::iterate_properties([&](auto property) {
 				using ValType = typename decltype(property)::Member;
 				this->set<ValType>(property.name, other.template get<ValType>(property.name));
-                //this->set<ValType>(property.name, other.template get<ValType>(property.name));
             });
 
 		}
