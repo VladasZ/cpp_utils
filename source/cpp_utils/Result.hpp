@@ -23,13 +23,13 @@ namespace cu {
 
         bool found;
 		bool not_found;
-        T result;
+        T object;
 
         Result() : found(false), not_found(!found) {
 
         }
 
-        Result(const T& result) : result(result), found(true), not_found(!found) {
+        Result(const T& object) : object(object), found(true), not_found(!found) {
 
         }
 
@@ -38,14 +38,14 @@ namespace cu {
                 throw std::runtime_error(std::string() +
                                          "Conversion of not found result of type: " + typeid(T).name());
             }
-            return result;
+            return object;
         }
 
         std::string to_string() {
             if (found) {
                 return std::string() + "\n" +
                        "Found result: " "\n"
-                       + result.to_json();
+                       + object.to_json();
             }
             return "Not found result";
         }

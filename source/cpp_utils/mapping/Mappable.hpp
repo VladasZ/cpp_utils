@@ -117,23 +117,16 @@ namespace mapping {
             return result;
         }
 
-		void update_with(const T& other, bool check_primary_key = true) {
-
-			if (check_primary_key && primary_value() != other.primary_value()) {
-				throw std::runtime_error(
-					"Invalid update object: " + other.primary_value().to_string() + "\n" +
-					"Trying to update: " + primary_value().to_string() + "\n" +
-					"Class: " + T::class_name()
-				);
-			}
-
+		void update_with(const T& other, bool ignore_primary_key = true) {
 			T::iterate_properties([&](auto property) {
 				using Member = typename decltype(property)::Member;
+				if (ignore_primary_key && property.is_primary) {
+                    return;
+				}
 				const auto value = other._value(property);
 				if (value != Member { })
 				    this->_set_value(property) = value;
             });
-
 		}
 
         Value primary_value() const {

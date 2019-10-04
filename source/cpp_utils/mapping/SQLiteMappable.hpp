@@ -87,9 +87,12 @@ namespace mapping {
         }
 
         std::string select_command() const {
-            auto primary_value = this->primary_value().database_string();
+            return SQLiteMappable<T>::select_command_with_primary_value(this->primary_value());
+        }
+
+        static std::string select_command_with_primary_value(const Value& value) {
             return "SELECT * FROM " + T::class_name() +
-                   " WHERE " + T::primary_key + " = " + primary_value + ";";
+                   " WHERE " + T::primary_key + " = " + value.database_string() + ";";
         }
 
         std::string select_where_command() const {
