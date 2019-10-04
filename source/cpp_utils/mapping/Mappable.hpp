@@ -14,6 +14,8 @@
 #include "Property.hpp"
 #include "IterateTuple.hpp"
 
+#define _TEMPLATE template
+
 namespace mapping {
 
     template<class Type>
@@ -87,8 +89,9 @@ namespace mapping {
 				if (found) return;
 				if (property.name == name) {
 					found = true;
+					throw "Not implemented needs fix";
 					//result = this->template _value(property);
-					this->_set_value(property) = val;
+					//this->_TEMPLATE _set_value(property) = val;
 				}
 			});
 
@@ -127,9 +130,10 @@ namespace mapping {
 			}
 
 			T::iterate_properties([&](auto property) {
-				using ValType = decltype(property)::Member;
-				this->set<ValType>(property.name, other.get<ValType>(property.name));
-			});
+				using ValType = typename decltype(property)::Member;
+				this->set<ValType>(property.name, other.template get<ValType>(property.name));
+                //this->set<ValType>(property.name, other.template get<ValType>(property.name));
+            });
 
 		}
 

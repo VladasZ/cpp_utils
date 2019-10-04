@@ -93,10 +93,8 @@ namespace mapping {
         }
 
         std::string select_where_command() const {
-			//auto field = this->template edited_field();
 			auto field = this->edited_field();
-			//auto value = this->template get<Value>(field).database_string();
-			auto value = this->get<Value>(field).database_string();
+			auto value = this->_TEMPLATE get<Value>(field).database_string();
 			return "SELECT * FROM " + T::class_name() +
                    " WHERE " + field + " = " + value + ";";
         }
