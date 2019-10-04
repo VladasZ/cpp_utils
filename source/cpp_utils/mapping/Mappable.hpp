@@ -117,9 +117,9 @@ namespace mapping {
             return result;
         }
 
-		void update_with(const T& other) {
+		void update_with(const T& other, bool check_primary_key = true) {
 
-			if (primary_value().to_string() != other.primary_value().to_string()) {
+			if (check_primary_key && primary_value() != other.primary_value()) {
 				throw std::runtime_error(
 					"Invalid update object: " + other.primary_value().to_string() + "\n" +
 					"Trying to update: " + primary_value().to_string() + "\n" +
@@ -128,8 +128,10 @@ namespace mapping {
 			}
 
 			T::iterate_properties([&](auto property) {
-				using ValType = typename decltype(property)::Member;
-				this->set<ValType>(property.name, other.template get<ValType>(property.name));
+				using Member = typename decltype(property)::Member;
+				const auto value = other._value(property);
+				if (value != Member { })
+				    this->_set_value(property) = value;
             });
 
 		}

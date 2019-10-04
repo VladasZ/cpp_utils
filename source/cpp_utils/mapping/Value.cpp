@@ -44,6 +44,14 @@ Value::operator float() const {
     return std::stof(_data);
 }
 
+bool Value::operator==(const Value& other) const {
+    return _data == other._data;
+}
+
+bool Value::operator!=(const Value& other) const {
+    return _data != other._data;
+}
+
 std::string Value::database_string() const {
     if (_type == String) {
         return "\'" + _data + "\'";
