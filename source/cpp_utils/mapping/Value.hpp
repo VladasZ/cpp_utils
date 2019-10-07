@@ -62,7 +62,8 @@ namespace mapping {
 
     private:
 
-        void _check(Type type) const;
+        void _check(Type) const;
+		bool _string_is_valid(const std::string&) const;
 
     };
 

@@ -23,11 +23,9 @@ namespace mapping {
         template<class Prop>
         std::string _database_value(const Prop& property) const {
             if constexpr (Prop::is_string) {
-				//return std::string() + "\'" + this->template _value(property) + "\'";
 				return std::string() + "\'" + this->_value(property) + "\'";
 			}
             else {
-				//return std::to_string(this->template _value(property));
 				return std::to_string(this->_value(property));
 			}
         }
@@ -101,6 +99,14 @@ namespace mapping {
 			return "SELECT * FROM " + T::class_name() +
                    " WHERE " + field + " = " + value + ";";
         }
+
+		std::string delete_command() const {
+			return T::delete_command_with_primary_value(primary_value());
+		}
+
+		static std::string delete_command_with_primary_value(const Value& value) {
+			return "DELETE FROM " + T::class_name() + " WHERE " + T::primary_key + " = " + value.database_string() + ";";
+		}
 
         static std::string select_all_command() {
             return "SELECT * FROM " + T::class_name() + ";";
