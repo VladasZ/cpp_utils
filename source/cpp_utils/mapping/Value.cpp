@@ -84,6 +84,7 @@ bool Value::_string_is_valid(const std::string& string) const {
 			(symbol >= 'a' && symbol <= 'z') ||
 			(symbol >= '0' && symbol <= '9') ||
 			(symbol == ' ') ||
+			(symbol == '-') ||
 			(symbol == '@') ||
 			(symbol == '.')
 			)
