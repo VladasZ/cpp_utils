@@ -80,6 +80,7 @@ void Value::check_string(const std::string& string) {
 			(symbol >= 'a' && symbol <= 'z') ||
 			(symbol >= '0' && symbol <= '9') ||
 			(symbol == ' ') ||
+			(symbol == '-') ||
 			(symbol == '@') ||
 			(symbol == '.')
 			)

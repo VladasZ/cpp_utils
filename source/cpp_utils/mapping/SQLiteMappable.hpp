@@ -101,7 +101,7 @@ namespace mapping {
         }
 
 		std::string delete_command() const {
-			return T::delete_command_with_primary_value(primary_value());
+			return T::delete_command_with_primary_value(this->primary_value());
 		}
 
 		static std::string delete_command_with_primary_value(const Value& value) {
