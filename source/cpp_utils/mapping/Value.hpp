@@ -60,10 +60,10 @@ namespace mapping {
 
         std::string to_string() const;
 
-    private:
+		static void check_string(const std::string&);
 
+    private:
         void _check(Type) const;
-		bool _string_is_valid(const std::string&) const;
 
     };
 

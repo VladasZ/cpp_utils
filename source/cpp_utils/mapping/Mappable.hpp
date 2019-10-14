@@ -45,8 +45,11 @@ namespace mapping {
         }
 
         template<class Prop, class Member = typename Prop::Member>
-        Member& _set_value(const Prop& property) {
-			return dynamic_cast<T*>(this)->*property.pointer;
+        void _set_value(const Prop& property, const Member& value) {
+			if constexpr (Prop::is_string) {
+				Value::check_string(value);
+			}
+			dynamic_cast<T*>(this)->*property.pointer = value;
 		}
 
     public:
@@ -90,7 +93,7 @@ namespace mapping {
                 if (found) return;
 				if (property.name == name) {
 					found = true;
-					this->_set_value(property) = val.convert<Member>();
+					this->_set_value(property, val.convert<Member>());
 				}
 			});
 
@@ -125,7 +128,7 @@ namespace mapping {
 				}
 				const auto value = other._value(property);
 				if (value != Member { })
-				    this->_set_value(property) = value;
+				    this->_set_value(property, value);
             });
 		}
 

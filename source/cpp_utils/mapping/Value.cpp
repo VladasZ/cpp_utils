@@ -18,11 +18,7 @@ map<Value::Type, string> Value::type_to_string = {
 };
 
 Value::Value(const std::string& str) : _type(String), _data(str) {
-
-	if (!_string_is_valid(str)) {
-		throw std::runtime_error("Invalid symbol in string value. Valid symbols are: [A-Za-z0-9.@]");
-	}
-
+	Value::check_string(str);
 }
 
 Value::Value(int i) : _type(Int), _data(std::to_string(i)) {
@@ -77,7 +73,7 @@ void Value::_check(Value::Type type) const {
         " got: " + type_to_string[type]);
 }
 
-bool Value::_string_is_valid(const std::string& string) const {
+void Value::check_string(const std::string& string) {
 	for (auto symbol : string) {
 		if (
 			(symbol >= 'A' && symbol <= 'Z') ||
@@ -91,9 +87,7 @@ bool Value::_string_is_valid(const std::string& string) const {
 			continue;
 		}
 		else {
-			return false;
+			throw std::runtime_error("Invalid symbol in string value. Valid symbols are: [A-Za-z0-9.@]");
 		}
 	}
-	return true;
 }
-
