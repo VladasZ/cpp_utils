@@ -34,7 +34,16 @@ namespace mapping {
 
         template <class Member, class Property>
         static void _extract(Member& member, const Property& property, const JSON& json) {
-            member = json.value<Member>(property.name, Member { });
+			try {
+				member = json.value<Member>(property.name, Member { });
+			}
+			catch (...) {
+				throw std::runtime_error(std::string() +
+					"Invalid json value for key: \"" + property.name + "\" of class: " + property.class_name + ". " +
+					"Expected type: " + property.database_type_name() + " " +
+					"JSON exception: " + what()
+				);
+			}
         }
 
         template <class Member, class Property>
