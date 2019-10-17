@@ -13,6 +13,7 @@
 #include "json.hpp"
 
 #include "Mappable.hpp"
+#include "ExceptionCatch.hpp"
 
 namespace mapping {
 
