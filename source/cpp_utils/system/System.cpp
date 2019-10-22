@@ -58,6 +58,7 @@ Path System::user_name() {
 	GetUserName(username, &username_len);
     return username;
 #elif IOS_BUILD
+	Error("NOT IMPLEMENTED FOR THIS PLATFORM");
     return "System::user_name() is not implemented fot this platform";
 #else
     auto user = getenv("USER");
@@ -65,5 +66,13 @@ Path System::user_name() {
         return Path("No USER enviroment variable.");
     return Path(user);
 
+#endif
+}
+
+void System::alert(const std::string& message) {
+#ifdef WINDOWS
+	MessageBox(0, message.c_str(), "System alert.", MB_OK);
+#else
+	Error("NOT IMPLEMENTED FOR THIS PLATFORM");
 #endif
 }

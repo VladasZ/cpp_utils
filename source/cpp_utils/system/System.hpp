@@ -15,6 +15,7 @@ namespace cu::System {
     unsigned random();
     unsigned random(unsigned range);
     Path user_name();
+	void alert(const std::string& message);
 }
 
 #if __APPLE__

@@ -12,7 +12,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace cu::string {
+namespace cu::String {
 
 [[maybe_unused]]
 static std::string file_name(const std::string& str) {

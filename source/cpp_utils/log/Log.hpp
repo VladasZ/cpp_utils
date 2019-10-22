@@ -33,7 +33,7 @@ static Serial *serial_transmitter =
 #define LOG_LOCATION_ENABLED true
 #define LOG_ERRORS true
 
-#define UTILS_INTERNAL_FILENAME cu::string::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
+#define UTILS_INTERNAL_FILENAME cu::String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
 
 #define LOCATION_INFO UTILS_INTERNAL_FILENAME, __func__, __LINE__
 #define LOCATION_PARAMETERS const std::string& fileName, const char* function, int line
@@ -70,13 +70,14 @@ LOCATION(file, func, line)\
 
 #define Log(message)
 #define Warning(message)
-#define Error(message)
+#define _Error(message)
 #define Endl
 #define PING
 #define UNEXPECTED
 
 #endif
 
+#define Alert(message)  cu::System::alert(message); 
 #define Logvar(variable) Log(#variable << " : " << (variable))
 #define NOT_IMPLEMENTED _Error("Not implemented")
-#define Fatal(message) { _Error(message); std::terminate(); }
+#define Fatal(message) { _Error(message); Alert(message); }
