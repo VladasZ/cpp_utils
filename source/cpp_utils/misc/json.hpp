@@ -9945,8 +9945,7 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
     }
 
     /// return the value of an iterator
-    reference 
-	() const
+    reference value() const
     {
         auto it = --this->base();
         return it.operator * ();

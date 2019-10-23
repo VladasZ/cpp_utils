@@ -83,19 +83,23 @@ namespace mapping {
             });
             command.pop_back();
             command.pop_back();
-            return command + " WHERE " + sqlite_id_key + " = " + std::to_string(id) + ";";
+            return command + " WHERE " + sqlite_id_key + " = " + std::to_string(this->id) + ";";
         }
 
         std::string select_command_with_id() const {
-            return SQLiteMappable<T>::select_command_with_key_value(sqlite_id_key, id);
+            return SQLiteMappable<T>::select_command_with_key_value(sqlite_id_key, this->id);
         }
 
 		std::string select_command_with_unique_value() const {
-			return SQLiteMappable<T>::select_command_with_key_value(unique_key, unique_value());
+			return SQLiteMappable<T>::select_command_with_key_value(this->unique_key, this->unique_value());
 		}
 
+		static std::string static_select_command_with_id(ID id) {
+            return select_command_with_key_value(sqlite_id_key, id);
+        }
+
 		static std::string select_command_with_key_value(std::string key, Value value) {
-			return "SELECT * FROM " + T::class_name() +
+			return "SELECT rowid, * FROM " + T::class_name() +
 				  " WHERE " + key + " = " + value.database_string() + ";";
 		}
 
@@ -114,7 +118,7 @@ namespace mapping {
 		}
 
         static std::string select_all_command() {
-            return "SELECT * FROM " + T::class_name() + ";";
+            return "SELECT rowid, * FROM " + T::class_name() + ";";
         }
 
     };

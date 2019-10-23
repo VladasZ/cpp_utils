@@ -41,7 +41,7 @@ namespace mapping {
 
 		static const inline std::string id_key = "id";
 
-		ID id = ID { };
+		ID id = -1;
 
     protected:
 
@@ -184,6 +184,10 @@ namespace mapping {
 
 			bool has_id() const {
 				return id != -1;
+			}
+
+			bool has_unique_value() const {
+			    return !unique_value().is_empty();
 			}
 
     };
