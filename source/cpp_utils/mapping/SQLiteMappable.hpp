@@ -103,6 +103,10 @@ namespace mapping {
 				  " WHERE " + key + " = " + value.database_string() + ";";
 		}
 
+		static std::string select_last_entry_command() {
+            return "SELECT rowid, * FROM " + T::class_name() + " ORDER BY rowid DESC LIMIT 1;";
+        }
+
         std::string select_where_command() const {
 			auto field = this->edited_field();
 			auto value = this->_TEMPLATE get<Value>(field);
