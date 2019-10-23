@@ -52,6 +52,18 @@ bool Value::operator!=(const Value& other) const {
     return _data != other._data;
 }
 
+bool Value::is_empty() const {
+	if (_type == String) {
+		return _data.empty();
+	}
+	else if (_type == Int) {
+		return this->operator int() == 0;
+	}
+	else if (_type == Float) {
+		return this->operator float() == 0.0f;
+	}
+}
+
 std::string Value::database_string() const {
     if (_type == String) {
         return "\'" + _data + "\'";

@@ -32,6 +32,8 @@ namespace mapping {
 
     public:
 
+		static const inline std::string sqlite_id_key = "rowid";
+
         static std::string create_table_command() {
             std::string command = "CREATE TABLE IF NOT EXISTS ";
 
@@ -40,7 +42,7 @@ namespace mapping {
 
             T::iterate_properties([&](auto property) {
                 command += property.name + " " + property.database_type_name();
-                if (property.is_primary) {
+                if (property.is_unique) {
                     command += " UNIQUE";
                 }
                 command += ",\n";
@@ -81,23 +83,26 @@ namespace mapping {
             });
             command.pop_back();
             command.pop_back();
-            return command + " WHERE " + T::primary_key + " = " + this->primary_value().database_string() + ";";
+            return command + " WHERE " + sqlite_id_key + " = " + std::to_string(id) + ";";
         }
 
-        std::string select_command() const {
-            return SQLiteMappable<T>::select_command_with_primary_value(this->primary_value());
+        std::string select_command_with_id() const {
+            return SQLiteMappable<T>::select_command_with_key_value(sqlite_id_key, id);
         }
 
-        static std::string select_command_with_primary_value(const Value& value) {
-            return "SELECT * FROM " + T::class_name() +
-                   " WHERE " + T::primary_key + " = " + value.database_string() + ";";
-        }
+		std::string select_command_with_unique_value() const {
+			return SQLiteMappable<T>::select_command_with_key_value(unique_key, unique_value());
+		}
+
+		static std::string select_command_with_key_value(std::string key, Value value) {
+			return "SELECT * FROM " + T::class_name() +
+				  " WHERE " + key + " = " + value.database_string() + ";";
+		}
 
         std::string select_where_command() const {
 			auto field = this->edited_field();
-			auto value = this->_TEMPLATE get<Value>(field).database_string();
-			return "SELECT * FROM " + T::class_name() +
-                   " WHERE " + field + " = " + value + ";";
+			auto value = this->_TEMPLATE get<Value>(field);
+			return select_command_with_key_value(field, value);
         }
 
 		std::string delete_command() const {

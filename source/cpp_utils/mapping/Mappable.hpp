@@ -19,6 +19,8 @@
 
 namespace mapping {
 
+	using ID = int;
+
     template<class Type>
     static constexpr bool is_supported =
             std::is_same_v<Type, std::string> ||
@@ -36,6 +38,10 @@ namespace mapping {
     public:
 
         using This = T;
+
+		static const inline std::string id_key = "id";
+
+		ID id = ID { };
 
     protected:
 
@@ -61,6 +67,10 @@ namespace mapping {
                 throw std::runtime_error("Field get::No property name for class " + T::class_name());
             }
 
+			if (name == "id") {
+				return id;
+			}
+
             Value result;
             bool found = false;
             T::iterate_properties([&](auto property) {
@@ -83,6 +93,11 @@ namespace mapping {
 
 			if (name.empty()) {
 				throw std::runtime_error("Field set::No property name for class " + T::class_name());
+			}
+
+			if (name == "id") {
+				id = value;
+				return;
 			}
 
 			Value val = value;
@@ -120,21 +135,18 @@ namespace mapping {
             return result;
         }
 
-		void update_with(const T& other, bool ignore_primary_key = true) {
+		void update_with(const T& other) {
 			T::iterate_properties([&](auto property) {
 				using Member = typename decltype(property)::Member;
-				if (ignore_primary_key && property.is_primary) {
-                    return;
-				}
 				const auto value = other._value(property);
 				if (value != Member { })
 				    this->_set_value(property, value);
             });
 		}
 
-        Value primary_value() const {
-            return get<Value>(T::primary_key);
-        }
+		Value unique_value() const {
+			return get<Value>(T::unique_key);
+		}
 
         virtual std::string to_string() {
             return T::class_name();
@@ -159,23 +171,20 @@ namespace mapping {
             return result;
         }
 
-        static inline const std::string primary_key = []{
-            std::string result;
-            bool found = false;
+		static inline const std::string unique_key = [] {
+			std::string result;
 			Mappable<T>::iterate_properties([&](auto property) {
-                if (property.is_primary) {
-                    if (found) {
-                        throw std::runtime_error(
-                                "Class " + T::class_name() + " has 2 or more primary keys: " +
-                                result + " and " + property.name
-                        );
-                    }
-                    result = property.name;
-                    found = true;
-                }
-            });
-            return result;
-        }();
+				if (property.is_unique) 
+					result = property.name;
+			});
+			return result;
+		}();
+
+		public:
+
+			bool has_id() const {
+				return id != -1;
+			}
 
     };
 

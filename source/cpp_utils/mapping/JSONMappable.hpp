@@ -57,6 +57,7 @@ namespace mapping {
 
         JSON _to_json() const {
             JSON json;
+			json[id_key] = id;
             T::iterate_properties([&](auto property) {
 				_pack(this->_value(property), property, json);
 			});
@@ -65,6 +66,7 @@ namespace mapping {
 
         static T _parse_json(const JSON& json) {
             T object;
+			object.id = json.value<ID>(id_key, -1);
             T::iterate_properties([&](auto property) {
                 _extract(object.*property.pointer, property, json);
             });

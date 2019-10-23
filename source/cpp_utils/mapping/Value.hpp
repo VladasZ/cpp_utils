@@ -56,6 +56,8 @@ namespace mapping {
         bool operator == (const Value&) const;
         bool operator != (const Value&) const;
 
+		bool is_empty() const;
+
         std::string database_string() const;
 
         std::string to_string() const;

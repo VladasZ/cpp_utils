@@ -12,63 +12,68 @@
 
 namespace mapping {
 
-    template<class Class, class _Member>
-    class Property {
-    public:
+	enum class PropertyType {
+		None,
+		Secure,
+		Unique
+	};
 
-        using Member = std::remove_const_t<_Member>;
+	template<
+		class Class, 
+		class _Member,
+		PropertyType type
+	>
+	class Property {
+	public:
 
-        using Pointer = _Member Class::*;
+		using Member = std::remove_const_t<_Member>;
 
-        constexpr static bool is_string  = std::is_same_v<Member, std::string>;
-        constexpr static bool is_float   = std::is_same_v<Member, int        >;
-        constexpr static bool is_integer = std::is_same_v<Member, float      >;
+		using Pointer = _Member Class::*;
 
-        static_assert(is_string || is_float || is_integer, "Invalid property type");
+		constexpr static bool is_string  = std::is_same_v<Member, std::string>;
+		constexpr static bool is_float   = std::is_same_v<Member, int        >;
+		constexpr static bool is_integer = std::is_same_v<Member, float      >;
 
-        const std::string class_name  = Class::class_name();
-        const std::string member_name = database_type_name();
+		constexpr static bool is_secure  = type == PropertyType::Secure;
+		constexpr static bool is_unique  = type == PropertyType::Unique;
 
-        const std::string name;
-        const Pointer pointer;
+		static_assert(is_string || is_float || is_integer, "Invalid property type");
 
-		const bool is_primary;
-		const bool is_secure;
+		const std::string class_name = Class::class_name();
+		const std::string member_name = database_type_name();
 
-        constexpr Property(const std::string& name, Pointer pointer, bool is_primary, bool is_secure) :
-			name(name), pointer(pointer), is_primary(is_primary), is_secure(is_secure) {
-        }
+		const std::string name;
+		const Pointer pointer;
 
-        std::string database_type_name() const {
-            if constexpr (is_string) {
-                return "TEXT";
-            }
-            else if constexpr (is_float) {
-                return "REAL";
-            }
-            else if constexpr (is_integer) {
-                return "INTEGER";
-            }
-            else {
-                throw std::runtime_error(std::string() +
-                "Invalid member type: " + typeid(Member).name());
-            }
-        }
+		constexpr Property(const std::string& name, Pointer pointer) :
+			name(name), pointer(pointer) {
+		}
 
-        std::string to_string() const {
-            return std::string() +
-                   "Property: " + name + " of: " + class_name + " type: " + member_name;
-        }
+		std::string database_type_name() const {
+			if constexpr (is_string) {
+				return "TEXT";
+			}
+			else if constexpr (is_float) {
+				return "REAL";
+			}
+			else if constexpr (is_integer) {
+				return "INTEGER";
+			}
+			else {
+				throw std::runtime_error(std::string() +
+					"Invalid member type: " + typeid(Member).name());
+			}
+		}
 
-    };
+		std::string to_string() const {
+			return std::string() +
+				"Property: " + name + " of: " + class_name + " type: " + member_name;
+		}
 
-    template<class Class, class Member>
-    static const auto make_property(const std::string& name, Member Class::* pointer, bool is_primary = false, bool is_secure = false) {
-        return Property<Class, Member>(name, pointer, is_primary, is_secure);
-    }
+	};
 
 }
 
-#define PROPERTY(name)        mapping::make_property(#name, &This::name)
-#define PRIMARY_KEY(name)     mapping::make_property(#name, &This::name, true)
-#define SECURE_PROPERTY(name) mapping::make_property(#name, &This::name, false, true)
+#define PROPERTY(name)        mapping::Property<This, decltype(name), mapping::PropertyType::None   >(#name, &This::name)
+#define SECURE_PROPERTY(name) mapping::Property<This, decltype(name), mapping::PropertyType::Secure >(#name, &This::name)
+#define UNIQUE_PROPERTY(name) mapping::Property<This, decltype(name), mapping::PropertyType::Unique >(#name, &This::name)
