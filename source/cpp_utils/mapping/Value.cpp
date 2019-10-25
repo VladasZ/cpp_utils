@@ -62,6 +62,9 @@ bool Value::is_empty() const {
 	else if (_type == Float) {
 		return this->operator float() == 0.0f;
 	}
+	else {
+	    throw std::runtime_error("Invalid value type for: " + _data);
+	}
 }
 
 std::string Value::database_string() const {
