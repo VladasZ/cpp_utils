@@ -5,9 +5,3 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 setup_project(cpp_utils)
-
-add_subdirectory(source/cpp_utils)
-
-if(${DESKTOP_BUILD})
-	add_subdirectory(source/cpp_utils_test)
-endif()
