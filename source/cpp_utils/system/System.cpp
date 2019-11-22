@@ -60,6 +60,8 @@ Path System::user_name() {
 #elif IOS_BUILD
 	_Error("NOT IMPLEMENTED FOR THIS PLATFORM");
     return "System::user_name() is not implemented fot this platform";
+#elif ANDROID_BUILD
+    return "ANDEOPORRR";
 #else
     auto user = getenv("USER");
     if (!user)
