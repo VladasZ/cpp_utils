@@ -14,16 +14,15 @@ namespace cu {
 
 	class File {
 
-		size_t _size = 0;
-		char* _data = nullptr;
+		size_t _size;
+		char* _data;
 
 	public:
 
 		size_t size() const;
 		char* data() const;
 
-		File() = default;
-		File(const char* path);
+		File(const std::string& path);
 		~File();
 
 		static std::string read_to_string(const std::string& path);

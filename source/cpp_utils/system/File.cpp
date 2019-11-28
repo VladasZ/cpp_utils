@@ -14,18 +14,59 @@
 using namespace cu;
 using namespace std;
 
-File::File(const char* path) {
-    FILE* file = fopen(path, "rb");
+#ifdef ANDROID_BUILD
+
+static pair<char*, size_t> read(const string& path) {
+    throw "KUDDAAAHHH";
+    return { nullptr,  0};
+}
+
+static std::string read_to_string(const string& path) {
+    throw "KUDDAAAHHH";
+    return "";
+}
+
+#else
+
+static pair<char*, size_t> read(const string& path) {
+    FILE* file = fopen(path.c_str(), "rb");
     if (file == nullptr) {
         _Error("Failed to open file: " << path);
-        return;
+        throw runtime_error(string() + "Impossible to open file: " + path);
     }
     fseek(file, 0, SEEK_END);
-    _size = static_cast<size_t>(ftell(file));
+    auto size = static_cast<size_t>(ftell(file));
     fseek(file, 0, SEEK_SET);
-    _data = new char[_size];
-    fread(_data, 1, _size, file);
+    auto data = new char[size];
+    fread(data, 1, size, file);
     fclose(file);
+    return { data, size };
+}
+
+static std::string read_to_string(const string& path) {
+    ifstream stream(path.c_str(), ios::in);
+    string result;
+
+    if (stream.is_open()) {
+        string line = "";
+        while (getline(stream, line))
+            result += "\n" + line;
+        stream.close();
+    }
+    else {
+        _Error("Failed to open file: " << path);
+        throw runtime_error(string() + "Impossible to open file: " + path);
+    }
+
+    return result;
+}
+
+#endif
+
+File::File(const string& path) {
+    auto file = read(path);
+    _data = file.first;
+    _size = file.second;
 }
 
 File::~File() {
@@ -40,19 +81,6 @@ char* File::data() const {
     return _data;
 }
 
-std::string File::read_to_string(const std::string& path) {
-	ifstream stream(path.c_str(), ios::in);
-	std::string result;
-
-	if (stream.is_open()) {
-		std::string line = "";
-		while (getline(stream, line))
-			result += "\n" + line;
-		stream.close();
-	}
-	else {
-		throw std::runtime_error(std::string() + "Impossible to open file: " + path);
-	}
-
-	return result;
+string File::read_to_string(const string& path) {
+	return ::read_to_string(path);
 }
