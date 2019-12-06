@@ -1,0 +1,43 @@
+//
+//  AndroidSystem.cpp
+//  cpp_utils
+//
+//  Created by Vladas Zakrevskis on 12/6/19.
+//  Copyright © 2019 VladasZ. All rights reserved.
+//
+
+#ifdef ANDROID_BUILD
+
+#include "AndroidSystem.hpp"
+#include "ExceptionCatch.hpp"
+
+void AndroidSystem::set_asset_manager(AAssetManager* manager) {
+    asset_manager = manager;
+}
+
+cu::File AndroidSystem::load_file(const std::string& path) {
+
+    AAsset* asset = nullptr;
+
+    try {
+        asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_STREAMING);
+    }
+    catch (...) {
+        auto error = what();
+        throw std::runtime_error(error);
+    }
+
+    if (asset == nullptr) {
+        throw std::runtime_error("Failed to open file: " + path);
+    }
+    int size = AAsset_getLength(asset);
+    auto data = new char[size];
+    int read = AAsset_read(asset, data, size);
+    if (read != size) {
+        throw std::runtime_error("Failed to read file: " + path);
+    }
+    AAsset_close(asset);
+    return  { data, static_cast<unsigned>(size) };
+}
+
+#endif

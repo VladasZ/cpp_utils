@@ -16,9 +16,11 @@ using namespace std;
 
 #ifdef ANDROID_BUILD
 
+#include "AndroidSystem.hpp"
+
 static pair<char*, size_t> read(const string& path) {
-    throw "KUDDAAAHHH";
-    return { nullptr,  0};
+    auto file = AndroidSystem::load_file(path);
+    return { file.data(),  file.size() };
 }
 
 static std::string read_to_string(const string& path) {
@@ -63,6 +65,10 @@ static std::string read_to_string(const string& path) {
 
 #endif
 
+File::File(char* data, unsigned size) : _data(data), _size(size) {
+
+}
+
 File::File(const string& path) {
     auto file = read(path);
     _data = file.first;
@@ -73,7 +79,7 @@ File::~File() {
     delete[] _data;
 }
 
-size_t File::size() const {
+unsigned File::size() const {
     return _size;
 }
 

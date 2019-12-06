@@ -19,7 +19,7 @@ namespace cu {
         using std::string::string;
         
         Path(const std::string&);
-                
+
         Path operator / (const Path&) const;
 
     };

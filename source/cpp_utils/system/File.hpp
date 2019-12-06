@@ -8,22 +8,21 @@
 
 #pragma once
 
-#include <stddef.h>
-
 namespace cu {
 
 	class File {
 
-		size_t _size;
 		char* _data;
+        unsigned _size;
 
 	public:
 
-		size_t size() const;
-		char* data() const;
-
+		File(char* data, unsigned size);
 		File(const std::string& path);
 		~File();
+
+        unsigned size() const;
+		char* data() const;
 
 		static std::string read_to_string(const std::string& path);
 
