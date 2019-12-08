@@ -2,82 +2,45 @@
 //  Log.hpp
 //  cpp_utils
 //
-//  Created by Vladas Zakrevskis on 7/28/17.
-//  Copyright © 2017 VladasZ. All rights reserved.
+//  Created by Vladas Zakrevskis on 12/8/19.
+//  Copyright © 2019 VladasZ. All rights reserved.
 //
 
 #pragma once
 
-#include "System.hpp"
+#include <string>
+#include <sstream>
 
-#ifdef MICROCONTROLLER_BUILD
-#include "mbed.h"
+namespace cu {
 
-static Serial *serial_transmitter =
-  []{
-	auto serial = new Serial(USBTX, USBRX);	
-    serial->baud(230400);
-    return serial;
-  }();
-#endif
+    class Log {
 
-#include <string.h>
-#include <iostream>
+        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line);
 
-#include "../stl/StringUtils.hpp"
 
-#define LOG_ENABLED
+    public:
 
-#ifdef LOG_ENABLED
+        static std::string location(const std::string& file, const std::string& func, int line);
 
-#define LOG_LOCATION_ENABLED true
-#define LOG_ERRORS true
+        template <class T>
+        static void log(const T& message, const std::string& file, const std::string& func, int line) {
+            internal_log(to_string(message), file, func, line);
+        }
 
-#define UTILS_INTERNAL_FILENAME cu::String::file_name((strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__))
+        template <class T>
+        static std::string to_string(const T& value) {
+            std::stringstream buffer;
+            buffer << value;
+            return buffer.str();
+        }
 
-#define LOCATION_INFO UTILS_INTERNAL_FILENAME, __func__, __LINE__
-#define LOCATION_PARAMETERS const std::string& fileName, const char* function, int line
+    };
 
-#if LOG_LOCATION_ENABLED
-#define LOCATION(file, func, line) << "[" << file << "::" << func << " - " << line << "] "
-#else
-#define LOCATION(file, func, line) << " "
-#endif
+}
 
-#define UTILS_INTERNAL_LOG(message, type, file, func, line)\
-  std::cout /*"[" << type << "]"*/					   \
-LOCATION(file, func, line)\
-<< message << std::endl
+#define __UTILS_INTERNAL_LOG(message, file, func, line) cu::Log::log(message, file, func, line)
 
-#define UTILS_INTERNAL_LOG_INFO(message, file, func, line)    UTILS_INTERNAL_LOG(message, "INFO",    file, func, line)
-#define UTILS_INTERNAL_LOG_WARNING(message, file, func, line) UTILS_INTERNAL_LOG(message, "WARNING", file, func, line)
+#define Log(message)  __UTILS_INTERNAL_LOG (message, __FILE__, __func__, __LINE__)
+#define Logvar(variable) Log(std::string() + #variable + " : " + cu::Log::to_string(variable))
 
-#if LOG_ERRORS
-#define UTILS_INTERNAL_LOG_ERROR(message, file, func, line)   UTILS_INTERNAL_LOG(message, "ERROR",   file, func, line)
-#else
-#define __logE(message, file, func, line)
-#endif
-
-#define Log(message)     UTILS_INTERNAL_LOG_INFO   (message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
-#define Warning(message) UTILS_INTERNAL_LOG_WARNING(message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
-#define _Error(message)  UTILS_INTERNAL_LOG_ERROR  (message, UTILS_INTERNAL_FILENAME, __func__, __LINE__)
-#define Endl std::cout << std::endl
-
-#define PING Warning("")
-#define UNEXPECTED Error("")
-
-#else
-
-#define Log(message)
-#define Warning(message)
-#define _Error(message)
-#define Endl
-#define PING
-#define UNEXPECTED
-
-#endif
-
-#define Alert(message)  cu::System::alert(message); 
-#define Logvar(variable) Log(#variable << " : " << (variable))
-#define NOT_IMPLEMENTED _Error("Not implemented")
-#define Fatal(message) { _Error(message); Alert(message); }
+#define Fatal(message) { Log(message); throw std::runtime_error(message);  };

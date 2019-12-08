@@ -33,8 +33,7 @@ static std::string read_to_string(const string& path) {
 static pair<char*, size_t> read(const string& path) {
     FILE* file = fopen(path.c_str(), "rb");
     if (file == nullptr) {
-        _Error("Failed to open file: " << path);
-        throw runtime_error(string() + "Impossible to open file: " + path);
+        Fatal("Failed to open file: " + path);
     }
     fseek(file, 0, SEEK_END);
     auto size = static_cast<size_t>(ftell(file));
@@ -56,8 +55,7 @@ static std::string read_to_string(const string& path) {
         stream.close();
     }
     else {
-        _Error("Failed to open file: " << path);
-        throw runtime_error(string() + "Impossible to open file: " + path);
+        Fatal("Failed to open file: " + path);
     }
 
     return result;

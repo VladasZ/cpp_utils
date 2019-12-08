@@ -20,6 +20,19 @@ void AndroidSystem::set_asset_manager(AAssetManager* manager) {
 
 cu::File AndroidSystem::load_file(const std::string& path) {
 
+
+    AAssetDir* assetDir = AAssetManager_openDir(asset_manager, "drawabled");
+
+
+    if (assetDir == nullptr) {
+        throw std::runtime_error("noo");
+    }
+    else {
+        throw std::runtime_error("ok");
+    }
+
+
+
     AAsset* asset = nullptr;
 
     if (asset_manager == nullptr) {

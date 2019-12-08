@@ -58,8 +58,7 @@ Path System::user_name() {
 	GetUserName(username, &username_len);
     return username;
 #elif IOS_BUILD
-	_Error("NOT IMPLEMENTED FOR THIS PLATFORM");
-    return "System::user_name() is not implemented fot this platform";
+    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
 #elif ANDROID_BUILD
     return "ANDEOPORRR";
 #else
@@ -75,6 +74,6 @@ void System::alert(const std::string& message) {
 #ifdef WINDOWS
 	MessageBox(0, message.c_str(), "System alert.", MB_OK);
 #else
-	_Error("NOT IMPLEMENTED FOR THIS PLATFORM");
+    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
 #endif
 }
