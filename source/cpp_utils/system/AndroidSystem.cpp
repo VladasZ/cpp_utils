@@ -12,6 +12,9 @@
 #include "ExceptionCatch.hpp"
 
 void AndroidSystem::set_asset_manager(AAssetManager* manager) {
+    if (manager == nullptr) {
+        throw std::runtime_error("Failed to set asset manager.");
+    }
     asset_manager = manager;
 }
 
@@ -19,8 +22,12 @@ cu::File AndroidSystem::load_file(const std::string& path) {
 
     AAsset* asset = nullptr;
 
+    if (asset_manager == nullptr) {
+        throw std::runtime_error("Asset manager is not set up.");
+    }
+
     try {
-        asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_STREAMING);
+        asset = AAssetManager_open(asset_manager, "ic_android_black_24dp.xml", AASSET_MODE_STREAMING);
     }
     catch (...) {
         auto error = what();
