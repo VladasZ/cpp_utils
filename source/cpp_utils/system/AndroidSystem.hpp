@@ -22,9 +22,11 @@ class AndroidSystem {
 
 public:
 
+    using FileData = std::pair<char*, unsigned>;
+
 	static void set_asset_manager(AAssetManager*);
 
-	static cu::File load_file(const std::string& path);
+	static FileData load_file(const std::string& path);
 
 };
 

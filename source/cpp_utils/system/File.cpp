@@ -20,7 +20,7 @@ using namespace std;
 
 static pair<char*, size_t> read(const string& path) {
     auto file = AndroidSystem::load_file(path);
-    return { file.data(),  file.size() };
+    return { file.first,  file.second };
 }
 
 static std::string read_to_string(const string& path) {
@@ -67,14 +67,16 @@ File::File(char* data, unsigned size) : _data(data), _size(size) {
 
 }
 
-File::File(const string& path) {
+File::File(const string& path) : _path(path) {
     auto file = read(path);
     _data = file.first;
     _size = file.second;
 }
 
 File::~File() {
-    delete[] _data;
+    if (_data != nullptr) {
+        delete[] _data;
+    }
 }
 
 unsigned File::size() const {
@@ -83,6 +85,11 @@ unsigned File::size() const {
 
 char* File::data() const {
     return _data;
+}
+
+string File::to_string() const {
+    return string() +
+        "\nFile: " + _path + "\nsize: " + ::to_string(_size) + "\n";
 }
 
 string File::read_to_string(const string& path) {

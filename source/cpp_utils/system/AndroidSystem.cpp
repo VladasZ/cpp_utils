@@ -19,36 +19,28 @@ void AndroidSystem::set_asset_manager(AAssetManager* manager) {
     asset_manager = manager;
 }
 
-cu::File AndroidSystem::load_file(const std::string& path) {
-
-
-    AAssetDir* assetDir = AAssetManager_openDir(asset_manager, "drawabled");
-
-    Logvar(assetDir);
-
-    AAsset* asset = nullptr;
+AndroidSystem::FileData AndroidSystem::load_file(const std::string& path) {
 
     if (asset_manager == nullptr) {
-        throw std::runtime_error("Asset manager is not set up.");
+        Fatal("Asset manager is not set up.");
     }
 
-    try {
-        asset = AAssetManager_open(asset_manager, "ic_android_black_24dp.xml", AASSET_MODE_STREAMING);
-    }
-    catch (...) {
-        auto error = what();
-        throw std::runtime_error(error);
-    }
+    auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_STREAMING);
 
     if (asset == nullptr) {
-        throw std::runtime_error("Failed to open file: " + path);
+        Fatal("Failed to open file: " + path);
     }
+
     int size = AAsset_getLength(asset);
     auto data = new char[size];
     int read = AAsset_read(asset, data, size);
+
     if (read != size) {
-        throw std::runtime_error("Failed to read file: " + path);
+        Fatal("Failed to read file: " + path);
     }
+
+    Log("Loading android asset: " + path);
+    Logvar(size);
     AAsset_close(asset);
     return  { data, static_cast<unsigned>(size) };
 }

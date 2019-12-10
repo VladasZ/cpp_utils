@@ -12,7 +12,8 @@ namespace cu {
 
 	class File {
 
-		char* _data;
+		std::string _path;
+		char* _data = nullptr;
         unsigned _size;
 
 	public:
@@ -23,6 +24,8 @@ namespace cu {
 
         unsigned size() const;
 		char* data() const;
+
+		std::string to_string() const;
 
 		static std::string read_to_string(const std::string& path);
 
