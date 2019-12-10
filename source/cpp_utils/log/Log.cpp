@@ -6,10 +6,14 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
+#include <iostream>
+
+#ifdef ANDROID_BUILD
+#include <android/log.h>
+#endif
+
 #include "Log.hpp"
 #include "StringUtils.hpp"
-
-#include <iostream>
 
 using namespace cu;
 using namespace std;
@@ -25,7 +29,11 @@ string Log::location(const string& file, const string& func, int line) {
 
 void Log::internal_log(const string& message, const string& file, const string& func, int line) {
     string result_message = location(file, func, line) + " " + message;
+#ifdef ANDROID_BUILD
+    __android_log_print(ANDROID_LOG_DEBUG, "C++ Log", "%s", result_message.c_str());
+#else
     cout << result_message << endl;
+#endif
 }
 
 //TODO: - Fix and test

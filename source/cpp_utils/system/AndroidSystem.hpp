@@ -12,9 +12,7 @@
 
 #include <string>
 
-#include <jni.h>
 #include <android/asset_manager.h>
-#include <android/log.h>
 
 #include "File.hpp"
 

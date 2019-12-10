@@ -8,6 +8,7 @@
 
 #ifdef ANDROID_BUILD
 
+#include "Log.hpp"
 #include "AndroidSystem.hpp"
 #include "ExceptionCatch.hpp"
 
@@ -23,15 +24,7 @@ cu::File AndroidSystem::load_file(const std::string& path) {
 
     AAssetDir* assetDir = AAssetManager_openDir(asset_manager, "drawabled");
 
-
-    if (assetDir == nullptr) {
-        throw std::runtime_error("noo");
-    }
-    else {
-        throw std::runtime_error("ok");
-    }
-
-
+    Logvar(assetDir);
 
     AAsset* asset = nullptr;
 
