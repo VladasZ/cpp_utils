@@ -15,6 +15,12 @@ Path::Path(const std::string& str) : std::string(str) {
 }
 
 Path Path::operator / (const Path& path) const {
+    if (path.empty()) {
+        return *this;
+    }
+    if (this->empty()) {
+        return path;
+    }
     auto result = *this;
     result += "/";
     result += path;

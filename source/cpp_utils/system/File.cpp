@@ -23,9 +23,9 @@ static pair<char*, size_t> read(const string& path) {
     return { file.first,  file.second };
 }
 
-static std::string read_to_string(const string& path) {
-    throw "KUDDAAAHHH";
-    return "";
+static string read_to_string(const string& path) {
+    auto file = AndroidSystem::load_file(path);
+    return string(file.first, file.second);
 }
 
 #else
