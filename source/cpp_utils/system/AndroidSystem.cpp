@@ -39,8 +39,6 @@ AndroidSystem::FileData AndroidSystem::load_file(const std::string& path) {
         Fatal("Failed to read file: " + path);
     }
 
-    Log("Loading android asset: " + path);
-    Logvar(size);
     AAsset_close(asset);
     return  { data, static_cast<unsigned>(size) };
 }
