@@ -30,7 +30,12 @@ namespace cu {
         template <class T>
         static std::string to_string(const T& value) {
             std::stringstream buffer;
-            buffer << value;
+            if constexpr (std::is_same_v<bool, T>) {
+                buffer << (value ? "true" : "false");
+            }
+            else {
+                buffer << value;
+            }
             return buffer.str();
         }
 

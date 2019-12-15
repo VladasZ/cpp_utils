@@ -74,6 +74,7 @@ void System::alert(const std::string& message) {
 #ifdef WINDOWS
 	MessageBox(0, message.c_str(), "System alert.", MB_OK);
 #else
-    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
+	Log("System::alert is not implemented for this platform.");
+	Log(message);
 #endif
 }

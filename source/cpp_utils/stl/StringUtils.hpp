@@ -53,51 +53,62 @@ static std::string from_container(const T& container) {
 
 static std::vector<std::string> find_regexpr_matches(const std::string& string, const std::string& query) {
 
-	std::vector<std::string> result;
-	std::regex regex(query);
-	std::smatch match;
+    std::vector<std::string> result;
+    std::regex regex(query);
+    std::smatch match;
 
-	std::string::const_iterator searchStart(string.cbegin());
-	while (regex_search(searchStart, string.cend(), match, regex)) {
-		result.push_back(match[0]);
-		searchStart = match.suffix().first;
-	}
+    std::string::const_iterator searchStart(string.cbegin());
+    while (regex_search(searchStart, string.cend(), match, regex)) {
+        result.push_back(match[0]);
+        searchStart = match.suffix().first;
+    }
 
-	return result;
-	
+    return result;
+    
+}
+    
+static std::string from_bool(bool value) {
+    return value ? "true" : "false";
+}
+    
+static bool contains(const std::string& string, const std::string& part) {
+    return string.find(part) != std::string::npos;
 }
 
 static std::string find_regexpr_match(const std::string& string, const std::string& query) {
-	return find_regexpr_matches(string, query).front();
+    Log(string);
+    return find_regexpr_matches(string, query).front();
 }
-
+    
 static void drop_first(std::string& string) {
-	string.erase(0, 1);
+    string.erase(0, 1);
 }
 
 static void drop_last(std::string& string) {
-	string.erase(string.size() - 1);
+    string.erase(string.size() - 1);
 }
 
 static void trim(std::string& string) {
-	drop_first(string);
-	drop_last(string);
+    drop_first(string);
+    drop_last(string);
 }
 
 static std::string& trimmed(std::string& string) {
-	trim(string);
-	return string;
+    trim(string);
+    return string;
 }
 
 static void replace(const std::string& replace, const std::string& with, std::string& string) {
-	for (size_t position = 0;; position += with.length()) {
-		position = string.find(replace, position);
-		if (position == std::string::npos) {
-			break;
-		}
-		string.erase(position, replace.length());
-		string.insert(position, with);
-	}
+    for (size_t position = 0;; position += with.length()) {
+        position = string.find(replace, position);
+        if (position == std::string::npos) {
+            break;
+        }
+        string.erase(position, replace.length());
+        string.insert(position, with);
+    }
 }
 
 }
+
+
