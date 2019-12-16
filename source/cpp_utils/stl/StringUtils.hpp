@@ -85,7 +85,6 @@ namespace cu::String {
     }
 
     static std::string find_regexpr_match(const std::string& string, const std::string& query) {
-        Log(string);
         return find_regexpr_matches(string, query).front();
     }
 
