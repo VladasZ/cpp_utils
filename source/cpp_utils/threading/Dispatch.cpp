@@ -6,21 +6,20 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
-#include <vector>
+#include <mutex>
 #include <thread>
+#include <vector>
 
-#include "Log.hpp"
 #include "Dispatch.hpp"
 
 using namespace cu;
-using namespace std;
 
-static mutex _mutex;
+static std::mutex _mutex;
 
 static std::vector<Dispatch::Task> _tasks;
 
 void Dispatch::async(Task task) {
-    thread(task).detach();
+    std::thread(task).detach();
 }
 
 void Dispatch::on_main(Task task) {
