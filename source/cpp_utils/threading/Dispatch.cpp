@@ -15,7 +15,7 @@
 using namespace cu;
 using namespace std;
 
-static inline mutex _mutex;
+static mutex _mutex;
 
 static std::vector<Dispatch::Task> _tasks;
 
