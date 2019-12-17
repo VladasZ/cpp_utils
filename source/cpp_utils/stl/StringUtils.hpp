@@ -67,14 +67,17 @@ namespace cu::String {
 
     }
 
+    [[maybe_unused]]
     static std::string from_bool(bool value) {
         return value ? "true" : "false";
     }
 
+    [[maybe_unused]]
     static bool contains(const std::string& string, const std::string& part) {
         return string.find(part) != std::string::npos;
     }
 
+    [[maybe_unused]]
     static std::string remove(const std::string& string, char symbol) {
         std::string result = string;
         result.erase(std::remove_if(result.begin(),
@@ -84,6 +87,7 @@ namespace cu::String {
         return result;
     }
 
+    [[maybe_unused]]
     static std::string find_regexpr_match(const std::string& string, const std::string& query) {
         return find_regexpr_matches(string, query).front();
     }
@@ -101,11 +105,13 @@ namespace cu::String {
         drop_last(string);
     }
 
+    [[maybe_unused]]
     static std::string& trimmed(std::string& string) {
         trim(string);
         return string;
     }
 
+    [[maybe_unused]]
     static void replace(const std::string& replace, const std::string& with, std::string& string) {
         for (size_t position = 0;; position += with.length()) {
             position = string.find(replace, position);
