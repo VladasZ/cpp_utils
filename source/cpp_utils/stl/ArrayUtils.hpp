@@ -36,8 +36,9 @@ template <class Array, class Type = typename Array::value_type, class Predicate 
 static auto find(const Array& array, Predicate predicate) {
     auto val = std::numeric_limits<Type>::min();
     for (auto value : array) {
-        if (predicate(value, val))
+        if (predicate(value, val)) {
             val = value;
+        }
     }
     return val;
 }
@@ -57,8 +58,9 @@ static auto min(const Array& array) {
 template <class Array>
 [[maybe_unused]]
 static void print(const Array& array) {
-    for(const auto& val : array)
+    for(const auto& val : array) {
         std::cout << val.to_string() << std::endl;
+    }
 }
 
 template <class Array>
@@ -80,18 +82,19 @@ template <class Array,
 [[maybe_unused]]
 static void remove(Array& array, const ValueType& value) {
     auto position = std::find(array.begin(), array.end(), value);
-    if (position != array.end())
+    if (position != array.end()) {
         array.erase(position);
+    }
 }
 
 template <class Array,
           class ArrayToRemove,
-          std::enable_if_t<std::is_same_v<typename Array::value_type, typename ArrayToRemove::value_type>> = 0
-          >
+          std::enable_if_t<std::is_same_v<typename Array::value_type, typename ArrayToRemove::value_type>> = 0>
 [[maybe_unused]]
 static void remove(Array& array, const ArrayToRemove& objects_to_remove) {
-    for (auto object : objects_to_remove)
+    for (auto object : objects_to_remove) {
         remove(array, object);
+    }
 }
 
 template <class T>
