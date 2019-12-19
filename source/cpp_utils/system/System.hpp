@@ -11,7 +11,7 @@
 #include "Path.hpp"
 
 namespace cu::System {
-    void sleep(float interval);
+    void sleep(double interval);
     unsigned random();
     unsigned random(unsigned range);
     Path user_name();

@@ -22,7 +22,7 @@
 
 using namespace cu;
 
-void System::sleep(float interval) {
+void System::sleep(double interval) {
 #ifdef MICROCONTROLLER_BUILD
   wait(interval);
 #else
@@ -60,13 +60,13 @@ Path System::user_name() {
 #elif IOS_BUILD
     Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
 #elif ANDROID_BUILD
-    return "ANDEOPORRR";
+    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
 #else
     auto user = getenv("USER");
-    if (!user)
+    if (!user) {
         return Path("No USER enviroment variable.");
+    }
     return Path(user);
-
 #endif
 }
 
