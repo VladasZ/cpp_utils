@@ -12,7 +12,7 @@
 
 #include "IterateTuple.hpp"
 
-namespace new_mapping {
+namespace mapping {
 
     template <class Properties>
     class ClassInfo {
@@ -20,7 +20,7 @@ namespace new_mapping {
         using _FirstPropertyType = typename std::tuple_element_t<0, Properties>;
 
         static_assert(cu::is_tuple<Properties>::value);
-        static_assert(mapping::is_property<_FirstPropertyType>::value);
+        static_assert(is_property<_FirstPropertyType>::value);
 
     public:
 
@@ -49,7 +49,7 @@ namespace new_mapping {
 
         template <class Property>
         static constexpr void _check(bool& value, const Property& param) {
-            if constexpr (mapping::is_property<Property>::value) {
+            if constexpr (is_property<Property>::value) {
                 value = true;
             }
             static_assert(std::is_same_v<typename _FirstPropertyType::Class, typename Property::Class>);
@@ -65,5 +65,8 @@ namespace new_mapping {
         }
 
     };
+
+    template <class  > struct is_class_info               : std::false_type { };
+    template <class T> struct is_class_info<ClassInfo<T>> : std::true_type  { };
 
 }

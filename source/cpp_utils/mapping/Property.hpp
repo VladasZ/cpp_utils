@@ -73,7 +73,7 @@ namespace mapping {
 
 	};
 
-    template <typename> struct is_property: std::false_type {};
-    template <class C, class M, PropertyType t> struct is_property<Property<C, M, t>>: std::true_type {};
+    template <class                           > struct is_property                    : std::false_type { };
+    template <class C, class M, PropertyType t> struct is_property<Property<C, M, t>> : std::true_type  { };
 
 }
