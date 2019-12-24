@@ -19,16 +19,19 @@ namespace mapping {
 	};
 
 	template<
-		class Class, 
+		class _Class,
 		class _Member,
-		PropertyType type
+		PropertyType type = PropertyType::None
 	>
 	class Property {
 	public:
 
+	    using Class = _Class;
 		using Member = std::remove_const_t<_Member>;
 
 		using Pointer = _Member Class::*;
+
+		constexpr static bool is_property = true;
 
 		constexpr static bool is_string  = std::is_same_v<Member, std::string>;
 		constexpr static bool is_float   = std::is_same_v<Member, int        >;
@@ -39,17 +42,17 @@ namespace mapping {
 
 		static_assert(is_string || is_float || is_integer, "Invalid property type");
 
-		const std::string class_name = Class::class_name();
-		const std::string member_name = database_type_name();
+        const std::string_view class_name = Class::class_name();
+        const std::string_view member_name = database_type_name();
 
-		const std::string name;
+		const std::string_view name;
 		const Pointer pointer;
 
-		constexpr Property(const std::string& name, Pointer pointer) :
+		constexpr Property(const std::string_view& name, Pointer pointer) :
 			name(name), pointer(pointer) {
 		}
 
-		std::string database_type_name() const {
+		constexpr std::string_view database_type_name() const {
 			if constexpr (is_string) {
 				return "TEXT";
 			}
@@ -73,7 +76,3 @@ namespace mapping {
 	};
 
 }
-
-#define PROPERTY(name)        mapping::Property<This, decltype(name), mapping::PropertyType::None   >(#name, &This::name)
-#define SECURE_PROPERTY(name) mapping::Property<This, decltype(name), mapping::PropertyType::Secure >(#name, &This::name)
-#define UNIQUE_PROPERTY(name) mapping::Property<This, decltype(name), mapping::PropertyType::Unique >(#name, &This::name)
