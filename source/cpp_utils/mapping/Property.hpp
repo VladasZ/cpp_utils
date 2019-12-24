@@ -31,8 +31,6 @@ namespace mapping {
 
 		using Pointer = _Member Class::*;
 
-		constexpr static bool is_property = true;
-
 		constexpr static bool is_string  = std::is_same_v<Member, std::string>;
 		constexpr static bool is_float   = std::is_same_v<Member, int        >;
 		constexpr static bool is_integer = std::is_same_v<Member, float      >;
@@ -70,9 +68,12 @@ namespace mapping {
 
 		std::string to_string() const {
 			return std::string() +
-				"Property: " + name + " of: " + class_name + " type: " + member_name;
+				"Property: " + std::string(name) + " of: " + std::string(class_name) + " type: " + std::string(member_name);
 		}
 
 	};
+
+    template <typename> struct is_property: std::false_type {};
+    template <class C, class M, PropertyType t> struct is_property<Property<C, M, t>>: std::true_type {};
 
 }

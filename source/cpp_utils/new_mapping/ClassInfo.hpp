@@ -20,24 +20,39 @@ namespace new_mapping {
         using _FirstPropertyType = typename std::tuple_element_t<0, Properties>;
 
         static_assert(cu::is_tuple<Properties>::value);
-        static_assert(_FirstPropertyType::is_property);
+        static_assert(mapping::is_property<_FirstPropertyType>::value);
 
     public:
 
+        static constexpr bool is_class_info = true;
+
+        using Class = typename _FirstPropertyType::Class;
+
+        const std::string_view name;
         const Properties properties;
 
-        constexpr ClassInfo(Properties props) : properties(props) {
+        constexpr ClassInfo(std::string_view name, Properties props) : name(name), properties(props) {
             static_assert(_tuple_is_valid(props));
+        }
+
+        std::string to_string() const {
+            std::string result = std::string(name) + "\n";
+            cu::iterate_tuple(properties, [&](auto prop){
+                result += prop.to_string() + "\n";
+            });
+            return result;
         }
 
     private:
 
-        template <class Class>
-        static constexpr void _check(bool& value, const Class& param) {
-            //Class info constructor accepts only tuple with Property class specializations
-            if constexpr (Class::is_property) {
+        //MARK: - Tuple Check
+
+        template <class Property>
+        static constexpr void _check(bool& value, const Property& param) {
+            if constexpr (mapping::is_property<Property>::value) {
                 value = true;
             }
+            static_assert(std::is_same_v<typename _FirstPropertyType::Class, typename Property::Class>);
         }
 
         template <class T>

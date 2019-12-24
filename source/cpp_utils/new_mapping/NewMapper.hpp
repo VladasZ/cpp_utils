@@ -10,12 +10,18 @@
 
 #include <iostream>
 
+#include "IterateTuple.hpp"
+
 namespace new_mapping {
 
-    template <class Class, class Properties>
+    template <class ClassesInfo>
     class Mapper {
 
-        static constexpr Properties classes_info;
+        static_assert(cu::is_tuple<ClassesInfo>::value);
+
+    public:
+
+        const ClassesInfo classes_info;
 
 
 
