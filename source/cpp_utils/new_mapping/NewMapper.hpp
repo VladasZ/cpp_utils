@@ -25,7 +25,7 @@ namespace mapping {
 
         const ClassesInfo classes_info;
 
-        constexpr Mapper(ClassesInfo info) : classes_info(info) {
+        constexpr Mapper(const ClassesInfo info) : classes_info(info) {
             static_assert(_tuple_is_valid(info));
         }
 
@@ -40,7 +40,7 @@ namespace mapping {
 
         std::string to_string() const {
             std::string result;
-            cu::iterate_tuple(classes_info, [&](auto info){
+            cu::iterate_tuple(classes_info, [&](auto info) {
                 result += info.to_string() + "\n";
             });
             return result;
@@ -66,10 +66,12 @@ namespace mapping {
 
         template <class T>
         static constexpr bool _tuple_is_valid(const T& tuple) {
-            bool result = false;
-            std::apply([&](auto&&... args) {((
-                    _check(result, args)
-            ), ...);}, tuple);
+            bool result = true;
+//            cu::iterate_tuple(tuple, [&](auto info) {
+////                if (is_class_info<decltype(info)>::value) {
+////                    result = true;
+////                }
+//            });
             return result;
         }
 

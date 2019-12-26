@@ -31,7 +31,7 @@ namespace mapping {
         const std::string_view name;
         const Properties properties;
 
-        constexpr ClassInfo(std::string_view name, Properties props) : name(name), properties(props) {
+        constexpr ClassInfo(const std::string_view name, const Properties props) : name(name), properties(props) {
             static_assert(_tuple_is_valid(props));
         }
 
@@ -56,7 +56,7 @@ namespace mapping {
         }
 
         template <class T>
-        static constexpr bool _tuple_is_valid(const T& tuple) {
+        static constexpr auto _tuple_is_valid(const T& tuple) {
             bool result = false;
             std::apply([&](auto&&... args) {((
                     _check(result, args)
