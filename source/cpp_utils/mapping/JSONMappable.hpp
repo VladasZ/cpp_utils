@@ -36,12 +36,12 @@ namespace mapping {
         template <class Member, class Property>
         static void _extract(Member& member, const Property& property, const JSON& json) {
 			try {
-				member = json.value<Member>(property.name, Member { });
+				member = json.value<Member>(std::string(property.name), Member { });
 			}
 			catch (...) {
 				throw std::runtime_error(std::string() +
-					"Invalid json value for key: \"" + property.name + "\" of class: " + property.class_name + ". " +
-					"Expected type: " + property.database_type_name() + " " +
+					"Invalid json value for key: \"" + std::string(property.name) + "\" of class: " + std::string(property.class_name) + ". " +
+					"Expected type: " + std::string(property.database_type_name()) + " " +
 					"JSON exception: " + what()
 				);
 			}
@@ -52,7 +52,7 @@ namespace mapping {
 			if (skip_secure_properties && property.is_secure) {
 				return;
 			}
-            json[property.name] = member;
+            json[std::string(property.name)] = member;
         }
 
         JSON _to_json() const {
