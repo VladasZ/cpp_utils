@@ -35,15 +35,3 @@ void Log::internal_log(const string& message, const string& file, const string& 
     cout << result_message << endl;
 #endif
 }
-
-//TODO: - Fix and test
-//#ifdef MICROCONTROLLER_BUILD
-//#include "mbed.h"
-//
-//static Serial *serial_transmitter =
-//  []{
-//	auto serial = new Serial(USBTX, USBRX);
-//    serial->baud(230400);
-//    return serial;
-//  }();
-//#endif

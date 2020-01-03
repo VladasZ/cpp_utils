@@ -49,3 +49,15 @@ namespace cu {
 #define Logvar(variable) Log(std::string() + #variable + " : " + cu::Log::to_string(variable))
 
 #define Fatal(message) { Log(message); throw std::runtime_error(message);  };
+
+
+#ifdef MICROCONTROLLER_BUILD
+#include "mbed.h"
+
+static Serial *serial_transmitter =
+ []{
+	auto serial = new Serial(USBTX, USBRX);
+   serial->baud(230400);
+   return serial;
+ }();
+#endif

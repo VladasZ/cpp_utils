@@ -26,12 +26,3 @@ namespace cu::System {
 #define IOS_DEVICE
 #endif
 #endif
-
-#ifdef __arm__
-#if __APPLE__
-#else
-#ifndef __ANDROID__
-#define MICROCONTROLLER_BUILD
-#endif
-#endif
-#endif
