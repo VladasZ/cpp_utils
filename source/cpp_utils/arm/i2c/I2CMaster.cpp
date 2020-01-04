@@ -28,7 +28,7 @@ void I2CMaster::set_write_address(int address) {
 int I2CMaster::write_string(const std::string& str) {
   write(I2C::Command::WriteString);
   write(str.size());
-  _write(std.c_str(), str.size());
+  _write(str.c_str(), str.size());
 }
 
 int I2CMaster::read(char* data, int length) {

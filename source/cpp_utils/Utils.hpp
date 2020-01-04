@@ -19,8 +19,10 @@ using Callback = std::function<void()>;
 template <class T>
 using ArrayType = decltype(std::declval<T>()[0]);
 
+#ifndef MICROCONTROLLER_BUILD
 template <class T>
 const std::string type_name = typeid(T).name();
+#endif
 
 template <class T>
 void increment_with_limit(T& value, size_t limit = 10) {

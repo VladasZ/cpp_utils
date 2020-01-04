@@ -11,7 +11,6 @@
 #include "Log.hpp"
 #include "File.hpp"
 
-using namespace cu;
 using namespace std;
 
 #ifdef ANDROID_BUILD
@@ -63,35 +62,35 @@ static std::string read_to_string(const string& path) {
 
 #endif
 
-File::File(char* data, unsigned size) : _data(data), _size(size) {
+cu::File::File(char* data, unsigned size) : _data(data), _size(size) {
 
 }
 
-File::File(const string& path) : _path(path) {
+cu::File::File(const string& path) : _path(path) {
     auto file = read(path);
     _data = file.first;
     _size = file.second;
 }
 
-File::~File() {
+cu::File::~File() {
     if (_data != nullptr) {
         delete[] _data;
     }
 }
 
-unsigned File::size() const {
+unsigned cu::File::size() const {
     return _size;
 }
 
-char* File::data() const {
+char* cu::File::data() const {
     return _data;
 }
 
-string File::to_string() const {
+string cu::File::to_string() const {
     return string() +
         "\nFile: " + _path + "\nsize: " + ::to_string(_size) + "\n";
 }
 
-string File::read_to_string(const string& path) {
+string cu::File::read_to_string(const string& path) {
 	return ::read_to_string(path);
 }

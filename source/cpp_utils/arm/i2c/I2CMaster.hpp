@@ -14,32 +14,32 @@
 
 namespace cu {
 
-  class I2CMaster {
+    class I2CMaster {
 
-	int _current_address = 0;
-	void* _interface;
+        int _current_address = 0;
+        void* _interface;
 
-	
-  public:
 
-	I2CMaster(PinName sda, PinName scl);
+    public:
 
-	void set_write_address(int);
+        I2CMaster(PinName sda, PinName scl);
 
-	int write_string(const std::string&);
-	
-	template <class T>
-	int write(const T& data) {
-	  return write(&data, sizeof(T));
-	}
+        void set_write_address(int);
 
-	int read(char* data, int length);
+        int write_string(const std::string&);
 
-  private:
+        template <class T>
+        int write(const T& data) {
+            return _write(reinterpret_cast<const char*>(&data), sizeof(T));
+        }
 
-	int _write(const char* data, int length);
-	
-  };
+        int read(char* data, int length);
+
+    private:
+
+        int _write(const char* data, int length);
+
+    };
 
 }
 

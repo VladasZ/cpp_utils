@@ -5,6 +5,7 @@
 #include <map>
 #include <stdexcept>
 
+#include "Log.hpp"
 #include "Value.hpp"
 
 using namespace std;
@@ -63,7 +64,7 @@ bool Value::is_empty() const {
 		return this->operator float() == 0.0f;
 	}
 	else {
-	    throw std::runtime_error("Invalid value type for: " + _data);
+	    Fatal("Invalid value type for: " + _data);
 	}
 }
 
@@ -80,10 +81,11 @@ std::string Value::to_string() const {
 
 void Value::_check(Value::Type type) const {
 
-    if (type == _type)
+    if (type == _type) {
         return;
+    }
 
-    throw std::runtime_error(
+    Fatal(
         "Invalid mapping::Value conversion. Expected: " + type_to_string[_type] +
         " got: " + type_to_string[type]);
 }
@@ -103,7 +105,7 @@ void Value::check_string(const std::string& string) {
 			continue;
 		}
 		else {
-			throw std::runtime_error("Invalid symbol in string value. Valid symbols are: [A-Za-z0-9.@]");
+			Fatal("Invalid symbol in string value. Valid symbols are: [A-Za-z0-9.@]");
 		}
 	}
 }

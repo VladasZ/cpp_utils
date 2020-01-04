@@ -6,6 +6,8 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
+#ifndef MICROCONTROLLER_BUILD
+
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -41,3 +43,5 @@ void Dispatch::execute_tasks() {
     _tasks.clear();
     _mutex.unlock();
 }
+
+#endif

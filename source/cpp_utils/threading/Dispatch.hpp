@@ -8,6 +8,8 @@
 
 #pragma once
 
+#ifndef MICROCONTROLLER_BUILD
+
 #include <functional>
 
 namespace cu {
@@ -26,3 +28,5 @@ namespace cu {
     };
 
 }
+
+#endif
