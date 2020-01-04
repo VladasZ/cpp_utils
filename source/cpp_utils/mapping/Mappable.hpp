@@ -47,7 +47,11 @@ namespace mapping {
 
         template<class Prop, class Member = typename Prop::Member>
         const Member& _value(const Prop& property) const {
+#ifdef MICROCONTROLLER_BUILD
+            return reinterpret_cast<const T*>(this)->*property.pointer;
+#else
             return dynamic_cast<const T*>(this)->*property.pointer;
+#endif
         }
 
         template<class Prop, class Member = typename Prop::Member>
@@ -64,7 +68,7 @@ namespace mapping {
         Field get(const std::string& name) const { static_assert(is_supported<Field> || std::is_same_v<Field, Value>);
 
             if (name.empty()) {
-                throw std::runtime_error("Field get::No property name for class " + T::class_name());
+                Fatal("Field get::No property name for class " + T::class_name());
             }
 
 			if (name == "id") {

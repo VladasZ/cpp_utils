@@ -61,8 +61,15 @@ namespace mapping {
 				return "INTEGER";
 			}
 			else {
-				throw std::runtime_error(std::string() +
-					"Invalid member type: " + typeid(Member).name());
+
+			    std::string error = "Invalid member type: ";
+
+#ifdef MICROCONTROLLER_BUILD
+			    error += "no types info available on MICROCONTROLLER_BUILD";
+#else
+			    error += typeid(Member).name();
+#endif
+			    Fatal(error);
 			}
 		}
 

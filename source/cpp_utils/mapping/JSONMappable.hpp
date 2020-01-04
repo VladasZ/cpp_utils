@@ -39,7 +39,7 @@ namespace mapping {
 				member = json.value<Member>(std::string(property.name), Member { });
 			}
 			catch (...) {
-				throw std::runtime_error(std::string() +
+				Fatal(std::string() +
 					"Invalid json value for key: \"" + std::string(property.name) + "\" of class: " + std::string(property.class_name) + ". " +
 					"Expected type: " + std::string(property.database_type_name()) + " " +
 					"JSON exception: " + what()
