@@ -48,7 +48,10 @@ namespace mapping {
         template<class Prop, class Member = typename Prop::Member>
         const Member& _value(const Prop& property) const {
 #ifdef MICROCONTROLLER_BUILD
-            return reinterpret_cast<const T*>(this)->*property.pointer;
+            Log("Not implemented on this platform");
+            static Member dummy;
+            return dummy;
+         //   return reinterpret_cast<const T*>(this)->*property.pointer;
 #else
             return dynamic_cast<const T*>(this)->*property.pointer;
 #endif

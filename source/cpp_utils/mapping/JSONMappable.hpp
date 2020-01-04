@@ -35,6 +35,7 @@ namespace mapping {
 
         template <class Member, class Property>
         static void _extract(Member& member, const Property& property, const JSON& json) {
+#ifdef __cpp_exceptions
 			try {
 				member = json.value<Member>(std::string(property.name), Member { });
 			}
@@ -45,6 +46,9 @@ namespace mapping {
 					"JSON exception: " + what()
 				);
 			}
+#else
+            member = json.value<Member>(std::string(property.name), Member { });
+#endif
         }
 
         template <class Member, class Property>
