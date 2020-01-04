@@ -13,6 +13,17 @@
 namespace cu {
     class Serial {
 
+    public:
+
+        template <class T>
+        void serial_write(const T& value) {
+            _write(reinterpret_cast<const char*>(&value), sizeof(value));
+        }
+
+    private:
+
+        static int _write(const char* data, int length);
+
     };
 }
 

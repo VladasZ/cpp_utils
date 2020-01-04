@@ -18,25 +18,25 @@ using namespace cu;
 
 
 I2CMaster::I2CMaster(PinName sda, PinName scl) {
-  _interface = new MbedI2CMaster(sda, scl);
+    _interface = new MbedI2CMaster(sda, scl);
 }
 
 void I2CMaster::set_write_address(int address) {
-  _current_address = address;
+    _current_address = address;
 }
 
 int I2CMaster::write_string(const std::string& str) {
-  write(I2C::Command::WriteString);
-  write(str.size());
-  _write(str.c_str(), str.size());
+    write(I2C::Command::WriteString);
+    write(str.size());
+    _write(str.c_str(), str.size());
 }
 
 int I2CMaster::read(char* data, int length) {
-  return static_cast<MbedI2CMaster*>(_interface)->read(_current_address, data, length);
+    return static_cast<MbedI2CMaster*>(_interface)->read(_current_address, data, length);
 }
 
 int I2CMaster::_write(const char* data, int length) {
-  return static_cast<MbedI2CMaster*>(_interface)->write(_current_address, data, length);
+    return static_cast<MbedI2CMaster*>(_interface)->write(_current_address, data, length);
 }
 
 #endif

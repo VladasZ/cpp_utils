@@ -6,3 +6,4 @@
 *.o
 /.idea
 cmake-build-debug/
+arm_build/

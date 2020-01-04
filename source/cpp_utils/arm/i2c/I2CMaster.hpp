@@ -19,7 +19,6 @@ namespace cu {
         int _current_address = 0;
         void* _interface;
 
-
     public:
 
         I2CMaster(PinName sda, PinName scl);
