@@ -12,73 +12,69 @@
 
 namespace mapping {
 
-	enum class PropertyType {
-		None,
-		Secure,
-		Unique
-	};
+    enum class PropertyType {
+        None,
+        Secure,
+        Unique
+    };
 
-	template<
-		class _Class,
-		class _Member,
-		PropertyType type = PropertyType::None
-	>
-	class Property {
-	public:
+    template<
+            class _Class,
+            class _Member,
+            PropertyType type = PropertyType::None
+    >
+    class Property {
+    public:
 
-	    using Class = _Class;
-		using Member = std::remove_const_t<_Member>;
+        using Class = _Class;
+        using Member = std::remove_const_t<_Member>;
 
-		using Pointer = _Member Class::*;
+        using Pointer = _Member Class::*;
 
-		constexpr static bool is_string  = std::is_same_v<Member, std::string>;
-		constexpr static bool is_float   = std::is_same_v<Member, int        >;
-		constexpr static bool is_integer = std::is_same_v<Member, float      >;
+        constexpr static bool is_string  = std::is_same_v<Member, std::string>;
+        constexpr static bool is_float   = std::is_same_v<Member, int        >;
+        constexpr static bool is_integer = std::is_same_v<Member, float      >;
 
-		constexpr static bool is_secure  = type == PropertyType::Secure;
-		constexpr static bool is_unique  = type == PropertyType::Unique;
+        constexpr static bool is_secure  = type == PropertyType::Secure;
+        constexpr static bool is_unique  = type == PropertyType::Unique;
 
-		static_assert(is_string || is_float || is_integer, "Invalid property type");
+        static_assert(is_string || is_float || is_integer, "Invalid property type");
 
         const std::string_view class_name = Class::class_name();
         const std::string_view member_name = database_type_name();
 
-		const std::string_view name;
-		const Pointer pointer;
+        const std::string_view name;
+        const Pointer pointer;
 
-		constexpr Property(const std::string_view& name, Pointer pointer) :
-			name(name), pointer(pointer) {
-		}
+        constexpr Property(const std::string_view& name, Pointer pointer) :
+                name(name), pointer(pointer) {
+        }
 
-		constexpr std::string_view database_type_name() const {
-			if constexpr (is_string) {
-				return "TEXT";
-			}
-			else if constexpr (is_float) {
-				return "REAL";
-			}
-			else if constexpr (is_integer) {
-				return "INTEGER";
-			}
-			else {
-
-			    std::string error = "Invalid member type: ";
-
+        constexpr std::string_view database_type_name() const {
+            if constexpr (is_string) {
+                return "TEXT";
+            }
+            else if constexpr (is_float) {
+                return "REAL";
+            }
+            else if constexpr (is_integer) {
+                return "INTEGER";
+            }
+            else {
 #ifdef MICROCONTROLLER_BUILD
-			    error += "no types info available on MICROCONTROLLER_BUILD";
+                Fatal("Invalid member type");
 #else
-			    error += typeid(Member).name();
+                Fatal(std::string() + "Invalid member type: " + typeid(Member).name());
 #endif
-			    Fatal(error);
-			}
-		}
+            }
+        }
 
-		std::string to_string() const {
-			return std::string() +
-				"Property: " + std::string(name) + " of: " + std::string(class_name) + " type: " + std::string(member_name);
-		}
+        std::string to_string() const {
+            return std::string() +
+                   "Property: " + std::string(name) + " of: " + std::string(class_name) + " type: " + std::string(member_name);
+        }
 
-	};
+    };
 
     template <class                           > struct is_property                    : std::false_type { };
     template <class C, class M, PropertyType t> struct is_property<Property<C, M, t>> : std::true_type  { };

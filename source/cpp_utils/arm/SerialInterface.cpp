@@ -14,7 +14,10 @@
 using namespace cu;
 
 int cu::Serial::_write(const char* data, int length) {
-    static const event_callback_t dummy_callback;
+    static const event_callback_t dummy_callback = [](int a) {
+        Log("Hello");
+        Logvar(a);
+    };
     serial_transmitter->write(reinterpret_cast<const uint8_t*>(data), length, dummy_callback);
 }
 

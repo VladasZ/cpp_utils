@@ -16,7 +16,7 @@ namespace cu {
     public:
 
         template <class T>
-        void serial_write(const T& value) {
+        static void serial_write(const T& value) {
             _write(reinterpret_cast<const char*>(&value), sizeof(value));
         }
 
