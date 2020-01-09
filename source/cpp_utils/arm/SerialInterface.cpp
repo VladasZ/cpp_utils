@@ -8,17 +8,17 @@
 
 #ifdef MICROCONTROLLER_BUILD
 
+#include "mbed.h"
+
 #include "Log.hpp"
 #include "SerialInterface.hpp"
 
 using namespace cu;
 
-int cu::Serial::_write(const char* data, int length) {
-    static const event_callback_t dummy_callback = [](int a) {
-        Log("Hello");
-        Logvar(a);
-    };
-    serial_transmitter->write(reinterpret_cast<const uint8_t*>(data), length, dummy_callback);
+void cu::Serial::_write(const uint8_t* data, int length) {
+    Logvar(length);
+    static const event_callback_t dummy_callback;
+    mbed_serial->write(data, length, dummy_callback);
 }
 
 #endif

@@ -10,19 +10,22 @@
 
 #ifdef MICROCONTROLLER_BUILD
 
+#include <stdint.h>
+
 namespace cu {
+
     class Serial {
 
     public:
 
         template <class T>
-        static void serial_write(const T& value) {
-            _write(reinterpret_cast<const char*>(&value), sizeof(value));
+        static void write(const T& value) {
+            _write(reinterpret_cast<const uint8_t*>(&value), sizeof(value));
         }
 
     private:
 
-        static int _write(const char* data, int length);
+        static void _write(const uint8_t* data, int length);
 
     };
 }

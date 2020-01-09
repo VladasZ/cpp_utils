@@ -40,9 +40,7 @@ namespace cu {
 
 }
 
-#define __UTILS_INTERNAL_LOG(message, file, func, line) cu::Log::log(message, file, func, line)
-
-#define Log(message)  __UTILS_INTERNAL_LOG (message, __FILE__, __func__, __LINE__)
+#define Log(message)  cu::Log::log(message, __FILE__, __func__, __LINE__)
 #define Logvar(variable) Log(std::string() + #variable + " : " + cu::Log::to_string(variable))
 
 #ifdef __cpp_exceptions
@@ -53,10 +51,11 @@ namespace cu {
 
 #ifdef MICROCONTROLLER_BUILD
 #include "mbed.h"
-static Serial *serial_transmitter =
- []{
-	auto serial = new Serial(USBTX, USBRX);
-   serial->baud(230400);
-   return serial;
- }();
+namespace cu {
+    static const auto mbed_serial = [] {
+        auto serial = new Serial(USBTX, USBRX);
+        serial->baud(115200);
+        return serial;
+    }();
+}
 #endif

@@ -6,6 +6,7 @@
 //  Copyright © 2019 VladasZ. All rights reserved.
 //
 
+#include <string.h>
 #include <iostream>
 
 #ifdef ANDROID_BUILD
