@@ -1,5 +1,5 @@
 //
-//  Pin.hpp
+//  Arm.hpp
 //  cpp_utils
 //
 //  Created by Vladas Zakrevskis on 6/28/19.
@@ -8,19 +8,12 @@
 
 #pragma once
 
-#ifdef __arm__
+#ifdef MICROCONTROLLER_BUILD
 
-#include "mbed.h"
+namespace cu::Arm {
 
-namespace cu::arm {
-
-  template <class PinType>
-  void blink(PinType& pin, float frequency = 1) {
-	pin = 1;
-	wait(frequency / 2);
-	pin = 0;
-	wait(frequency / 2);
-  }
+    void blink(float interval = 1);
+    void flash(int frequency = 10);
 
 }
 

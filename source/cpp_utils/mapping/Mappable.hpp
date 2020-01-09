@@ -156,7 +156,7 @@ namespace mapping {
 		}
 
         virtual std::string to_string() {
-            return T::class_name();
+            return std::string(T::class_name());
         }
 
         template<class Closure>

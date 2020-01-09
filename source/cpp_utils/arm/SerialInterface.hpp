@@ -18,14 +18,27 @@ namespace cu {
 
     public:
 
+        template<class T>
+        static T& read() {
+            static T value;
+            read(value);
+            return value;
+        }
+
+        template<class T>
+        static void read(T& value) {
+            _read(&value, sizeof(T));
+        }
+
         template <class T>
         static void write(const T& value) {
-            _write(reinterpret_cast<const uint8_t*>(&value), sizeof(value));
+            _write(&value, sizeof(value));
         }
 
     private:
 
-        static void _write(const uint8_t* data, int length);
+        static void _read(void* data, int size);
+        static void _write(const void* data, int size);
 
     };
 }

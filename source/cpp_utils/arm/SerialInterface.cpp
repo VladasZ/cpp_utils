@@ -15,10 +15,14 @@
 
 using namespace cu;
 
-void cu::Serial::_write(const uint8_t* data, int length) {
-    Logvar(length);
-    static const event_callback_t dummy_callback;
-    mbed_serial->write(data, length, dummy_callback);
+static const event_callback_t dummy_callback;
+
+void cu::Serial::_read(void* data, int size) {
+    mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
+}
+
+void cu::Serial::_write(const void* data, int size) {
+    mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
 }
 
 #endif
