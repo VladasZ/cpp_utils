@@ -21,6 +21,7 @@ namespace cu {
         template<class T>
         static T& read() {
             static T value;
+            value = T { };
             read(value);
             return value;
         }

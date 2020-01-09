@@ -14,6 +14,7 @@ namespace cu::Arm {
 
     void blink(float interval = 1);
     void flash(int frequency = 10);
+    void hello();
 
 }
 

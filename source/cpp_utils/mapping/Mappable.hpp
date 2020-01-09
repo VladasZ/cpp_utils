@@ -19,7 +19,7 @@
 
 namespace mapping {
 
-	using ID = int;
+	using ID = int64_t;
 
     template<class Type>
     static constexpr bool is_supported =

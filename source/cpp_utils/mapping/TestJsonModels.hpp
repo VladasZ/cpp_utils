@@ -16,7 +16,7 @@ namespace mapping {
 
     public:
 
-        int age = 100;
+        int64_t age = 100;
         float height = 111.11;
 
         static std::string_view class_name() { return "TestClass"; }

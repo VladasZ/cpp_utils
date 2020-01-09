@@ -32,8 +32,8 @@ namespace mapping {
         using Pointer = _Member Class::*;
 
         constexpr static bool is_string  = std::is_same_v<Member, std::string>;
-        constexpr static bool is_float   = std::is_same_v<Member, int        >;
-        constexpr static bool is_integer = std::is_same_v<Member, float      >;
+        constexpr static bool is_float   = std::is_floating_point_v<float>;
+        constexpr static bool is_integer = std::numeric_limits<Member>::is_integer;
 
         constexpr static bool is_secure  = type == PropertyType::Secure;
         constexpr static bool is_unique  = type == PropertyType::Unique;

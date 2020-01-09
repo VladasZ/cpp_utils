@@ -29,4 +29,11 @@ void Arm::flash(int frequency) {
     }
 }
 
+void Arm::hello() {
+    Arm::flash(4);
+    wait(1);
+    Arm::flash(4);
+    wait(1);
+}
+
 #endif
