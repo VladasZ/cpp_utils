@@ -12,21 +12,25 @@
 
 namespace mapping {
 
-    class TestClass : public JSONMappable<TestClass> {
+    class TestClass //: public JSONMappable<TestClass>
+            {
 
     public:
 
-        int64_t age = 100;
-        float height = 111.11;
+        uint8_t age = 100;
+        uint8_t page = 110;
+        uint8_t wage = 120;
+        uint8_t gage = 130;
 
-        static std::string_view class_name() { return "TestClass"; }
 
-        static auto properties() {
-            return std::make_tuple(
-                    Property("age", &TestClass::age),
-                    Property("height", &TestClass::height)
-            );
-        }
+//        static std::string_view class_name() { return "TestClass"; }
+//
+//        static auto properties() {
+//            return std::make_tuple(
+//                    Property("age", &TestClass::age),
+//                    Property("height", &TestClass::height)
+//            );
+//        }
 
     };
 
