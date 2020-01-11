@@ -179,12 +179,16 @@ namespace mapping {
         }
 
 		static inline const std::string unique_key = [] {
+#ifdef WINDOWS_BUILD
+            return "Error";
+#else
 			std::string result;
 			Mappable<T>::iterate_properties([&](auto property) {
 				if (property.is_unique) 
 					result = property.name;
 			});
 			return result;
+#endif
 		}();
 
 		public:
