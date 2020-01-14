@@ -15,15 +15,32 @@ namespace cu {
 
     template <class T> using remove_all_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
-
     template <class T> std::string class_name = typeid(T).name();
+
+    //MARK: - Pointer to member tools
+
+    template <class           > struct is_pointer_to_member         : std::false_type { };
+    template <class T, class U> struct is_pointer_to_member<T U::*> : std::true_type  { };
+    template <class T> constexpr bool is_pointer_to_member_v = is_pointer_to_member<remove_all_t<T>>::value;
+
+    template<class T>struct pointer_to_member_class;
+    template<class Class, class Value> struct pointer_to_member_class<Value Class::*> { using type = Class; };
+
+    template<class T> struct pointer_to_member_value;
+    template<class Class, class Value> struct pointer_to_member_value<Value Class::*> { using type = Value; };
+
+    template <class T>
+    struct pointer_to_member_info {
+        static_assert(is_pointer_to_member_v<T>);
+        using Class = typename pointer_to_member_class<T>::type;
+        using Value = typename pointer_to_member_value<T>::type;
+    };
+
+    //MARK: - Tuple tools
 
     template <class     > struct is_tuple                   : std::false_type { };
     template <class ...T> struct is_tuple<std::tuple<T...>> : std::true_type  { };
     template <class T> constexpr bool is_tuple_v = is_tuple<remove_all_t<T>>::value;
-
-    template <class           > struct is_pointer_to_member         : std::false_type { };
-    template <class T, class U> struct is_pointer_to_member<T U::*> : std::true_type  { };
 
     template <class T>
     using first_tuple_type = typename std::tuple_element_t<0, T>;
