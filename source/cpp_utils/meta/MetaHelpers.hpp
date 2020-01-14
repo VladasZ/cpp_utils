@@ -20,9 +20,7 @@ namespace cu {
 
     template <class     > struct is_tuple                   : std::false_type { };
     template <class ...T> struct is_tuple<std::tuple<T...>> : std::true_type  { };
-
-    template <class T>
-    constexpr bool is_tuple_v = is_tuple<remove_all_t<T>>::value;
+    template <class T> constexpr bool is_tuple_v = is_tuple<remove_all_t<T>>::value;
 
     template <class           > struct is_pointer_to_member         : std::false_type { };
     template <class T, class U> struct is_pointer_to_member<T U::*> : std::true_type  { };
@@ -39,18 +37,10 @@ namespace cu {
     }
 
     template <class Tuple, class Lambda>
-    constexpr void iterate_tuple(Tuple tup, const Lambda& f) {
+    constexpr void iterate_tuple(const Tuple& tup, const Lambda& f) {
         static_assert(is_tuple_v<Tuple>);
         cu::static_for<0, std::tuple_size_v<Tuple>>([&](auto i) {
             f(std::get<i.value>(tup));
-        });
-    }
-
-    template <class Tuple, class Lambda>
-    constexpr void iterate_tuple_types(const Lambda& f) {
-        static_assert(is_tuple<std::remove_cv_t<Tuple>>::value);
-        cu::static_for<0, std::tuple_size_v<Tuple>>([&](auto i) {
-            f(std::get<i.value>(std::declval<Tuple>()));
         });
     }
 
