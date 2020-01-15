@@ -17,6 +17,8 @@ namespace cu {
 
     template <class T> std::string class_name = typeid(T).name();
 
+    template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;
+
     //MARK: - Pointer to member tools
 
     template <class           > struct is_pointer_to_member         : std::false_type { };
