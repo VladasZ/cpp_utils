@@ -9,6 +9,8 @@
 #pragma once
 
 #include <tuple>
+#include <vector>
+#include <string>
 #include <type_traits>
 
 namespace cu {
@@ -22,6 +24,10 @@ namespace cu {
 #endif
 
     template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;
+
+    template <class  > struct is_vector                 : std::false_type { };
+    template <class T> struct is_vector<std::vector<T>> : std::true_type  { };
+    template <class T> constexpr bool is_vector_v = is_vector<remove_all_t<T>>::value;
 
     //MARK: - Pointer to member tools
 
