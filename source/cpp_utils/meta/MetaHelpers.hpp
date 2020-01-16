@@ -25,15 +25,15 @@ namespace cu {
 
     template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;
 
-    template <class  > struct is_vector                 : std::false_type { };
-    template <class T> struct is_vector<std::vector<T>> : std::true_type  { };
-    template <class T> constexpr bool is_vector_v = is_vector<remove_all_t<T>>::value;
+    template <class  > struct __is_vector                 : std::false_type { };
+    template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
+    template <class T> constexpr bool is_std_vector_v = __is_vector<remove_all_t<T>>::value;
 
     //MARK: - Pointer to member tools
 
-    template <class           > struct is_pointer_to_member         : std::false_type { };
-    template <class T, class U> struct is_pointer_to_member<T U::*> : std::true_type  { };
-    template <class T> constexpr bool is_pointer_to_member_v = is_pointer_to_member<remove_all_t<T>>::value;
+    template <class           > struct __is_pointer_to_member         : std::false_type { };
+    template <class T, class U> struct __is_pointer_to_member<T U::*> : std::true_type  { };
+    template <class T> constexpr bool is_pointer_to_member_v = __is_pointer_to_member<remove_all_t<T>>::value;
 
     template<class T>struct pointer_to_member_class;
     template<class Class, class Value> struct pointer_to_member_class<Value Class::*> { using type = Class; };
@@ -50,9 +50,9 @@ namespace cu {
 
     //MARK: - Tuple tools
 
-    template <class     > struct is_tuple                   : std::false_type { };
-    template <class ...T> struct is_tuple<std::tuple<T...>> : std::true_type  { };
-    template <class T> constexpr bool is_tuple_v = is_tuple<remove_all_t<T>>::value;
+    template <class     > struct __is_tuple                   : std::false_type { };
+    template <class ...T> struct __is_tuple<std::tuple<T...>> : std::true_type  { };
+    template <class T> constexpr bool is_tuple_v = __is_tuple<remove_all_t<T>>::value;
 
     template <class T>
     using first_tuple_type = typename std::tuple_element_t<0, T>;

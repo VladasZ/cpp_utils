@@ -11,6 +11,8 @@
 #include <string>
 #include <sstream>
 
+#define UTILS_LOG_ENABLED
+
 namespace cu {
 
     class Log {
@@ -42,6 +44,8 @@ namespace cu {
 
 #define VarString(variable) (std::string() + #variable + " : " + cu::Log::to_string(variable))
 
+#ifdef UTILS_LOG_ENABLED
+
 #define Log(message)  cu::Log::log(message, __FILE__, __func__, __LINE__)
 #define Logvar(variable) Log(VarString(variable))
 
@@ -49,6 +53,15 @@ namespace cu {
 #define Fatal(message) { Log(message); throw std::runtime_error(message); };
 #else
 #define Fatal(message) { Log("### FATAL ERROR ###"); Log(message); std::terminate(); };
+#endif
+
+#else
+
+#define Log(message)
+#define Logvar(variable)
+
+#define Fatal(message)
+
 #endif
 
 #ifdef MICROCONTROLLER_BUILD
