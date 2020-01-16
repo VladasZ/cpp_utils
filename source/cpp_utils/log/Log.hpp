@@ -40,8 +40,10 @@ namespace cu {
 
 }
 
+#define VarString(variable) (std::string() + #variable + " : " + cu::Log::to_string(variable))
+
 #define Log(message)  cu::Log::log(message, __FILE__, __func__, __LINE__)
-#define Logvar(variable) Log(std::string() + #variable + " : " + cu::Log::to_string(variable))
+#define Logvar(variable) Log(VarString(variable))
 
 #ifdef __cpp_exceptions
 #define Fatal(message) { Log(message); throw std::runtime_error(message); };
