@@ -5,7 +5,7 @@
 #include "Log.hpp"
 #include "ArrayUtils.hpp"
 
-constexpr std::array arr = { 1, 2, 3, 4, 10 };
+constexpr std::array<int, 5> arr = { 1, 2, 3, 4, 10 };
 static_assert(cu::array::static_exists<arr>(10));
 
 
