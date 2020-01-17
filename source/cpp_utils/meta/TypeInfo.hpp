@@ -45,6 +45,13 @@ namespace cu {
             }
         }();
 
+        static std::string to_string() {
+            return std::string() +
+                   ", is pointer: "               + (is_pointer               ? "true" : "false") + "\n" +
+                   ", is array: "                 + (is_array_type            ? "true" : "false") + "\n" +
+                   ", is array of custom types: " + (is_array_of_custom_types ? "true" : "false");
+        }
+
     };
 
 }

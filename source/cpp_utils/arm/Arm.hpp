@@ -1,6 +1,6 @@
 //
 //  Arm.hpp
-//  cpp_utils
+//  arm
 //
 //  Created by Vladas Zakrevskis on 6/28/19.
 //  Copyright © 2019 VladasZ. All rights reserved.
@@ -10,7 +10,7 @@
 
 #ifdef MICROCONTROLLER_BUILD
 
-namespace cu::Arm {
+namespace arm {
 
     void blink(float interval = 1);
     void flash(int frequency = 10);

@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <type_traits>
 #include <string>
+#include <type_traits>
 
 
 namespace bitwise {
@@ -53,8 +53,9 @@ namespace bitwise {
     template <uint8_t begin, uint8_t end, uint8_t span = end - begin, class T>
     constexpr auto get_part(const T& value) {
         fits<span> result(0);
-        for (int i = 0; i < span; i++)
+        for (int i = 0; i < span; i++) {
             result = set_byte(result, i, get_byte(begin + i, value));
+        }
         return result;
     }
 
@@ -64,8 +65,9 @@ namespace bitwise {
         std::string result;
         for (int i = size<T> - 1; i >= 0; i--) {
             result += std::to_string(get_byte(i, value));
-            if (i % 8 == 0)
+            if (i % 8 == 0) {
                 result += " ";
+            }
         }
         return result;
     }

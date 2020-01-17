@@ -1,6 +1,6 @@
 //
 //  Arm.cpp
-//  cpp_utils
+//  arm
 //
 //  Created by Vladas Zakrevskis on 9/01/20.
 //  Copyright © 2020 VladasZ. All rights reserved.
@@ -12,27 +12,25 @@
 
 #include "Arm.hpp"
 
-using namespace cu;
-
 static DigitalOut led(LED1);
 
-void Arm::blink(float interval) {
+void arm::blink(float interval) {
     led = 1;
     wait(interval / 2);
     led = 0;
     wait(interval / 2);
 }
 
-void Arm::flash(int frequency) {
+void arm::flash(int frequency) {
     for (int i = 0; i < frequency; ++i) {
         blink(1.0f / frequency);
     }
 }
 
-void Arm::hello() {
-    Arm::flash(4);
+void arm::hello() {
+    arm::flash(4);
     wait(1);
-    Arm::flash(4);
+    arm::flash(4);
     wait(1);
 }
 
