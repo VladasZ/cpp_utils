@@ -27,6 +27,7 @@ namespace cu {
 #endif
 
     template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;
+    template <class T, class U> constexpr bool is_base_of_v = std::is_base_of_v<remove_all_t<T>, remove_all_t<U>>;
 
     template <class  > struct __is_vector                 : std::false_type { };
     template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
