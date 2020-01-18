@@ -23,11 +23,11 @@ void Servo::disable() {
     _pwm.pulsewidth(0);
 }
 
-void Servo::wave(float range) {
+void Servo::wave(float range, float duration) {
     write(range);
-    wait(1);
+    wait(duration / 2);
     write(0);
-    wait(1);
+    wait(duration / 2);
 }
 
 Servo& Servo::operator=(float percent) {

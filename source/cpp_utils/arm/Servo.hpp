@@ -28,7 +28,7 @@ namespace arm {
         void write(float percent);
         void disable();
 
-        void wave(float range = 1.0f);
+        void wave(float range = 1.0f, float duration = 1.0f);
 
         Servo& operator= (float percent);
 

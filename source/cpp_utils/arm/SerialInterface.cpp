@@ -17,11 +17,15 @@ using namespace cu;
 
 static const event_callback_t dummy_callback;
 
-void cu::Serial::_read(void* data, int size) {
+bool cu::SerialInterface::is_readable() {
+    return mbed_serial->readable();
+}
+
+void cu::SerialInterface::_read(void* data, int size) {
     mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
 }
 
-void cu::Serial::_write(const void* data, int size) {
+void cu::SerialInterface::_write(const void* data, int size) {
     mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
 }
 

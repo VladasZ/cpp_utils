@@ -14,7 +14,7 @@
 
 namespace cu {
 
-    class Serial {
+    class SerialInterface {
 
     public:
 
@@ -35,6 +35,8 @@ namespace cu {
         static void write(const T& value) {
             _write(&value, sizeof(value));
         }
+
+        static bool is_readable();
 
     private:
 
