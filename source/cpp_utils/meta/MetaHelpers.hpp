@@ -13,14 +13,17 @@
 #include <string>
 #include <type_traits>
 
+
 namespace cu {
+
+    std::string demangle(const std::string& name);
 
     template <class T> using remove_all_t = std::remove_cv_t<std::remove_reference_t<std::remove_pointer_t<T>>>;
 
 #ifdef MICROCONTROLLER_BUILD
     template <class T> std::string class_name = "Not supported on MC";
 #else
-    template <class T> std::string class_name = typeid(T).name();
+    template <class T> std::string class_name = demangle(typeid(T).name());
 #endif
 
     template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;

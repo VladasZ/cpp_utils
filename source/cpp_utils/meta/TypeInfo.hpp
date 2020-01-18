@@ -34,6 +34,15 @@ namespace cu {
         static constexpr bool is_embedded_type = is_base_type || is_array_type;
         static constexpr bool is_custom_type   = !is_embedded_type;
 
+        static constexpr bool is_array_of_pointers = [] {
+            if constexpr (is_array_type) {
+                return std::is_pointer_v<typename Class::value_type>;
+            }
+            else {
+                return false;
+            }
+        }();
+
         static constexpr bool is_array_of_custom_types = [] {
             if constexpr (is_array_type) {
                 using ArrayValue = typename Class::value_type;
