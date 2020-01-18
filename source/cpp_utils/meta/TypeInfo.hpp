@@ -54,7 +54,7 @@ namespace cu {
             }
         }();
 
-        static constexpr bool is_array_of_custom_types = !is_array_of_embedded_types;
+        static constexpr bool is_array_of_custom_types = is_array_type && !is_array_of_embedded_types;
 
         static std::string to_string() {
             return std::string() +
