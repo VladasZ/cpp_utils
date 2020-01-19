@@ -20,7 +20,7 @@ static UIViewController *topmostController() {
     return controller;
 }
 
-#elif MAC_OS
+#else
 
 #import <AppKit/AppKit.h>
 
@@ -57,15 +57,16 @@ static UIViewController *topmostController() {
     
     [topmostController() presentViewController:controller animated:YES completion:nil];
     
-#elif MAC_OS
+#else
     
     NSAlert *alert = [NSAlert new];
     [alert addButtonWithTitle:@"OK"];
     alert.messageText = messageString;
     [alert runModal];
-    
+    [alert release];
+
 #endif
-    
+
 }
 
 @end
