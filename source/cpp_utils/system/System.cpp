@@ -17,6 +17,10 @@
 #include <Lmcons.h>
 #endif
 
+#ifdef APPLE
+#include "CallObj.hpp"
+#endif
+
 #include "Log.hpp"
 #include "System.hpp"
 
@@ -73,6 +77,8 @@ Path System::user_name() {
 void System::alert(const std::string& message) {
 #ifdef WINDOWS
 	MessageBox(0, message.c_str(), "System alert.", MB_OK);
+#elif APPLE
+	obj_c::show_alert(message);
 #else
 	Log("System::alert is not implemented for this platform.");
 	Log(message);
