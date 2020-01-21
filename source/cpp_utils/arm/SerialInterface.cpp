@@ -21,6 +21,10 @@ bool cu::SerialInterface::is_readable() {
     return mbed_serial->readable();
 }
 
+bool cu::SerialInterface::is_writeable() {
+    return mbed_serial->writable();
+}
+
 void cu::SerialInterface::_read(void* data, int size) {
     mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
 }

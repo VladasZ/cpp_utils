@@ -37,6 +37,7 @@ namespace cu {
         }
 
         static bool is_readable();
+        static bool is_writeable();
 
     private:
 

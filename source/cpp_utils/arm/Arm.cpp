@@ -8,11 +8,7 @@
 
 #ifdef MICROCONTROLLER_BUILD
 
-#include "mbed.h"
-
 #include "Arm.hpp"
-
-static DigitalOut led(LED1);
 
 void arm::blink(float interval) {
     led = 1;

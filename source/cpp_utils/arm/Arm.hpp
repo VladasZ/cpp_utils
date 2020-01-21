@@ -10,7 +10,11 @@
 
 #ifdef MICROCONTROLLER_BUILD
 
+#include "mbed.h"
+
 namespace arm {
+
+    static DigitalOut led(LED1);
 
     void blink(float interval = 1);
     void flash(int frequency = 10);
