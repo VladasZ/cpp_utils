@@ -21,6 +21,8 @@ int Time::interval() {
     static long long prev_interval = 1;
     int result = int(now() - prev_interval);
     prev_interval = now();
-    if (result == 0) return 1;
+    if (result == 0) {
+        return 1;
+    }
     return result;
 }

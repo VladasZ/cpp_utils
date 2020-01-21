@@ -17,9 +17,9 @@ namespace cu {
 
     class Log {
 
-        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line);
-
     public:
+
+        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line);
 
         static std::string location(const std::string& file, const std::string& func, int line);
 
