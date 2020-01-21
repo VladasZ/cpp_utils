@@ -26,7 +26,7 @@ void arm::flash(int frequency) {
 void arm::hello() {
     arm::flash(4);
     wait(1);
-    arm::flash(4);
+    arm::flash(8);
     wait(1);
 }
 

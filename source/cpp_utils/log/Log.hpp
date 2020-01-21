@@ -71,7 +71,7 @@ namespace cu {
 namespace cu {
     static const auto mbed_serial = [] {
         auto serial = new Serial(USBTX, USBRX);
-        serial->baud(115200);
+        serial->baud(MBED_SERIAL_BAUD);
         return serial;
     }();
 }
