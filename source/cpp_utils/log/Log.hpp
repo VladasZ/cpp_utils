@@ -64,10 +64,10 @@ namespace cu {
 
 #endif
 
+#define MBED_SERIAL_BAUD 115200
+
 #ifdef MICROCONTROLLER_BUILD
 #include "mbed.h"
-
-#define MBED_SERIAL_BAUD 115200
 namespace cu {
     static const auto mbed_serial = [] {
         auto serial = new Serial(USBTX, USBRX);
