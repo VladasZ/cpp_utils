@@ -18,6 +18,9 @@ namespace cu {
 
     public:
 
+        static inline unsigned bytes_received = 0;
+        static inline unsigned bytes_sent = 0;
+
         template<class T>
         static T& read() {
             static T value;
@@ -33,7 +36,7 @@ namespace cu {
 
         template <class T>
         static void write(const T& value) {
-            _write(&value, sizeof(value));
+            _write(&value, sizeof(T));
         }
 
         static bool is_readable();
