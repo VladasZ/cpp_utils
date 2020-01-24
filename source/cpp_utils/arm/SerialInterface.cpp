@@ -22,17 +22,15 @@ bool cu::SerialInterface::is_readable() {
 }
 
 bool cu::SerialInterface::is_writeable() {
-    return mbed_serial->writable();
+    return mbed_serial->writeable();
 }
 
-void cu::SerialInterface::_read(void* data, int size) {
-    mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
-    bytes_received += size;
+int cu::SerialInterface::_read(void* data, int size) {
+    return mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
 }
 
-void cu::SerialInterface::_write(const void* data, int size) {
+int cu::SerialInterface::_write(const void* data, int size) {
     mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
-    bytes_sent += size;
 }
 
 #endif
