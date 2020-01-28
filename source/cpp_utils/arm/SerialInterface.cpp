@@ -30,7 +30,7 @@ int cu::SerialInterface::_read(void* data, int size) {
 }
 
 int cu::SerialInterface::_write(const void* data, int size) {
-    mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
+    return mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
 }
 
 #endif
