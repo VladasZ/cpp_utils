@@ -10,6 +10,7 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #define UTILS_LOG_ENABLED
 
@@ -49,6 +50,8 @@ namespace cu {
 #define Log(message)  cu::Log::log(message, __FILE__, __func__, __LINE__)
 #define Logvar(variable) Log(VarString(variable))
 
+#define Separator std::cout << "========================================" << std::endl
+
 #ifdef __cpp_exceptions
 #define Fatal(message) { Log(message); throw std::runtime_error(message); };
 #else
@@ -59,6 +62,8 @@ namespace cu {
 
 #define Log(message)
 #define Logvar(variable)
+
+#define Separator
 
 #define Fatal(message)
 

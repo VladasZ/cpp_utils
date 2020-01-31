@@ -7,7 +7,6 @@
 //
 
 #include <string.h>
-#include <iostream>
 
 #ifdef ANDROID_BUILD
 #include <android/log.h>
