@@ -6,8 +6,6 @@
 //  Copyright © 2020 VladasZ. All rights reserved.
 //
 
-#pragma once
-
 #include "MetaHelpers.hpp"
 
 #ifdef __GNUG__
@@ -29,5 +27,3 @@ std::string demangle(const char* name) {
 }
 
 #endif
-
-
