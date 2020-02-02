@@ -23,9 +23,10 @@ static UIViewController *topmostController() {
 #else
 
 #import <AppKit/AppKit.h>
-#import <CoreBluetooth/CoreBluetooth.h>
 
 #endif
+
+#import <CoreBluetooth/CoreBluetooth.h>
 
 static CBCentralManager* centralManager;
 static OBJBridge* instance;
