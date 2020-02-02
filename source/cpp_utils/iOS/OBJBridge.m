@@ -23,11 +23,15 @@ static UIViewController *topmostController() {
 #else
 
 #import <AppKit/AppKit.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 #endif
 
-@interface OBJBridge ()
+static CBCentralManager* centralManager;
+static OBJBridge* instance;
 
+
+@interface OBJBridge () <CBCentralManagerDelegate>
 @end
 
 @implementation OBJBridge
@@ -67,6 +71,31 @@ static UIViewController *topmostController() {
 
 #endif
 
+}
+
++ (void)testBluetooth {
+
+    instance = [OBJBridge new];
+
+    dispatch_queue_t queue = dispatch_queue_create("downLoadAGroupPhoto",
+                                                   DISPATCH_QUEUE_CONCURRENT);
+
+    centralManager =
+            [[CBCentralManager alloc] initWithDelegate:instance queue:queue options:nil];
+
+    [centralManager scanForPeripheralsWithServices:nil options:nil];
+
+
+    NSLog(@"Hellof");
+}
+
+
+- (void)centralManagerDidUpdateState:(CBCentralManager*)central {
+    NSLog(@"@%", central);
+}
+
+- (void)centralManager:(CBCentralManager*)central didDiscoverPeripheral:(CBPeripheral*)peripheral advertisementData:(NSDictionary<NSString*, id>*)advertisementData RSSI:(NSNumber*)RSSI {
+    NSLog(@"Discovered %@", peripheral.name);
 }
 
 @end

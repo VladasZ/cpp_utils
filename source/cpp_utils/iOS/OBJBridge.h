@@ -13,5 +13,6 @@
 + (NSString*)workDirectoryPath;
 + (NSArray<NSString*>*)ls:(const char*)path;
 + (void)showAlert:(const char*)message;
++ (void)testBluetooth;
 
 @end

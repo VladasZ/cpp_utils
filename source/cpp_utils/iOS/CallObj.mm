@@ -28,4 +28,8 @@ vector<string> obj_c::ls(const string& path) {
     return result;
 }
 
+void obj_c::test_bluetooth() {
+    [OBJBridge testBluetooth];
+}
+
 #endif

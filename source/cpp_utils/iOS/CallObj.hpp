@@ -20,6 +20,8 @@ namespace obj_c {
     void show_alert(const std::string& message);
     std::vector<std::string> ls(const std::string& path);
 
+    void test_bluetooth();
+
 }
 
 #endif
