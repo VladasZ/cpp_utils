@@ -26,10 +26,6 @@ public:
     
     Event() = default;
 
-    void subscribe(const Callback& action) {
-        subscribers.push_back(action);
-    }
-    
     void link(This& event) {
         linked_events.push_back(&event);
     }
