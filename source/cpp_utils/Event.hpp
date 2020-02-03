@@ -26,18 +26,24 @@ public:
     
     Event() = default;
 
-    void subscribe(Callback action) {
+    void subscribe(const Callback& action) {
         subscribers.push_back(action);
     }
     
     void link(This& event) {
         linked_events.push_back(&event);
     }
+
+    void operator = (const Callback& action) {
+        subscribers.push_back(action);
+    }
     
     void operator()(Params... parameters) const {
-        for (const auto& subscriber : subscribers)
+        for (const auto& subscriber : subscribers) {
             subscriber(parameters...);
-        for (const auto event : linked_events)
+        }
+        for (const auto event : linked_events) {
             event->operator()(parameters...);
+        }
     }
 };

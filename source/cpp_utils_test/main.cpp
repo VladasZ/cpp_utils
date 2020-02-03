@@ -1,15 +1,19 @@
 
 
 #include "Log.hpp"
-#include "Bluetooth.hpp"
+#include "RangeConversion.hpp"
 
+using namespace cu;
 
 int main() {
 
-    cu::Bluetooth::test();
+    RangeConversion conv { 2, 3, 10, 110 };
 
-    while(true) {
+    conv.flip = true;
 
+    for (float i = 2; i < 3; i += 0.01) {
+        conv = i;
+        Log((float)conv);
     }
 
     return 0;
