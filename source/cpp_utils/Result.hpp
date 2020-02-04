@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Log.hpp"
+#include "MetaHelpers.hpp"
 
 namespace cu {
 
@@ -29,8 +30,7 @@ namespace cu {
 
         constexpr operator T() const {
             if (!found) {
-                throw std::runtime_error(std::string() +
-                                         "Conversion of not found result of type: " + typeid(T).name());
+                Fatal("Conversion of not found result of type: " + cu::class_name<T>);
             }
             return object;
         }
