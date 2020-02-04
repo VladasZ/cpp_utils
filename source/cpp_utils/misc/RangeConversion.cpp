@@ -7,7 +7,6 @@
 //
 
 #include "Log.hpp"
-#include "GmMath.hpp"
 #include "RangeConversion.hpp"
 
 using namespace cu;
