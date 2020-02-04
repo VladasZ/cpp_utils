@@ -21,7 +21,7 @@ namespace cu {
 		const bool not_found;
         const T object;
 
-        constexpr Result() : found(false), not_found(!found) {
+        constexpr Result() : found(false), not_found(!found), object(T { }) {
         }
 
         constexpr Result(const T& object) : object(object), found(true), not_found(!found) {
