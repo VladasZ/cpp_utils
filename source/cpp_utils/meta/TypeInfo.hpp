@@ -25,9 +25,12 @@ namespace cu {
 
         static constexpr bool is_enum = std::is_enum_v<Class>;
 
+        static constexpr bool is_char    = std::is_same_v          <Class, char>;
         static constexpr bool is_string  = std::is_same_v          <Class, std::string>;
         static constexpr bool is_float   = std::is_floating_point_v<Class>;
         static constexpr bool is_integer = std::numeric_limits     <Class>::is_integer || is_enum;
+
+        static constexpr bool is_c_string = is_char && is_pointer;
 
         static constexpr bool is_std_vector = cu::is_std_vector_v<Class>;
 
@@ -60,6 +63,8 @@ namespace cu {
 
         static std::string to_string() {
             return std::string() +
+                   ", is base char: "             + (is_char                  ? "true" : "false") + "\n" +
+                   ", is is c string: "           + (is_c_string              ? "true" : "false") + "\n" +
                    ", is base type: "             + (is_base_type             ? "true" : "false") + "\n" +
                    ", is embedded type: "         + (is_embedded_type         ? "true" : "false") + "\n" +
                    ", is enum type: "             + (is_enum                  ? "true" : "false") + "\n" +
