@@ -62,7 +62,7 @@ namespace cu {
     using first_tuple_type = typename std::tuple_element_t<0, T>;
 
     template <int First, int Last, class Lambda>
-    constexpr void static_for(Lambda const& f) {
+    constexpr void static_for(const Lambda& f) {
         if constexpr (First < Last) {
             f(std::integral_constant<int, First> { });
             static_for<First + 1, Last>(f);

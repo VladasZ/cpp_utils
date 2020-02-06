@@ -15,20 +15,23 @@ namespace arm {
 
     class Servo {
 
-        const float _high;
-        const float _low;
-        const float _range;
+        float _high = 2000;
+        float _low  = 1000;
+        float _range;
 
         PwmOut _pwm;
 
     public:
 
-        Servo(PinName pin, float high, float low);
+        Servo(PinName pin);
 
         void write(float percent);
         void disable();
 
         void wave(float range = 1.0f, float duration = 1.0f);
+
+        void set_pulse_range(float high, float low);
+        void set_pulse_width(float);
 
         Servo& operator= (float percent);
 

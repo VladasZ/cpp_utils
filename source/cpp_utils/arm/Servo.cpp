@@ -12,11 +12,10 @@
 
 using namespace arm;
 
-Servo::Servo(PinName pin, float high, float low)
-: _high(high), _low(low), _range(high - low), _pwm(pin) { }
+Servo::Servo(PinName pin) : _range(_high - _low), _pwm(pin) { }
 
 void Servo::write(float percent) {
-    _pwm.pulsewidth(_low + percent * _range);
+    set_pulse_width(_low + percent * _range);
 }
 
 void Servo::disable() {
@@ -28,6 +27,16 @@ void Servo::wave(float range, float duration) {
     wait(duration / 2);
     write(0);
     wait(duration / 2);
+}
+
+void Servo::set_pulse_range(float high, float low) {
+    _high = high;
+    _low = low;
+    _range = high - low;
+}
+
+void Servo::set_pulse_width(float width) {
+    _pwm.pulsewidth(width / 1000000.0f);
 }
 
 Servo& Servo::operator=(float percent) {
