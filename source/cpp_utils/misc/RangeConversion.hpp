@@ -6,6 +6,8 @@
 //  Copyright © 2020 VladasZ. All rights reserved.
 //
 
+#pragma once
+
 namespace cu {
 
     class RangeConversion {
