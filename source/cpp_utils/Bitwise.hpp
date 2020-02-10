@@ -18,14 +18,33 @@ namespace bitwise {
     constexpr size_t size = sizeof(T) * 8;
 
     template <uint8_t bit_size, bool _signed = false>
-    using fits = typename std::conditional<bit_size <=  8, typename std::conditional<_signed,  int8_t,  uint8_t>::type,
-                 typename std::conditional<bit_size <= 16, typename std::conditional<_signed, int16_t, uint16_t>::type,
-                 typename std::conditional<bit_size <= 32, typename std::conditional<_signed, int32_t, uint32_t>::type,
-                                                           typename std::conditional<_signed, int64_t, uint64_t>::type>::type>::type>::type;
+    class fits {
+
+        static_assert(bit_size <= 64);
+
+        using  _8 = typename std::conditional<_signed,   int8_t,   uint8_t>::type;
+        using _16 = typename std::conditional<_signed,  int16_t,  uint16_t>::type;
+        using _32 = typename std::conditional<_signed,  int32_t,  uint32_t>::type;
+        using _64 = typename std::conditional<_signed,  int64_t,  uint64_t>::type;
+
+        static constexpr bool fits_8  = bit_size <=  8;
+        static constexpr bool fits_16 = bit_size <= 16;
+        static constexpr bool fits_32 = bit_size <= 32;
+
+    public:
+
+        using type = typename std::conditional<fits_8,   _8,
+                     typename std::conditional<fits_16, _16,
+                     typename std::conditional<fits_32, _32, _64>::type>::type>::type;
+
+    };
+
+    template <uint8_t bit_size, bool _signed = false>
+    using fits_t = typename fits<bit_size, _signed>::type;
 
     template <class T>
     constexpr auto& to_number(const T& value) {
-        return *static_cast<const fits<size<T>>*>(static_cast<const void*>(&value));
+        return *static_cast<const fits_t<size<T>>*>(static_cast<const void*>(&value));
     }
 
     template <class T, class NumberType>
@@ -52,7 +71,7 @@ namespace bitwise {
 
     template <uint8_t begin, uint8_t end, uint8_t span = end - begin, class T>
     constexpr auto get_part(const T& value) {
-        fits<span> result(0);
+        fits_t<span> result { 0 };
         for (int i = 0; i < span; i++) {
             result = set_byte(result, i, get_byte(begin + i, value));
         }
