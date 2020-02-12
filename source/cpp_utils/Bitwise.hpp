@@ -69,8 +69,9 @@ namespace bitwise {
         return to_type<T>(result);
     }
 
-    template <uint8_t begin, uint8_t end, uint8_t span = end - begin, class T>
+    template <uint8_t begin, uint8_t end, class T>
     constexpr auto get_part(const T& value) {
+        constexpr uint8_t span = end - begin + 1;
         fits_t<span> result { 0 };
         for (int i = 0; i < span; i++) {
             result = set_byte(result, i, get_byte(begin + i, value));

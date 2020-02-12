@@ -13,14 +13,14 @@ namespace cu {
     public:
 
         template <class Other>
-        Other force_create() const {
+        Other force_convert() const {
             Other result { };
             memcpy(&result, this, sizeof(T));
             return result;
         }
 
         template <class Other>
-        static T force_convert(const Other& other) {
+        static T force_create(const Other& other) {
             T result;
             memcpy(&result, &other, sizeof(T));
             return result;

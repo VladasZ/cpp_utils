@@ -21,7 +21,7 @@ namespace cu {
     template <class T> using remove_all_t = std::remove_cv_t<std::remove_reference_t<std::remove_pointer_t<T>>>;
 
 #ifdef MICROCONTROLLER_BUILD
-    template <class T> std::string class_name = "Not supported on MC";
+    template <class T> std::string class_name = "Not supported on MC. sizeof: " + std::to_string(sizeof(T));
 #else
     template <class T> std::string class_name = demangle(typeid(T).name());
 #endif
