@@ -1,5 +1,5 @@
 //
-//  Header.hpp
+//  PacketHeader.hpp
 //  cpp_utils
 //
 //  Created by Vladas Zakrevskis on 29/01/20.
@@ -12,8 +12,12 @@
 
 namespace cu {
 
-    template <class T = uint8_t>
-    class Header {
+    struct _EmptyPacket {
+        static constexpr uint16_t packet_id = 0;
+    };
+
+    template <class T = _EmptyPacket>
+    class PacketHeader {
 
         static inline constexpr uint8_t first_byte = 222;
         static inline constexpr uint8_t second_byte = 111;
@@ -22,6 +26,7 @@ namespace cu {
 
         std::array<uint8_t, 2> header = { first_byte, second_byte };
         uint16_t size = sizeof(T);
+        uint16_t packet_id = T::packet_id;
 
         bool is_valid() const {
             return header[0] == first_byte && header[1] == second_byte;
@@ -32,7 +37,11 @@ namespace cu {
             _data[0] = _data[1];
             _data[1] = _data[2];
             _data[2] = _data[3];
-            _data[3] = byte;
+            _data[3] = _data[4];
+            _data[4] = _data[5];
+            _data[5] = _data[6];
+            _data[6] = _data[7];
+            _data[7] = byte;
         }
 
     private:

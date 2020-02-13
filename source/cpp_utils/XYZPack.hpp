@@ -19,12 +19,15 @@ class XYZPack {
     XYZPack(const T& x, const T& y, const T& z) : x(x), y(y), z(z) { }
 
     template<class Value>
-    XYZPack<T>& operator = (const Value& value) {
+    XYZPack& operator = (const Value& value) {
         x = value;
         y = value;
         z = value;
         return *this;
     }
+
+    T* begin() { return &x; }
+    T* end()   { return &z + 1; }
 
     std::string to_string() const {
         return std::string() + "\n"
