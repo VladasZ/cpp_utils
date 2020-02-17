@@ -11,8 +11,8 @@
 
 using namespace cu;
 
-RangeConversion::RangeConversion(float begin, float end, float converted_begin, float converted_end)
-: begin(begin), end(end), converted_begin(converted_begin), converted_end(converted_end) { }
+RangeConversion::RangeConversion(float minimum, float maximum, float converted_minimum, float converted_maximum)
+: minimum(minimum), maximum(maximum), converted_minimum(converted_minimum), converted_maximum(converted_maximum) { }
 
 float RangeConversion::convert(float value) {
     this->operator=(value);
@@ -21,12 +21,12 @@ float RangeConversion::convert(float value) {
 
 void RangeConversion::operator=(float value) {
 
-    auto value_range      = end    - begin;
-    auto normalized_value = value - begin;
+    auto value_range      = maximum - minimum;
+    auto normalized_value = value - minimum;
 
     normalized_value /= value_range;
 
-    auto converted_range = converted_end - converted_begin;
+    auto converted_range = converted_maximum - converted_minimum;
 
     _value = converted_range * normalized_value;
 
@@ -34,7 +34,7 @@ void RangeConversion::operator=(float value) {
         _value = converted_range - _value;
     }
 
-    _value += converted_begin;
+    _value += converted_minimum;
 }
 
 RangeConversion::operator float() {

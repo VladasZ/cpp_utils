@@ -18,14 +18,14 @@ namespace cu {
 
         bool flip = false;
 
-        float begin = 0;
-        float end   = 1;
+        float minimum = 0;
+        float maximum = 1;
 
-        float converted_begin = 0;
-        float converted_end   = 1;
+        float converted_minimum = 0;
+        float converted_maximum = 1;
 
         RangeConversion() = default;
-        RangeConversion(float begin, float end, float converted_begin = 0, float converted_end = 1);
+        RangeConversion(float minumum, float maximum, float converted_minimum = 0, float converted_maximum = 1);
 
         float convert(float);
 
