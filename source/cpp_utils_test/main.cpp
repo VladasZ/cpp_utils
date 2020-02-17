@@ -12,8 +12,7 @@ int main() {
     conv.flip = true;
 
     for (float i = 2; i < 3; i += 0.01) {
-        conv = i;
-        Log((float)conv);
+        Log(conv.convert(i));
     }
 
     return 0;

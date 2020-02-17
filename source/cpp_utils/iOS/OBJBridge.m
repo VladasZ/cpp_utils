@@ -92,7 +92,7 @@ static OBJBridge* instance;
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager*)central {
-    NSLog(@"@%", central);
+    NSLog(@"%@", central);
 }
 
 - (void)centralManager:(CBCentralManager*)central didDiscoverPeripheral:(CBPeripheral*)peripheral advertisementData:(NSDictionary<NSString*, id>*)advertisementData RSSI:(NSNumber*)RSSI {
