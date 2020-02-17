@@ -14,13 +14,7 @@ using namespace cu;
 RangeConversion::RangeConversion(float minimum, float maximum, float converted_minimum, float converted_maximum)
 : minimum(minimum), maximum(maximum), converted_minimum(converted_minimum), converted_maximum(converted_maximum) { }
 
-float RangeConversion::convert(float value) {
-    this->operator=(value);
-    return _value;
-}
-
-void RangeConversion::operator=(float value) {
-
+float RangeConversion::convert(float value) const {
     auto value_range      = maximum - minimum;
     auto normalized_value = value - minimum;
 
@@ -28,15 +22,11 @@ void RangeConversion::operator=(float value) {
 
     auto converted_range = converted_maximum - converted_minimum;
 
-    _value = converted_range * normalized_value;
+    auto result = converted_range * normalized_value;
 
     if (flip) {
-        _value = converted_range - _value;
+        result = converted_range - result;
     }
 
-    _value += converted_minimum;
-}
-
-RangeConversion::operator float() {
-    return _value;
+    return result + converted_minimum;
 }

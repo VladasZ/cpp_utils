@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "MetaHelpers.hpp"
 
 #define UTILS_LOG_ENABLED
 
@@ -31,12 +32,17 @@ namespace cu {
 
         template <class T>
         static std::string to_string(const T& value) {
-            if constexpr (std::is_same_v<bool, T>) {
+            if constexpr (has_to_string<T, std::string()>::value) {
+                return value.to_string();
+            }
+            else if constexpr (std::is_same_v<bool, T>) {
                 return value ? "true" : "false";
             }
-            std::stringstream buffer;
-            buffer << value;
-            return buffer.str();
+            else {
+                std::stringstream buffer;
+                buffer << value;
+                return buffer.str();
+            }
         }
 
     };

@@ -12,8 +12,6 @@ namespace cu {
 
     class RangeConversion {
 
-        float _value = 0;
-
     public:
 
         bool flip = false;
@@ -27,10 +25,7 @@ namespace cu {
         RangeConversion() = default;
         RangeConversion(float minumum, float maximum, float converted_minimum = 0, float converted_maximum = 1);
 
-        float convert(float);
-
-        void operator = (float value);
-        operator float();
+        float convert(float value) const;
 
     };
 

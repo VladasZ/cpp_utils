@@ -10,6 +10,8 @@ class XYZPack {
 
   public:
 
+    using ValueType = T;
+
     T x;
     T y;
     T z;
@@ -18,8 +20,7 @@ class XYZPack {
     XYZPack(const T& value) : x(value), y(value), z(value) { }
     XYZPack(const T& x, const T& y, const T& z) : x(x), y(y), z(z) { }
 
-    template<class Value>
-    XYZPack& operator = (const Value& value) {
+    XYZPack& operator = (const T& value) {
         x = value;
         y = value;
         z = value;
@@ -28,6 +29,15 @@ class XYZPack {
 
     T* begin() { return &x; }
     T* end()   { return &z + 1; }
+
+    void apply(std::function<void(T&)> action) {
+        action(x); action(y); action(z);
+    }
+
+    XYZPack& operator = (std::function<void(T&)> action) {
+        apply(action);
+        return *this;
+    }
 
     std::string to_string() const {
         return std::string() + "\n"
