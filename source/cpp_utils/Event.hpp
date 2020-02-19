@@ -9,6 +9,7 @@
 #pragma once
 
 #include <vector>
+#include <cassert>
 #include <functional>
 
 #include "ArrayUtils.hpp"
