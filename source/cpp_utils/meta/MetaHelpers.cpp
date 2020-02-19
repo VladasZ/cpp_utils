@@ -22,7 +22,7 @@ std::string cu::demangle(const std::string& name) {
 
 #else
 
-std::string demangle(const char* name) {
+std::string cu::demangle(const std::string& name) {
     return name;
 }
 
