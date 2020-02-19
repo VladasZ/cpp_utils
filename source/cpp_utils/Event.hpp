@@ -11,35 +11,59 @@
 #include <vector>
 #include <functional>
 
-template<class ...Params>
-class Event {
-    
-public:
-    using Callback = std::function<void(Params...)>;
-    using This = Event<Params...>;
-    
-private:
-    std::vector<Callback> subscribers;
-    std::vector<This*> linked_events;
+#include "ArrayUtils.hpp"
 
-public:
-    
-    Event() = default;
+namespace cu {
 
-    void link(This& event) {
-        linked_events.push_back(&event);
-    }
+    template<class ...Params>
+    class Event {
 
-    void operator = (const Callback& action) {
-        subscribers.push_back(action);
-    }
-    
-    void operator()(Params... parameters) const {
-        for (const auto& subscriber : subscribers) {
-            subscriber(parameters...);
+        using Callback = std::function<void(Params...)>;
+        using This = Event<Params...>;
+
+        struct ObjectSubscriber {
+            void* object;
+            Callback callback;
+            ObjectSubscriber(void* o, Callback c) : object(o), callback(c) { }
+            bool operator ==(const ObjectSubscriber& other) const {
+                return object == other.object;
+            }
+        };
+
+    private:
+        std::vector<Callback> subscribers;
+        std::vector<ObjectSubscriber> object_subscribers;
+
+    public:
+
+        Event() = default;
+
+        Callback& subscribe(void* object) {
+            assert(object != nullptr);
+            object_subscribers.emplace_back(object, Callback());
+            return object_subscribers.back().callback;
         }
-        for (const auto event : linked_events) {
-            event->operator()(parameters...);
+
+        void unsubscribe(void* object) {
+            cu::array::remove_where(object_subscribers, [&](const ObjectSubscriber& subscriber) {
+                return subscriber.object == object;
+            });
         }
-    }
-};
+
+        void operator = (Callback action) {
+            subscribers.push_back(action);
+        }
+
+        void operator()(Params... parameters) const {
+            for (auto subscriber : subscribers) {
+                subscriber(parameters...);
+            }
+            if (object_subscribers.size()) {
+                for (auto& subscriber : object_subscribers) {
+                    subscriber.callback(parameters...);
+                }
+            }
+        }
+    };
+
+}

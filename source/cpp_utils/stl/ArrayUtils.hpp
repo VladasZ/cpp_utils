@@ -87,6 +87,15 @@ namespace cu::array {
         }
     }
 
+    template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
+    static void remove_where(Array& array, Predicate predicate) {
+        for (auto object : array) {
+            if (predicate(object)) {
+                remove(array, object);
+            }
+        }
+    }
+
     template <class T>
     class backwards {
         T& _arr;
