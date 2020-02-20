@@ -17,7 +17,6 @@ namespace cu {
 
     template <class Data>
     struct DataPacket : public PacketHeader<Data>, public Data {
-        using Data::Data;
     };
 
     template <class  > struct __is_data_packet                 : std::false_type { };
