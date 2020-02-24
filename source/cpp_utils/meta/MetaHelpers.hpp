@@ -13,6 +13,10 @@
 #include <string>
 #include <type_traits>
 
+#include "CPP17Bridge.hpp"
+#include "ArduinoBrigde.hpp"
+
+#ifdef CPP_17_BUILD
 
 namespace cu {
 
@@ -26,12 +30,15 @@ namespace cu {
     template <class T> std::string class_name = demangle(typeid(T).name());
 #endif
 
-    template <class T, class U> constexpr bool is_same_v = std::is_same_v<remove_all_t<T>, remove_all_t<U>>;
-    template <class T, class U> constexpr bool is_base_of_v = std::is_base_of_v<remove_all_t<T>, remove_all_t<U>>;
+    template <class T, class U> constexpr bool is_same_v    = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
+    template <class T, class U> constexpr bool is_base_of_v = std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
+
 
     template <class  > struct __is_vector                 : std::false_type { };
     template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
     template <class T> constexpr bool is_std_vector_v = __is_vector<remove_all_t<T>>::value;
+
+
 
     //MARK: - Pointer to member tools
 
@@ -113,3 +120,5 @@ namespace cu {
     };
 
 }
+
+#endif

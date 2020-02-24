@@ -11,9 +11,15 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+
 #include "MetaHelpers.hpp"
 
 #define UTILS_LOG_ENABLED
+
+#ifdef NO_CPP_17_BUILD
+#define constexpr
+#endif
+
 
 namespace cu {
 
@@ -32,10 +38,13 @@ namespace cu {
 
         template <class T>
         static std::string to_string(const T& value) {
+#ifdef CPP_17_BUILD
             if constexpr (has_to_string<T, std::string()>::value) {
                 return value.to_string();
             }
-            else if constexpr (std::is_same_v<bool, T>) {
+            else
+#endif
+            if constexpr (std::is_same<bool, T>::value) {
                 return value ? "true" : "false";
             }
             else {
@@ -77,7 +86,7 @@ namespace cu {
 
 #define MBED_SERIAL_BAUD 115200
 
-#ifdef MICROCONTROLLER_BUILD
+#ifdef MBED_BUILD
 #include "mbed.h"
 namespace cu {
     static const auto mbed_serial = [] {
@@ -87,3 +96,5 @@ namespace cu {
     }();
 }
 #endif
+
+#undef constexpr
