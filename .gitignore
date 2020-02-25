@@ -7,3 +7,4 @@
 /.idea
 cmake-build-debug/
 arm_build/
+dep_build/

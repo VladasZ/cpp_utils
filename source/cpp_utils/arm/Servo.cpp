@@ -8,7 +8,6 @@
 #ifdef MICROCONTROLLER_BUILD
 
 #include "Servo.hpp"
-#include "GmMath.hpp"
 
 using namespace arm;
 
