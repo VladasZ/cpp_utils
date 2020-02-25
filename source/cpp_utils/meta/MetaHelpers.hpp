@@ -14,7 +14,6 @@
 #include <type_traits>
 
 #include "CPP17Bridge.hpp"
-#include "ArduinoBrigde.hpp"
 
 #ifdef CPP_17_BUILD
 
