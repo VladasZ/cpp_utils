@@ -96,6 +96,11 @@ namespace cu::array {
         }
     }
 
+    template <class Array, class Value = typename Array::value_type>
+    static bool contains(const Array& array, const Value& value) {
+        return std::find(array.begin(), array.end(), value) != array.end();
+    }
+
     template <class T>
     class backwards {
         T& _arr;
