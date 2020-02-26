@@ -12,16 +12,22 @@
 #include <thread>
 #endif
 
-#ifdef WINDOWS
-#include <windows.h>
-#include <Lmcons.h>
-#endif
 
 #ifdef APPLE
 #include "CallObj.hpp"
 #endif
 
+#ifdef DESKTOP_BUILD
+#ifdef WINDOWS_BUILD
+#include <stdio.h>
+#include <direct.h>
+#include <windows.h>
+#include <Lmcons.h>
+#else
 #include <unistd.h>
+#include "dirent.h"
+#endif
+#endif
 
 
 #include "Log.hpp"
@@ -102,34 +108,53 @@ Path System::home() {
 
 Path System::pwd() {
 #ifdef DESKTOP_BUILD
+#ifdef WINDOWS_BUILD
+    static char cCurrentPath[FILENAME_MAX];
+    if (!_getcwd(cCurrentPath, sizeof(cCurrentPath))) {
+        Fatal("");
+    }
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
+    return cCurrentPath;
+#else
     char cwd[1024];
     chdir("/path/to/change/directory/to");
     getcwd(cwd, sizeof(cwd));
     printf("Current working dir: %s\n", cwd);
     return cwd;
+#endif
 #else
     return "Not implemented on this platform";
 #endif
 }
 
-#include "dirent.h"
 
 Path::Array System::ls(const std::string& path, bool full_path) {
 #ifdef DESKTOP_BUILD
+#ifdef WINDOWS_BUILD
+    Path::Array names;
+    string search_path = path + "/*.*";
+    WIN32_FIND_DATA fd;
+    HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                names.push_back(fd.cFileName);
+            }
+        } while (::FindNextFile(hFind, &fd));
+        ::FindClose(hFind);
+    }
+    return names;
+#else
     Path::Array result;
-    DIR *dir;
-    struct dirent *ent;
-    if ((dir = opendir("c:\\src\\")) != NULL) {
-        while ((ent = readdir(dir)) != NULL) {
-            result.push_back(ent->d_name);
-        }
-        closedir(dir);
+    auto dir = opendir(path.c_str());
+    if (!dir) throw std::runtime_error("Path not found " + path);
+    dirent* ent = nullptr;
+    while ((ent = readdir(dir))) {
+        result.push_back(ent->d_name);
     }
-    else {
-        perror ("");
-        throw std::runtime_error("Path not found" + path);
-    }
+    closedir(dir);
     return result;
+#endif
 #else
     return { "Not implemented on this platform" };
 #endif
