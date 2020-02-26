@@ -7,6 +7,7 @@
 //
 
 #include "Path.hpp"
+#include "System.hpp"
 
 using namespace cu;
 
@@ -25,4 +26,8 @@ Path Path::operator / (const Path& path) const {
     result += "/";
     result += path;
     return result;
+}
+
+Path::Array Path::ls() const {
+    return System::ls(*this);
 }

@@ -9,18 +9,23 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace cu {
-    
+
     class Path : public std::string {
         
     public:
+
+        using Array = std::vector<Path>;
         
         using std::string::string;
         
         Path(const std::string&);
 
         Path operator / (const Path&) const;
+
+        Array ls() const;
 
     };
     

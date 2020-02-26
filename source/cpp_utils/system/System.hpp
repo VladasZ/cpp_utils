@@ -10,12 +10,24 @@
 
 #include "Path.hpp"
 
-namespace cu::System {
-    void sleep(double interval);
-    unsigned random();
-    unsigned random(unsigned range);
-    Path user_name();
-	void alert(const std::string& message);
+namespace cu {
+
+    struct System {
+
+        static void sleep(double interval);
+
+        static unsigned random();
+        static unsigned random(unsigned range);
+
+        static void alert(const std::string& message);
+
+        static std::string user_name();
+
+        static Path home();
+        static Path pwd();
+        static Path::Array ls(const std::string& path = ".", bool full_path = false);
+    };
+
 }
 
 #if __APPLE__

@@ -18,7 +18,7 @@
 using namespace cu;
 using namespace std;
 
-static string last_path_component(const string& path) {
+string Log::last_path_component(const string& path) {
     return (strrchr(path.c_str(), '/') ? strrchr(path.c_str(), '/') + 1 : path.c_str());
 }
 

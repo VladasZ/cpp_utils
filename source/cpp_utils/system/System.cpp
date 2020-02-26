@@ -21,10 +21,13 @@
 #include "CallObj.hpp"
 #endif
 
+#include <filesystem>
+
 #include "Log.hpp"
 #include "System.hpp"
 
 using namespace cu;
+using namespace std;
 
 void System::sleep(double interval) {
 #ifdef MICROCONTROLLER_BUILD
@@ -40,7 +43,7 @@ unsigned System::random() {
 #else
   static bool first_call = true;
   if (first_call) {
-	first_call = false;
+    first_call = false;
     srand(static_cast<unsigned>(time(nullptr)));
   }
   return rand();
@@ -50,16 +53,27 @@ unsigned System::random() {
 unsigned System::random(unsigned range) {
 #ifdef APPLE
   return arc4random_uniform(range);
-#else 
+#else
   return random() % range;
 #endif
 }
 
-Path System::user_name() {
+void System::alert(const std::string& message) {
 #ifdef WINDOWS
-	char username[UNLEN + 1];
-	DWORD username_len = UNLEN + 1;
-	GetUserName(username, &username_len);
+    MessageBox(0, message.c_str(), "System alert.", MB_OK);
+#elif APPLE
+    obj_c::show_alert(message);
+#else
+    Log("System::alert is not implemented for this platform.");
+    Log(message);
+#endif
+}
+
+string System::user_name() {
+#ifdef WINDOWS
+    char username[UNLEN + 1];
+    DWORD username_len = UNLEN + 1;
+    GetUserName(username, &username_len);
     return username;
 #elif IOS_BUILD
     Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
@@ -70,17 +84,43 @@ Path System::user_name() {
     if (!user) {
         return Path("No USER enviroment variable.");
     }
-    return Path(user);
+    return string(user);
 #endif
 }
 
-void System::alert(const std::string& message) {
+Path System::home() {
 #ifdef WINDOWS
-	MessageBox(0, message.c_str(), "System alert.", MB_OK);
+    Path users = "C:/Users";
 #elif APPLE
-	obj_c::show_alert(message);
+    Path users = "/Users";
 #else
-	Log("System::alert is not implemented for this platform.");
-	Log(message);
+    Path users = "/home";
+#endif
+    return users / user_name();
+}
+
+Path System::pwd() {
+#ifdef DESKTOP_BUILD
+    return filesystem::current_path().string();
+#else
+    return "Not implemented on this platform";
 #endif
 }
+
+Path::Array System::ls(const std::string& path, bool full_path) {
+#ifdef DESKTOP_BUILD
+    Path::Array result;
+    for (auto entry : filesystem::directory_iterator(path)) {
+        if (full_path) {
+            result.push_back(entry.path().string());
+        }
+        else {
+            result.push_back(Log::last_path_component(entry.path().string()));
+        }
+    }
+    return result;
+#else
+    return { "Not implemented on this platform" };
+#endif
+}
+

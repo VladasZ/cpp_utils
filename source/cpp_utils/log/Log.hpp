@@ -16,16 +16,13 @@
 
 #define UTILS_LOG_ENABLED
 
-#ifdef NO_CPP_17_BUILD
-#define constexpr
-#endif
-
-
 namespace cu {
 
     class Log {
 
     public:
+
+        static std::string last_path_component(const std::string& path);
 
         static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line);
 
@@ -38,13 +35,17 @@ namespace cu {
 
         template <class T>
         static std::string to_string(const T& value) {
-#ifdef CPP_17_BUILD
-            if constexpr (has_to_string<T, std::string()>::value) {
+            if constexpr (cu::is_std_vector_v<T>) {
+                std::string result = "\n";
+                for (auto val : value) {
+                    result += Log::to_string(val) + "\n";
+                }
+                return result;
+            }
+            else if constexpr (has_to_string<T, std::string()>::value) {
                 return value.to_string();
             }
-            else
-#endif
-            if constexpr (std::is_same<bool, T>::value) {
+            else if constexpr (std::is_same<bool, T>::value) {
                 return value ? "true" : "false";
             }
             else {
