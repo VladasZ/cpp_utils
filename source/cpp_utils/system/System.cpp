@@ -21,7 +21,8 @@
 #include "CallObj.hpp"
 #endif
 
-#include <experimental/filesystem>
+#include <unistd.h>
+
 
 #include "Log.hpp"
 #include "System.hpp"
@@ -101,23 +102,32 @@ Path System::home() {
 
 Path System::pwd() {
 #ifdef DESKTOP_BUILD
-    return filesystem::current_path().string();
+    char cwd[1024];
+    chdir("/path/to/change/directory/to");
+    getcwd(cwd, sizeof(cwd));
+    printf("Current working dir: %s\n", cwd);
+    return cwd;
 #else
     return "Not implemented on this platform";
 #endif
 }
 
+#include "dirent.h"
+
 Path::Array System::ls(const std::string& path, bool full_path) {
 #ifdef DESKTOP_BUILD
     Path::Array result;
-
-    for (auto entry : std::experimental::filesystem::directory_iterator(path)) {
-        if (full_path) {
-            result.push_back(entry.path().string());
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir("c:\\src\\")) != NULL) {
+        while ((ent = readdir(dir)) != NULL) {
+            result.push_back(ent->d_name);
         }
-        else {
-            result.push_back(Log::last_path_component(entry.path().string()));
-        }
+        closedir(dir);
+    }
+    else {
+        perror ("");
+        throw std::runtime_error("Path not found" + path);
     }
     return result;
 #else
