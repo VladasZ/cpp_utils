@@ -13,9 +13,6 @@
 #include <string>
 #include <type_traits>
 
-#include "CPP17Bridge.hpp"
-
-#ifdef CPP_17_BUILD
 
 namespace cu {
 
@@ -119,5 +116,3 @@ namespace cu {
     };
 
 }
-
-#endif
