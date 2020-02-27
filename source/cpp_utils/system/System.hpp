@@ -21,11 +21,13 @@ namespace cu {
 
         static void alert(const std::string& message);
 
-        static std::string user_name();
+        static const Path& user_name();
 
-        static Path home();
+        static const Path& home();
+
         static Path pwd();
         static Path::Array ls(const std::string& path = ".", bool full_path = false);
+
     };
 
 }

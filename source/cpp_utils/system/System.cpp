@@ -76,7 +76,7 @@ void System::alert(const std::string& message) {
 #endif
 }
 
-string System::user_name() {
+const Path& System::user_name() {
 #ifdef WINDOWS
     char username[UNLEN + 1];
     DWORD username_len = UNLEN + 1;
@@ -87,23 +87,29 @@ string System::user_name() {
 #elif ANDROID_BUILD
     Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
 #else
-    auto user = getenv("USER");
-    if (!user) {
-        return Path("No USER enviroment variable.");
-    }
-    return string(user);
+
+    static const Path user = [] {
+        auto user = getenv("USER");
+        if (!user) {
+            return Path("No USER enviroment variable.");
+        }
+        return Path(string(user));
+    }();
+
+    return user;
 #endif
 }
 
-Path System::home() {
+const Path& System::home() {
 #ifdef WINDOWS
-    Path users = "C:/Users";
+    Path users { "C:/Users" };
 #elif APPLE
-    Path users = "/Users";
+    Path users { "/Users" };
 #else
-    Path users = "/home";
+    Path users { "/home" };
 #endif
-    return users / user_name();
+    static const Path home = users / Path(user_name());
+    return home;
 }
 
 Path System::pwd() {
@@ -120,7 +126,7 @@ Path System::pwd() {
     chdir("/path/to/change/directory/to");
     getcwd(cwd, sizeof(cwd));
     printf("Current working dir: %s\n", cwd);
-    return cwd;
+    return Path { cwd };
 #endif
 #else
     return "Not implemented on this platform";
@@ -150,7 +156,7 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     if (!dir) throw std::runtime_error("Path not found " + path);
     dirent* ent = nullptr;
     while ((ent = readdir(dir))) {
-        result.push_back(ent->d_name);
+        result.emplace_back(path + "/" + ent->d_name);
     }
     closedir(dir);
     return result;
@@ -159,4 +165,3 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     return { "Not implemented on this platform" };
 #endif
 }
-
