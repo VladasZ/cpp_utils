@@ -76,16 +76,16 @@ void System::alert(const std::string& message) {
 #endif
 }
 
-const Path System::user_name = [] {
+const Path System::user_name = [] () -> Path {
 #ifdef WINDOWS
     char username[UNLEN + 1];
     DWORD username_len = UNLEN + 1;
     GetUserName(username, &username_len);
     return username;
 #elif IOS_BUILD
-    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
+    return "NOT IMPLEMENTED FOR THIS PLATFORM";
 #elif ANDROID_BUILD
-    Fatal("NOT IMPLEMENTED FOR THIS PLATFORM");
+    return "NOT IMPLEMENTED FOR THIS PLATFORM";
 #else
 
     static const Path user = [] {
@@ -100,7 +100,7 @@ const Path System::user_name = [] {
 #endif
 }();
 
-const Path System::home = [] {
+const Path System::home = [] () -> Path {
 #ifdef WINDOWS
     Path users { "C:/Users" };
 #elif APPLE
