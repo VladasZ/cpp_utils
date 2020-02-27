@@ -9,10 +9,13 @@
 #pragma once
 
 #include "Path.hpp"
+#include "SystemInfo.hpp"
 
 namespace cu {
 
-    struct System {
+    class System {
+
+    public:
 
         static void sleep(double interval);
 
@@ -21,9 +24,9 @@ namespace cu {
 
         static void alert(const std::string& message);
 
-        static const Path& user_name();
+        static const Path user_name;
 
-        static const Path& home();
+        static const Path home;
 
         static Path pwd();
         static Path::Array ls(const std::string& path = ".", bool full_path = false);
@@ -31,12 +34,3 @@ namespace cu {
     };
 
 }
-
-#if __APPLE__
-#include "TargetConditionals.h"
-#if TARGET_IPHONE_SIMULATOR
-#define IOS_SIMULATOR
-#elif TARGET_OS_IPHONE
-#define IOS_DEVICE
-#endif
-#endif

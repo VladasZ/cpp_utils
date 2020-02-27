@@ -38,6 +38,10 @@ Path::Array Path::ls() const {
     return System::ls(this->_path);
 }
 
+std::string Path::file_name() const {
+    return Log::last_path_component(_path);
+}
+
 std::string Path::to_string() const {
     return std::string() +
     "Path: " + this->_path + " " + _info.to_string();

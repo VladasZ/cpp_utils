@@ -19,7 +19,7 @@ using namespace std;
 static pair<bool, bool> get_info(const string& path) {
     static struct stat s;
     if (stat(path.c_str(), &s) == 0) {
-        if(s.st_mode & S_IFDIR) {
+        if (s.st_mode & S_IFDIR) {
             return { false, true };
         }
         if (s.st_mode & S_IFREG) {
@@ -36,6 +36,7 @@ PathInfo::PathInfo() {
 }
 
 PathInfo::PathInfo(const string& path) {
+  //  Log(path);
     auto info = get_info(path);
     _is_valid     = info.first || info.second;
     _is_file      = info.first;
@@ -43,5 +44,7 @@ PathInfo::PathInfo(const string& path) {
 }
 
 std::string PathInfo::to_string() const {
-    return VarString(_is_valid) + " " + VarString(_is_file) + " " + VarString(_is_directory);
+    if (!_is_valid)    return "is not valid";
+    if (_is_file)      return "is file";
+    if (_is_directory) return "is directory";
 }

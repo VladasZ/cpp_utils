@@ -25,6 +25,7 @@ namespace cu {
 
         using Array = std::vector<Path>;
 
+        Path() = default;
         Path(const char*);
         Path(const std::string&);
 
@@ -37,6 +38,8 @@ namespace cu {
         operator std::string() const;
 
         Array ls() const;
+
+        std::string file_name() const;
 
         std::string to_string() const;
 

@@ -76,7 +76,7 @@ void System::alert(const std::string& message) {
 #endif
 }
 
-const Path& System::user_name() {
+const Path System::user_name = [] {
 #ifdef WINDOWS
     char username[UNLEN + 1];
     DWORD username_len = UNLEN + 1;
@@ -98,9 +98,9 @@ const Path& System::user_name() {
 
     return user;
 #endif
-}
+}();
 
-const Path& System::home() {
+const Path System::home = [] {
 #ifdef WINDOWS
     Path users { "C:/Users" };
 #elif APPLE
@@ -108,9 +108,8 @@ const Path& System::home() {
 #else
     Path users { "/home" };
 #endif
-    static const Path home = users / Path(user_name());
-    return home;
-}
+    return users / user_name;
+}();
 
 Path System::pwd() {
 #ifdef DESKTOP_BUILD
@@ -153,7 +152,9 @@ Path::Array System::ls(const std::string& path, bool full_path) {
 #else
     Path::Array result;
     auto dir = opendir(path.c_str());
-    if (!dir) throw std::runtime_error("Path not found " + path);
+    if (!dir) {
+        throw std::runtime_error("Path not found " + path);
+    }
     dirent* ent = nullptr;
     while ((ent = readdir(dir))) {
         result.emplace_back(path + "/" + ent->d_name);
