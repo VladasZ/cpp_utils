@@ -75,12 +75,12 @@ string String::find_regexpr_match(const string& str, const string& query) {
     return find_regexpr_matches(str, query).front();
 }
 
-void String::drop_first(string& str) {
-    str.erase(0, 1);
+void String::drop_first(string& str, unsigned count) {
+    str.erase(0, count);
 }
 
-void String::drop_last(string& str) {
-    str.erase(str.size() - 1);
+void String::drop_last(string& str, unsigned count) {
+    str.erase(str.size() - count);
 }
 
 void String::trim(string& str) {

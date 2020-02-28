@@ -9,6 +9,7 @@
 #include "Log.hpp"
 #include "Path.hpp"
 #include "System.hpp"
+#include "StringUtils.hpp"
 
 using namespace cu;
 
@@ -18,6 +19,19 @@ Path::Path(const char* path) : Path(std::string(path)) {
 
 Path::Path(const std::string& path) : _path(path), _info(path) {
 
+}
+
+void Path::trim_relative() {
+    auto last_component = Log::last_path_component(_path);
+    if (last_component == "..") {
+        String::drop_last(_path, 3);
+        auto folder_name = Log::last_path_component(_path);
+        String::drop_last(_path, folder_name.size() + 1);
+    }
+    else if (last_component == ".") {
+        String::drop_last(_path, 2);
+    }
+    _info = _path;
 }
 
 Path Path::operator / (const Path& path) const {

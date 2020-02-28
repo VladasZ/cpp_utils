@@ -27,9 +27,9 @@ namespace cu::String {
 
     std::string find_regexpr_match(const std::string& string, const std::string& query);
 
-    void drop_first(std::string& string);
+    void drop_first(std::string& string, unsigned count = 1);
 
-    void drop_last(std::string& string);
+    void drop_last(std::string& string, unsigned count = 1);
 
     void trim(std::string& string);
 

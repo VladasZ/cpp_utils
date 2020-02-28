@@ -153,7 +153,7 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     Path::Array result;
     auto dir = opendir(path.c_str());
     if (!dir) {
-        throw std::runtime_error("Path not found " + path);
+        Fatal("Path not found " + path);
     }
     dirent* ent = nullptr;
     while ((ent = readdir(dir))) {

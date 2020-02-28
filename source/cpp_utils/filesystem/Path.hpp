@@ -33,6 +33,8 @@ namespace cu {
         bool is_file()      const { return _info.is_file();      }
         bool is_directory() const { return _info.is_directory(); }
 
+        void trim_relative();
+
         Path operator / (const Path&) const;
 
         operator std::string() const;

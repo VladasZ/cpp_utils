@@ -79,9 +79,8 @@ namespace cu::array {
         }
     }
 
-    template <class Array, class ArrayToRemove,
-            std::enable_if_t<std::is_same_v<typename Array::value_type, typename ArrayToRemove::value_type>> = 0>
-    static void remove(Array& array, const ArrayToRemove& objects_to_remove) {
+    template <class Array, class ArrayToRemove>
+    static void remove_from(Array& array, const ArrayToRemove& objects_to_remove) {
         for (auto object : objects_to_remove) {
             remove(array, object);
         }
@@ -121,6 +120,11 @@ namespace cu::array {
             }
         });
         return result;
+    }
+
+    template <class A, class B>
+    constexpr static void append(A& a, const B& b) {
+        a.insert(std::end(a), std::begin(b), std::end(b));
     }
 
 }

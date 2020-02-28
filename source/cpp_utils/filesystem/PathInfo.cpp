@@ -6,8 +6,10 @@
 //  Copyright © 2020 VladasZ. All rights reserved.
 //
 
+#ifndef MICROCONTROLLER_BUILD
 #include <utility>
 #include <sys/stat.h>
+#endif
 
 #include "Log.hpp"
 #include "PathInfo.hpp"
@@ -17,6 +19,9 @@ using namespace std;
 
 
 static pair<bool, bool> get_info(const string& path) {
+#ifdef MICROCONTROLLER_BUILD
+    return { false, false };
+#else
     static struct stat s;
     if (stat(path.c_str(), &s) == 0) {
         if (s.st_mode & S_IFDIR) {
@@ -27,6 +32,7 @@ static pair<bool, bool> get_info(const string& path) {
         }
     }
     return { false, false };
+#endif
 }
 
 PathInfo::PathInfo() {
