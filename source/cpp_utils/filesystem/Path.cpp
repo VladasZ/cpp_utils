@@ -17,7 +17,7 @@ Path::Path(const char* path) : Path(std::string(path)) {
 
 }
 
-Path::Path(const std::string& path) : _path(path), _info(path) {
+Path::Path(const std::string& path) : _info(path), _path(path)  {
 
 }
 

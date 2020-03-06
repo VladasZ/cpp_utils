@@ -38,17 +38,17 @@ using namespace std;
 
 void System::sleep(double interval) {
 #ifdef MICROCONTROLLER_BUILD
-  wait(interval);
+    wait(interval);
 #else
-  std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
+    std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
 #endif
 }
 
 unsigned System::random() {
 #ifdef APPLE
-  return arc4random();
+    return arc4random();
 #else
-  static bool first_call = true;
+    static bool first_call = true;
   if (first_call) {
     first_call = false;
     srand(static_cast<unsigned>(time(nullptr)));
@@ -59,9 +59,9 @@ unsigned System::random() {
 
 unsigned System::random(unsigned range) {
 #ifdef APPLE
-  return arc4random_uniform(range);
+    return arc4random_uniform(range);
 #else
-  return random() % range;
+    return random() % range;
 #endif
 }
 
@@ -76,19 +76,18 @@ void System::alert(const std::string& message) {
 #endif
 }
 
-const Path System::user_name = [] () -> Path {
-#ifdef WINDOWS
-    char username[UNLEN + 1];
-    DWORD username_len = UNLEN + 1;
-    GetUserName(username, &username_len);
-    return username;
-#elif IOS_BUILD
-    return "NOT IMPLEMENTED FOR THIS PLATFORM";
-#elif ANDROID_BUILD
-    return "NOT IMPLEMENTED FOR THIS PLATFORM";
-#else
-
+const Path System::user_name() {
     static const Path user = [] {
+#ifdef WINDOWS
+        char username[UNLEN + 1];
+        DWORD username_len = UNLEN + 1;
+        GetUserName(username, &username_len);
+        return username;
+#elif IOS_BUILD
+        return "NOT IMPLEMENTED FOR THIS PLATFORM";
+#elif ANDROID_BUILD
+        return "NOT IMPLEMENTED FOR THIS PLATFORM";
+#else
         auto user = getenv("USER");
         if (!user) {
             return Path("No USER enviroment variable.");
@@ -96,20 +95,24 @@ const Path System::user_name = [] () -> Path {
         return Path(string(user));
     }();
 
+#endif
     return user;
-#endif
-}();
+}
 
-const Path System::home = [] () -> Path {
+const Path& System::home() {
+    static const Path result = [] {
 #ifdef WINDOWS
-    Path users { "C:/Users" };
+        Path users { "C:/Users" };
 #elif APPLE
-    Path users { "/Users" };
+        Path users { "/Users" };
 #else
-    Path users { "/home" };
+        Path users { "/home" };
 #endif
-    return users / user_name;
-}();
+        Logvar(users);
+        return users / user_name();
+    }();
+    return result;
+}
 
 Path System::pwd() {
 #ifdef DESKTOP_BUILD
