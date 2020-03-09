@@ -82,7 +82,7 @@ const Path System::user_name() {
         char username[UNLEN + 1];
         DWORD username_len = UNLEN + 1;
         GetUserName(username, &username_len);
-        return username;
+        return std::string(username);
 #elif IOS_BUILD
         return "NOT IMPLEMENTED FOR THIS PLATFORM";
 #elif ANDROID_BUILD
@@ -93,9 +93,9 @@ const Path System::user_name() {
             return Path("No USER enviroment variable.");
         }
         return Path(string(user));
+#endif
     }();
 
-#endif
     return user;
 }
 
@@ -108,7 +108,6 @@ const Path& System::home() {
 #else
         Path users { "/home" };
 #endif
-        Logvar(users);
         return users / user_name();
     }();
     return result;
