@@ -10,6 +10,8 @@
 
 #include "CallObj.hpp"
 #include "OBJBridge.h"
+#include "CentralManagerBridge.h"
+#include "PeripheralManagerBridge.h"
 
 using namespace std;
 using namespace obj_c;
@@ -28,8 +30,12 @@ vector<string> obj_c::ls(const string& path) {
     return result;
 }
 
-void obj_c::test_bluetooth() {
-    [OBJBridge testBluetooth];
+void obj_c::test_central() {
+    [CentralManagerBridge testCentral];
+}
+
+void obj_c::test_peripheral() {
+    [PeripheralManagerBridge testPeripheral];
 }
 
 #endif

@@ -48,6 +48,13 @@ namespace cu {
     template<class T> struct pointer_to_member_value;
     template<class Class, class Value> struct pointer_to_member_value<Value Class::*> { using type = Value; };
 
+#ifdef __OBJC__
+    template <typename T> struct is_objc_object : std::integral_constant<bool, std::is_convertible_v<T, id> && !std::is_null_pointer_v<T>> { };
+    template <typename T> constexpr bool is_objc_object_v = is_objc_object<T>::value;
+#else
+    template <typename T> constexpr bool is_objc_object_v = false;
+#endif
+
     template <class T>
     struct pointer_to_member_info {
         static_assert(is_pointer_to_member_v<T>);
@@ -73,7 +80,7 @@ namespace cu {
     }
 
     template <class Tuple, class Lambda>
-    constexpr void iterate_tuple(const Tuple& tup, const Lambda& f) {
+    constexpr void iterate_tuple(Tuple& tup, const Lambda& f) {
         static_assert(is_tuple_v<Tuple>);
         cu::static_for<0, std::tuple_size_v<Tuple>>([&](auto i) {
             f(std::get<i.value>(tup));

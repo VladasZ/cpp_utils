@@ -42,6 +42,14 @@ namespace cu {
                 }
                 return result;
             }
+#ifdef __OBJC__
+            else if constexpr (cu::is_objc_object_v<T>) {
+                if (value == nullptr) {
+                    return "nil";
+                }
+                return [[value description] cString];
+            }
+#endif
             else if constexpr (has_to_string<T, std::string()>::value) {
                 return value.to_string();
             }

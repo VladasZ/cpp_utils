@@ -6,6 +6,8 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#include "Log.hpp"
+
 #import "OBJBridge.h"
 
 #ifdef IOS_BUILD
@@ -26,13 +28,8 @@ static UIViewController *topmostController() {
 
 #endif
 
-#import <CoreBluetooth/CoreBluetooth.h>
 
-static CBCentralManager* centralManager;
-static OBJBridge* instance;
-
-
-@interface OBJBridge () <CBCentralManagerDelegate>
+@interface OBJBridge () 
 @end
 
 @implementation OBJBridge
@@ -72,31 +69,6 @@ static OBJBridge* instance;
 
 #endif
 
-}
-
-+ (void)testBluetooth {
-
-    instance = [OBJBridge new];
-
-    dispatch_queue_t queue = dispatch_queue_create("downLoadAGroupPhoto",
-                                                   DISPATCH_QUEUE_CONCURRENT);
-
-    centralManager =
-            [[CBCentralManager alloc] initWithDelegate:instance queue:queue options:nil];
-
-    [centralManager scanForPeripheralsWithServices:nil options:nil];
-
-
-    NSLog(@"Hellof");
-}
-
-
-- (void)centralManagerDidUpdateState:(CBCentralManager*)central {
-    NSLog(@"%@", central);
-}
-
-- (void)centralManager:(CBCentralManager*)central didDiscoverPeripheral:(CBPeripheral*)peripheral advertisementData:(NSDictionary<NSString*, id>*)advertisementData RSSI:(NSNumber*)RSSI {
-    NSLog(@"Discovered %@", peripheral.name);
 }
 
 @end

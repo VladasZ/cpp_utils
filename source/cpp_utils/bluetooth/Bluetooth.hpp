@@ -13,7 +13,8 @@ namespace cu {
     class Bluetooth {
     public:
 
-        static void test();
+        static void test_central();
+        static void test_peripheral();
 
     };
 

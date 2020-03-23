@@ -14,9 +14,16 @@
 
 using namespace cu;
 
-void Bluetooth::test() {
+void Bluetooth::test_central() {
 #ifdef APPLE
-    obj_c::test_bluetooth();
+    obj_c::test_central();
 #endif
 }
+
+void Bluetooth::test_peripheral() {
+#ifdef APPLE
+    obj_c::test_peripheral();
+#endif
+}
+
 

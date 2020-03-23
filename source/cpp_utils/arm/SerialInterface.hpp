@@ -20,21 +20,19 @@ namespace cu {
 
         template<class T>
         static int read(T& value) {
-            return _read(&value, sizeof(T));
+            return read(&value, sizeof(T));
         }
 
         template <class T>
         static int write(const T& value) {
-            return _write(&value, sizeof(T));
+            return write(&value, sizeof(T));
         }
 
         static bool is_readable();
         static bool is_writeable();
 
-    private:
-
-        static int _read(void* data, int size);
-        static int _write(const void* data, int size);
+        static int read(void* data, int size);
+        static int write(const void* data, int size);
 
     };
 }

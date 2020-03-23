@@ -19,7 +19,7 @@ namespace cu {
     template <class T = _EmptyPacket>
     class PacketHeader {
 
-        static inline constexpr uint8_t first_byte = 222;
+        static inline constexpr uint8_t first_byte = 223;
         static inline constexpr uint8_t second_byte = 111;
 
     public:

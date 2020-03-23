@@ -25,11 +25,11 @@ bool cu::SerialInterface::is_writeable() {
     return mbed_serial->writeable();
 }
 
-int cu::SerialInterface::_read(void* data, int size) {
+int cu::SerialInterface::read(void* data, int size) {
     return mbed_serial->read(static_cast<uint8_t*>(data), size, dummy_callback);
 }
 
-int cu::SerialInterface::_write(const void* data, int size) {
+int cu::SerialInterface::write(const void* data, int size) {
     return mbed_serial->write(static_cast<const uint8_t*>(data), size, dummy_callback);
 }
 
