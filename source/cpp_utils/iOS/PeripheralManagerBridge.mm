@@ -28,26 +28,32 @@
 @end
 
 
+
+#define NOTIFY_MTU      20
+
+
+
 @implementation PeripheralManagerBridge
 
-+ (void)setup {
-    static PeripheralManagerBridge* instance = [[PeripheralManagerBridge alloc] init];
-}
 
-- (void)dealloc {
-    Log("Dealloc");
+
+#pragma mark - View Lifecycle
+
++ (void)setup {
+    Log("Setup");
+    static PeripheralManagerBridge* instance = nil;
+    instance = [[PeripheralManagerBridge alloc] init];
 }
 
 - (instancetype)init {
-    Log("init");
+    // Start up the CBPeripheralManager
+    Log("Init");
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     return self;
 }
 
-- (void)startAdvertising {
-    Log("startAdvertising");
-    [_peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
-}
+#pragma mark - Peripheral Methods
+
 
 /** Required protocol method.  A full app should take care of all the possible states,
  *  but we're just waiting for  to know when the CBPeripheralManager is ready
@@ -56,7 +62,6 @@
 {
     // Opt out from any other state
     if (peripheral.state != CBManagerStatePoweredOn) {
-        Log();
         return;
     }
     
@@ -66,7 +71,7 @@
     // ... so build our service.
     
     // Start with the CBMutableCharacteristic
-    _transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]
+    self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]
                                                                       properties:CBCharacteristicPropertyNotify
                                                                            value:nil
                                                                      permissions:CBAttributePermissionsReadable];
@@ -76,18 +81,26 @@
                                                                         primary:YES];
     
     // Add the characteristic to the service
-    transferService.characteristics = @[_transferCharacteristic];
+    transferService.characteristics = @[self.transferCharacteristic];
     
     // And add it to the peripheral manager
-    [_peripheralManager addService:transferService];
+    [self.peripheralManager addService:transferService];
 }
 
+
+/** Catch when someone subscribes to our characteristic, then start sending them data
+ */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
     Log(@"Central subscribed to characteristic");
     
+    
+    static int a = 0;
+    
+    NSString* datovka = [NSString stringWithFormat:@"Dativko: %d", a++];
+    
     // Get the data
-    self.dataToSend = [@"datnoje datovko!" dataUsingEncoding:NSUTF8StringEncoding];
+    self.dataToSend = [datovka dataUsingEncoding:NSUTF8StringEncoding];
     
     // Reset the index
     self.sendDataIndex = 0;
@@ -104,11 +117,13 @@
     Log(@"Central unsubscribed from characteristic");
 }
 
-- (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
-{
-    Log();
-    // Start sending again
-    [self sendData];
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error {
+    
+    Logvar([error localizedDescription]);
+    
+    [self startAdv:true];
+    
 }
 
 /** Sends the next amount of data to the connected central
@@ -121,7 +136,7 @@
     if (sendingEOM) {
         
         // send it
-        BOOL didSend = [_peripheralManager updateValue:[@"EOM" dataUsingEncoding:NSUTF8StringEncoding] forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+        BOOL didSend = [self.peripheralManager updateValue:[@"EOM" dataUsingEncoding:NSUTF8StringEncoding] forCharacteristic:self.transferCharacteristic onSubscribedCentrals:nil];
         
         // Did it send?
         if (didSend) {
@@ -161,10 +176,10 @@
         if (amountToSend > NOTIFY_MTU) amountToSend = NOTIFY_MTU;
         
         // Copy out the data we want
-        NSData *chunk = [NSData dataWithBytes: (char*)self.dataToSend.bytes + self.sendDataIndex length:amountToSend];
+        NSData *chunk = [NSData dataWithBytes:(char*)self.dataToSend.bytes+self.sendDataIndex length:amountToSend];
         
         // Send it
-        didSend = [_peripheralManager updateValue:chunk forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+        didSend = [self.peripheralManager updateValue:chunk forCharacteristic:self.transferCharacteristic onSubscribedCentrals:nil];
         
         // If it didn't work, drop out and wait for the callback
         if (!didSend) {
@@ -172,7 +187,7 @@
         }
         
         NSString *stringFromData = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
-        Log(stringFromData);
+        Logvar(stringFromData);
         
         // It did send, so update our index
         self.sendDataIndex += amountToSend;
@@ -186,7 +201,7 @@
             sendingEOM = YES;
             
             // Send it
-            BOOL eomSent = [_peripheralManager updateValue:[@"EOM" dataUsingEncoding:NSUTF8StringEncoding] forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+            BOOL eomSent = [self.peripheralManager updateValue:[@"EOM" dataUsingEncoding:NSUTF8StringEncoding] forCharacteristic:self.transferCharacteristic onSubscribedCentrals:nil];
             
             if (eomSent) {
                 // It sent, we're all done
@@ -200,12 +215,37 @@
     }
 }
 
-- (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error{
-    Log(@"didAddService");
-    NSDictionary *advertisingData =
-  @{CBAdvertisementDataLocalNameKey : @"Test2", CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]};
 
-    [peripheral startAdvertising:advertisingData];
+/** This callback comes in when the PeripheralManager is ready to send the next chunk of data.
+ *  This is to ensure that packets will arrive in the order they are sent
+ */
+- (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
+{
+    Log();
+    // Start sending again
+    [self sendData];
+}
+
+
+#pragma mark - TextView Methods
+
+
+/** Start advertising
+ */
+- (void)startAdv:(BOOL)start
+{
+    Logvar(start);
+    
+    if (start) {
+          NSDictionary *advertisingData =
+        @{CBAdvertisementDataLocalNameKey : @"Test3", CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]};
+    
+        [self.peripheralManager startAdvertising:advertisingData];
+    }
+    
+    else {
+        [self.peripheralManager stopAdvertising];
+    }
 }
 
 
