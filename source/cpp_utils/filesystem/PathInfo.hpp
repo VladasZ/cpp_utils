@@ -18,6 +18,7 @@ namespace cu {
         bool _is_valid;
         bool _is_file;
         bool _is_directory;
+        std::string _extension;
 
     public:
 
@@ -27,6 +28,8 @@ namespace cu {
         bool is_valid()     const { return _is_valid;     }
         bool is_file()      const { return _is_file;      }
         bool is_directory() const { return _is_directory; }
+
+        const std::string& extension() const { return _extension; }
 
         std::string to_string() const;
 

@@ -35,6 +35,12 @@ static pair<bool, bool> get_info(const string& path) {
 #endif
 }
 
+static std::string get_extension(const string& path) {
+    auto index = path.rfind('.');
+    if (index == string::npos) return { };
+    return path.substr(index + 1);
+}
+
 PathInfo::PathInfo() {
     _is_valid     = false;
     _is_file      = false;
@@ -42,11 +48,11 @@ PathInfo::PathInfo() {
 }
 
 PathInfo::PathInfo(const string& path) {
-  //  Log(path);
     auto info = get_info(path);
     _is_valid     = info.first || info.second;
     _is_file      = info.first;
     _is_directory = info.second;
+    _extension = get_extension(path);
 }
 
 std::string PathInfo::to_string() const {
