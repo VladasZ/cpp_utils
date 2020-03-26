@@ -10,6 +10,7 @@
 
 @interface PeripheralManagerBridge : NSObject
 
-+ (void)testPeripheral;
++ (void)setup;
++ (void)startAdvertising;
 
 @end

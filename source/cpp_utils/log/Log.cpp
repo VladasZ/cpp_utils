@@ -18,12 +18,16 @@
 using namespace cu;
 using namespace std;
 
+
 string Log::last_path_component(const string& path) {
     return (strrchr(path.c_str(), '/') ? strrchr(path.c_str(), '/') + 1 : path.c_str());
 }
 
 string Log::location(const string& file, const string& func, int line) {
     string clean_file = cu::String::file_name(last_path_component(file));
+    if (clean_file.back() == 'm') {
+        return func + " - " + to_string(line) + "] ";
+    }
     return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
 }
 

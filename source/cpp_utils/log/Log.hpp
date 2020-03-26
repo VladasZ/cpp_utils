@@ -71,8 +71,8 @@ namespace cu {
 
 #ifdef UTILS_LOG_ENABLED
 
-#define Log(message)  cu::Log::log(message, __FILE__, __func__, __LINE__)
-#define Logvar(variable) Log(VarString(variable))
+#define _Log_0()        cu::Log::log("", __FILE__, __func__, __LINE__)
+#define _Log_1(message) cu::Log::log(message, __FILE__, __func__, __LINE__)
 
 #define Separator std::cout << "========================================" << std::endl
 
@@ -84,14 +84,21 @@ namespace cu {
 
 #else
 
-#define Log(message)
-#define Logvar(variable)
+#define _Log_0()
+#define _Log_1(message)
 
 #define Separator
 
 #define Fatal(message)
 
 #endif
+
+#define _Log_X(x, A, FUNC, ...) FUNC
+
+#define Log(...) _Log_X(, ##__VA_ARGS__, _Log_1(__VA_ARGS__), _Log_0(__VA_ARGS__))
+
+#define Logvar(variable) Log(VarString(variable))
+
 
 #define MBED_SERIAL_BAUD 115200
 

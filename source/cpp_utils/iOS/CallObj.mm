@@ -35,7 +35,7 @@ void obj_c::test_central() {
 }
 
 void obj_c::test_peripheral() {
-    [PeripheralManagerBridge testPeripheral];
+    [PeripheralManagerBridge setup];
 }
 
 #endif
