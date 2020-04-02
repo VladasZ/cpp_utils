@@ -6,6 +6,8 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#ifndef MICROCONTROLLER_BUILD
+
 #include "Log.hpp"
 #include "Path.hpp"
 #include "System.hpp"
@@ -60,3 +62,5 @@ std::string Path::to_string() const {
     return std::string() +
     "Path: " + this->_path + " " + _info.to_string();
 }
+
+#endif

@@ -8,8 +8,12 @@
 
 #pragma once
 
+#ifdef MICROCONTROLLER_BUILD
+#include "mbed.h"
+#else
+#include <thread>
 #include "Path.hpp"
-#include "SystemInfo.hpp"
+#endif
 
 namespace cu {
 
@@ -17,12 +21,21 @@ namespace cu {
 
     public:
 
-        static void sleep(double interval);
+        static void sleep(double interval) {
+#ifdef MICROCONTROLLER_BUILD
+            wait_us(1000000.0 * interval);
+            //ThisThread::sleep_for(1000000 * interval);
+#else
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
+#endif
+        }
 
         static unsigned random();
         static unsigned random(unsigned range);
 
         static void alert(const std::string& message);
+
+#ifndef MICROCONTROLLER_BUILD
 
         static const Path user_name();
 
@@ -30,6 +43,8 @@ namespace cu {
 
         static Path pwd();
         static Path::Array ls(const std::string& path = ".", bool full_path = false);
+
+#endif
 
     };
 

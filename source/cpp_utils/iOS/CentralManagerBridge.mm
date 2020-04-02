@@ -76,9 +76,12 @@
  */
 - (void)scan
 {
-    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]
-                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
-    
+
+//    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]
+//                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+
+    [self.centralManager scanForPeripheralsWithServices:nil options:nil];
+
     Log(@"Scanning started");
 }
 
@@ -100,9 +103,9 @@
         Log(peripheral.name);
 
         // And connect
-        Log(@"Connecting to peripheral");
+      //  Log(@"Connecting to peripheral");
         Log(peripheral);
-        [self.centralManager connectPeripheral:peripheral options:nil];
+       // [self.centralManager connectPeripheral:peripheral options:nil];
     }
 }
 

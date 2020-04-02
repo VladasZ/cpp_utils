@@ -12,13 +12,31 @@
 
 #include "mbed.h"
 
+#include "System.hpp"
+
 namespace arm {
 
-    static DigitalOut led(LED1);
+    static inline DigitalOut led(LED1);
 
-    void blink(float interval = 1);
-    void flash(int frequency = 10);
-    void hello();
+    void blink(float interval = 1) {
+        led = 1;
+        cu::System::sleep(interval / 2);
+        led = 0;
+        cu::System::sleep(interval / 2);
+    }
+
+    void flash(int frequency = 10) {
+        for (int i = 0; i < frequency; ++i) {
+            blink(1.0f / frequency);
+        }
+    }
+
+    void hello() {
+        arm::flash(4);
+        cu::System::sleep(1);
+        arm::flash(8);
+        cu::System::sleep(1);
+    }
 
 }
 

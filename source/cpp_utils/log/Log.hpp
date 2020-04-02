@@ -9,6 +9,7 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <iostream>
 
@@ -22,11 +23,26 @@ namespace cu {
 
     public:
 
-        static std::string last_path_component(const std::string& path);
+        static std::string last_path_component(const std::string& path) {
+            return (strrchr(path.c_str(), '/') ? strrchr(path.c_str(), '/') + 1 : path.c_str());
+        }
 
-        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line);
+        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
+            std::string result_message = location(file, func, line) + " " + message;
+#ifdef ANDROID_BUILD
+            __android_log_print(ANDROID_LOG_DEBUG, "C++ Log", "%s", result_message.c_str());
+#else
+            std::cout << result_message << std::endl;
+#endif
+        }
 
-        static std::string location(const std::string& file, const std::string& func, int line);
+        static std::string location(const std::string& file, const std::string& func, int line) {
+            std::string clean_file = last_path_component(file);
+            if (clean_file.back() == 'm') {
+                return func + " - " + to_string(line) + "] ";
+            }
+            return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
+        }
 
         template <class T>
         static void log(const T& message, const std::string& file, const std::string& func, int line) {
@@ -43,7 +59,7 @@ namespace cu {
                 return result;
             }
 #ifdef __OBJC__
-            else if constexpr (cu::is_objc_object_v<T>) {
+                else if constexpr (cu::is_objc_object_v<T>) {
                 if (value == nullptr) {
                     return "nil";
                 }
@@ -100,19 +116,3 @@ namespace cu {
 #define Ping Log();
 
 #define Logvar(variable) Log(VarString(variable))
-
-
-#define MBED_SERIAL_BAUD 115200
-
-#ifdef MBED_BUILD
-#include "mbed.h"
-namespace cu {
-    static const auto mbed_serial = [] {
-        auto serial = new Serial(USBTX, USBRX);
-        serial->baud(MBED_SERIAL_BAUD);
-        return serial;
-    }();
-}
-#endif
-
-#undef constexpr

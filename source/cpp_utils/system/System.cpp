@@ -6,11 +6,6 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef MICROCONTROLLER_BUILD
-#include "mbed.h"
-#else
-#include <thread>
-#endif
 
 
 #ifdef APPLE
@@ -35,14 +30,6 @@
 
 using namespace cu;
 using namespace std;
-
-void System::sleep(double interval) {
-#ifdef MICROCONTROLLER_BUILD
-    wait(interval);
-#else
-    std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
-#endif
-}
 
 unsigned System::random() {
 #ifdef APPLE
@@ -75,6 +62,8 @@ void System::alert(const std::string& message) {
     Log(message);
 #endif
 }
+
+#ifndef MICROCONTROLLER_BUILD
 
 const Path System::user_name() {
     static const Path user = [] {
@@ -168,3 +157,5 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     return { "Not implemented on this platform" };
 #endif
 }
+
+#endif

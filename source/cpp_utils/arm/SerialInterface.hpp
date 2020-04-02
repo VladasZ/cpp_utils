@@ -12,27 +12,45 @@
 
 #include <stdint.h>
 
+#include <mbed.h>
+
 namespace cu {
 
     class SerialInterface {
 
+        const event_callback_t dummy_callback;
+
+        Serial& mbed_serial;
+
     public:
 
+        SerialInterface(Serial& mbed_serial) : mbed_serial(mbed_serial) { }
+
         template<class T>
-        static int read(T& value) {
+        int read(T& value) {
             return read(&value, sizeof(T));
         }
 
         template <class T>
-        static int write(const T& value) {
+        int write(const T& value) {
             return write(&value, sizeof(T));
         }
 
-        static bool is_readable();
-        static bool is_writeable();
+        bool is_readable(){
+            return mbed_serial.readable();
+        }
 
-        static int read(void* data, int size);
-        static int write(const void* data, int size);
+        bool is_writeable()  {
+            return mbed_serial.writeable();
+        }
+
+        int read(void* data, int size){
+            return mbed_serial.read(static_cast<uint8_t*>(data), size, dummy_callback);
+        }
+
+        int write(const void* data, int size) {
+            return mbed_serial.write(static_cast<const uint8_t*>(data), size, dummy_callback);
+        }
 
     };
 }
