@@ -13,7 +13,11 @@
 #include <sstream>
 #include <iostream>
 
+#ifdef ARDUINO
+#include <HardwareSerial.h>
+#else
 #include "MetaHelpers.hpp"
+#endif
 
 #define UTILS_LOG_ENABLED
 
@@ -29,7 +33,9 @@ namespace cu {
 
         static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
             std::string result_message = location(file, func, line) + " " + message;
-#ifdef ANDROID_BUILD
+#ifdef ARDUINO
+            Serial.println(result_message.c_str());
+#elif ANDROID_BUILD
             __android_log_print(ANDROID_LOG_DEBUG, "C++ Log", "%s", result_message.c_str());
 #else
             std::cout << result_message << std::endl;
@@ -51,32 +57,32 @@ namespace cu {
 
         template <class T>
         static std::string to_string(const T& value) {
-            if constexpr (cu::is_std_vector_v<T>) {
-                std::string result = "\n";
-                for (auto val : value) {
-                    result += Log::to_string(val) + "\n";
-                }
-                return result;
-            }
-#ifdef __OBJC__
-                else if constexpr (cu::is_objc_object_v<T>) {
-                if (value == nullptr) {
-                    return "nil";
-                }
-                return [[value description] cString];
-            }
-#endif
-            else if constexpr (has_to_string<T, std::string()>::value) {
-                return value.to_string();
-            }
-            else if constexpr (std::is_same<bool, T>::value) {
-                return value ? "true" : "false";
-            }
-            else {
+//            if constexpr (cu::is_std_vector_v<T>) {
+//                std::string result = "\n";
+//                for (auto val : value) {
+//                    result += Log::to_string(val) + "\n";
+//                }
+//                return result;
+//            }
+//#ifdef __OBJC__
+//                else if constexpr (cu::is_objc_object_v<T>) {
+//                if (value == nullptr) {
+//                    return "nil";
+//                }
+//                return [[value description] cString];
+//            }
+//#endif
+//            else if constexpr (has_to_string<T, std::string()>::value) {
+//                return value.to_string();
+//            }
+//            else if constexpr (std::is_same<bool, T>::value) {
+//                return value ? "true" : "false";
+//            }
+//            else {
                 std::stringstream buffer;
                 buffer << value;
                 return buffer.str();
-            }
+        //   }
         }
 
     };

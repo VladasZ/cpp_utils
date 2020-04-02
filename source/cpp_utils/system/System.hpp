@@ -8,7 +8,8 @@
 
 #pragma once
 
-#ifdef MICROCONTROLLER_BUILD
+#ifdef ARDUINO
+#elif MBED_BUILD
 #include "mbed.h"
 #else
 #include <thread>
@@ -22,7 +23,9 @@ namespace cu {
     public:
 
         static void sleep(double interval) {
-#ifdef MICROCONTROLLER_BUILD
+#ifdef ARDUINO
+        delay(1000.0 * interval);
+#elif MBED_BUILD
             wait_us(1000000.0 * interval);
             //ThisThread::sleep_for(1000000 * interval);
 #else
