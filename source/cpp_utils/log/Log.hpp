@@ -57,34 +57,44 @@ namespace cu {
 
         template <class T>
         static std::string to_string(const T& value) {
-//            if constexpr (cu::is_std_vector_v<T>) {
-//                std::string result = "\n";
-//                for (auto val : value) {
-//                    result += Log::to_string(val) + "\n";
-//                }
-//                return result;
-//            }
-//#ifdef __OBJC__
-//                else if constexpr (cu::is_objc_object_v<T>) {
-//                if (value == nullptr) {
-//                    return "nil";
-//                }
-//                return [[value description] cString];
-//            }
-//#endif
-//            else if constexpr (has_to_string<T, std::string()>::value) {
-//                return value.to_string();
-//            }
-//            else if constexpr (std::is_same<bool, T>::value) {
-//                return value ? "true" : "false";
-//            }
-//            else {
+#ifdef ARDUINO
+            std::stringstream buffer;
+            buffer << value;
+            return buffer.str();
+#else
+            if constexpr (cu::is_std_vector_v<T>) {
+                std::string result = "\n";
+                for (auto val : value) {
+                    result += Log::to_string(val) + "\n";
+                }
+                return result;
+            }
+#ifdef QSTRING_H
+            else if constexpr (cu::is_same_v<T, QString>) {
+                return value.toStdString();
+            }
+#endif
+#ifdef __OBJC__
+            else if constexpr (cu::is_objc_object_v<T>) {
+                if (value == nullptr) {
+                    return "nil";
+                }
+                return [[value description] cString];
+            }
+#endif
+            else if constexpr (has_to_string<T, std::string()>::value) {
+                return value.to_string();
+            }
+            else if constexpr (std::is_same<bool, T>::value) {
+                return value ? "true" : "false";
+            }
+            else {
                 std::stringstream buffer;
                 buffer << value;
                 return buffer.str();
-        //   }
+            }
+#endif
         }
-
     };
 
 }
