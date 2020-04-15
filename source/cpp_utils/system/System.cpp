@@ -31,26 +31,6 @@
 using namespace cu;
 using namespace std;
 
-unsigned System::random() {
-#ifdef APPLE
-    return arc4random();
-#else
-    static bool first_call = true;
-  if (first_call) {
-    first_call = false;
-    srand(static_cast<unsigned>(time(nullptr)));
-  }
-  return rand();
-#endif
-}
-
-unsigned System::random(unsigned range) {
-#ifdef APPLE
-    return arc4random_uniform(range);
-#else
-    return random() % range;
-#endif
-}
 
 void System::alert(const std::string& message) {
 #ifdef WINDOWS

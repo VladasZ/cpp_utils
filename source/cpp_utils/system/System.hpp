@@ -33,8 +33,22 @@ namespace cu {
 #endif
         }
 
-        static unsigned random();
-        static unsigned random(unsigned range);
+        static unsigned random() {
+#ifdef APPLE
+            return arc4random();
+#else
+            static bool first_call = true;
+            if (first_call) {
+                first_call = false;
+                srand(static_cast<unsigned>(time(nullptr)));
+            }
+            return rand();
+#endif
+        }
+
+        static unsigned random(unsigned range) {
+            return random() % range;
+        }
 
         static void alert(const std::string& message);
 
