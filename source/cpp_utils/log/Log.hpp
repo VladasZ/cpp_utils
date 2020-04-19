@@ -28,7 +28,13 @@ namespace cu {
     public:
 
         static std::string last_path_component(const std::string& path) {
-            return (strrchr(path.c_str(), '/') ? strrchr(path.c_str(), '/') + 1 : path.c_str());
+#ifdef WINDOWS_BUILD
+            static const char slash = '\\';
+#else
+            static const char slash = '/';
+#endif
+            auto pos = strrchr(path.c_str(), slash);
+            return pos ? pos + 1 : path;
         }
 
         static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
