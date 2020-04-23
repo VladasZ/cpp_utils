@@ -36,15 +36,15 @@ namespace cu {
             return write(&value, sizeof(T));
         }
 
-        bool is_readable(){
+        bool is_readable() {
             return mbed_serial.readable();
         }
 
-        bool is_writeable()  {
+        bool is_writeable() {
             return mbed_serial.writeable();
         }
 
-        int read(void* data, int size){
+        int read(void* data, int size) {
             return mbed_serial.read(static_cast<uint8_t*>(data), size, dummy_callback);
         }
 
