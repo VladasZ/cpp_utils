@@ -59,4 +59,5 @@ std::string PathInfo::to_string() const {
     if (!_is_valid)    return "is not valid";
     if (_is_file)      return "is file";
     if (_is_directory) return "is directory";
+    Fatal("Invalid path");
 }
