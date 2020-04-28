@@ -14,24 +14,24 @@
 #include <functional>
 #include <type_traits>
 
-
 #include "System.hpp"
 #include "MetaHelpers.hpp"
+
 
 namespace cu::array {
 
     template <class Array>
-    static size_t bytes_size(const Array& array) {
+    constexpr static size_t bytes_size(const Array& array) {
         return sizeof(typename Array::value_type) * array.size();
     }
 
     template <class Type, class Array>
-    static size_t size_in(const Array& array) {
+    constexpr static size_t size_in(const Array& array) {
         return bytes_size(array) / sizeof(Type);
     }
 
     template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(Value, Value)>>
-    static auto find(const Array& array, Predicate predicate) {
+    constexpr static auto find(const Array& array, Predicate predicate) {
         auto val = std::numeric_limits<Value>::min();
         for (auto value : array) {
             if (predicate(value, val)) {
@@ -42,12 +42,12 @@ namespace cu::array {
     }
 
     template <class Array>
-    static auto max(const Array& array) {
+    constexpr static auto max(const Array& array) {
         return find(array, [](auto a, auto b) { return a > b; });
     }
 
     template <class Array>
-    static auto min(const Array& array) {
+    constexpr static auto min(const Array& array) {
         return find(array, [](auto a, auto b) { return a < b; });
     }
 
@@ -96,7 +96,7 @@ namespace cu::array {
     }
 
     template <class Array, class Value = typename Array::value_type>
-    static bool contains(const Array& array, const Value& value) {
+    constexpr static bool contains(const Array& array, const Value& value) {
         return std::find(array.begin(), array.end(), value) != array.end();
     }
 

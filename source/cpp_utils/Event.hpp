@@ -14,6 +14,7 @@
 
 #include "ArrayUtils.hpp"
 
+
 namespace cu {
 
     template<class ...Params>
@@ -32,9 +33,11 @@ namespace cu {
         };
 
     private:
+
         bool active = false;
         std::vector<Callback> subscribers;
         std::vector<ObjectSubscriber> object_subscribers;
+
     public:
 
         Event() = default;
