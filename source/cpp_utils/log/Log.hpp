@@ -135,6 +135,6 @@ namespace cu {
 
 #define Log(...) _Log_X(, ##__VA_ARGS__, _Log_1(__VA_ARGS__), _Log_0(__VA_ARGS__))
 
-#define Ping Log();
+#define Ping Log("");
 
 #define Logvar(variable) Log(VarString(variable))
