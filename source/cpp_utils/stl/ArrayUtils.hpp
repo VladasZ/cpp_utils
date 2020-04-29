@@ -30,30 +30,9 @@ namespace cu::array {
         return bytes_size(array) / sizeof(Type);
     }
 
-    template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(Value, Value)>>
-    constexpr static auto find(const Array& array, Predicate predicate) {
-        auto val = std::numeric_limits<Value>::min();
-        for (auto value : array) {
-            if (predicate(value, val)) {
-                val = value;
-            }
-        }
-        return val;
-    }
-
-    template <class Array>
-    constexpr static auto max(const Array& array) {
-        return find(array, [](auto a, auto b) { return a > b; });
-    }
-
-    template <class Array>
-    constexpr static auto min(const Array& array) {
-        return find(array, [](auto a, auto b) { return a < b; });
-    }
-
     template <class Array>
     static void print(const Array& array) {
-        for(const auto& val : array) {
+        for (const auto& val : array) {
             std::cout << val.to_string() << std::endl;
         }
     }
@@ -81,17 +60,16 @@ namespace cu::array {
 
     template <class Array, class ArrayToRemove>
     static void remove_from(Array& array, const ArrayToRemove& objects_to_remove) {
-        for (auto object : objects_to_remove) {
+        for (const auto& object : objects_to_remove) {
             remove(array, object);
         }
     }
 
     template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
     static void remove_where(Array& array, Predicate predicate) {
-        for (auto object : array) {
-            if (predicate(object)) {
-                remove(array, object);
-            }
+        auto position = std::find_if(array.begin(), array.end(), predicate);
+        if (position != array.end()) {
+            array.erase(position);
         }
     }
 

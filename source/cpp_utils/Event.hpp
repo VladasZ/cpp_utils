@@ -27,24 +27,18 @@ namespace cu {
             void* object;
             Callback callback;
             ObjectSubscriber(void* o, Callback c) : object(o), callback(c) { }
-            bool operator ==(const ObjectSubscriber& other) const {
-                return object == other.object;
-            }
         };
 
     private:
 
-        bool active = false;
         std::vector<Callback> subscribers;
         std::vector<ObjectSubscriber> object_subscribers;
+        std::vector<This*> linked_events;
 
     public:
 
-        Event() = default;
-
         [[nodiscard]]
         Callback& subscribe(void* object) {
-            active = true;
             assert(object != nullptr);
             object_subscribers.emplace_back(object, Callback());
             return object_subscribers.back().callback;
@@ -54,25 +48,28 @@ namespace cu {
             cu::array::remove_where(object_subscribers, [&](const ObjectSubscriber& subscriber) {
                 return subscriber.object == object;
             });
-            if (subscribers.empty() && object_subscribers.empty()) {
-                active = false;
-            }
         }
 
         void operator = (Callback action) {
-            active = true;
             subscribers.push_back(action);
         }
 
+        void link(This& event) {
+            linked_events.push_back(&event);
+        }
+
         void operator()(Params... parameters) const {
-            if (!active) return;
-            for (auto subscriber : subscribers) {
+            for (auto& subscriber : subscribers) {
                 subscriber(parameters...);
             }
             for (auto& subscriber : object_subscribers) {
                 subscriber.callback(parameters...);
             }
+            for (auto event : linked_events) {
+                event->operator()(parameters...);
+            }
         }
+
     };
 
 }
