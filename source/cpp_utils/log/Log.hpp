@@ -85,7 +85,7 @@ namespace cu {
                 if (value == nullptr) {
                     return "nil";
                 }
-                return [[value description] cString];
+                return [[value description] UTF8String];
             }
 #endif
             else if constexpr (has_to_string<T, std::string()>::value) {
