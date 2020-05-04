@@ -27,15 +27,17 @@ namespace cu {
 
         explicit ArrayView(const T* data, size_t size) : _data(data), _size(size) { }
 
-        template<class Container>
-        ArrayView(const Container& container) : _data(container.data()), _size(container.size()) { }
+        template<class Container, class Value = typename Container::value_type>
+        ArrayView(const Container& container)
+        : _data(reinterpret_cast<const T*>(container.data())),
+          _size(container.size() * (sizeof(Value) / sizeof(T))) { }
 
-        bool empty() const { return _size == 0; }
+        bool empty()  const { return _size == 0; }
         size_t size() const { return _size; }
 
-        const T* data() const { return _data; }
+        const T* data()  const { return _data; }
         const T* begin() const { return _data; }
-        const T* end() const { return _data + _size; }
+        const T* end()   const { return _data + _size; }
 
         const T& operator[](int i) const { return _data[i]; }
 

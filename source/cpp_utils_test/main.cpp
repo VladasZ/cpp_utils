@@ -20,7 +20,7 @@ int main() {
 
     Logvar(std::is_scalar_v<decltype(spesogon)>);
 
-    ArrayView spiagron = spesogon;
+    ArrayView<int> spiagron = spesogon;
 
     for (auto i : spiagron) {
         Logvar(i);
