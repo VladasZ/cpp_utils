@@ -23,7 +23,7 @@ namespace cu {
 
     public:
 
-        explicit ArrayView() : _data(nullptr), _size(0) { }
+        ArrayView() : _data(nullptr), _size(0) { }
 
         explicit ArrayView(const T* data, size_t size) : _data(data), _size(size) { }
 
