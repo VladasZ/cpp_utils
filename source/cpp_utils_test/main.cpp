@@ -1,19 +1,28 @@
 
+#include <vector>
 
 #include "Log.hpp"
-#include "RangeConversion.hpp"
+#include "ArrayView.hpp"
 
 using namespace cu;
 
+
 int main() {
 
-    RangeConversion conv { 2, 3, 10, 110 };
+    std::vector<int> spesogon = { 1, 2, 3, 4, 5 };
 
-    conv.flip = true;
-
-    for (float i = 2; i < 3; i += 0.01) {
-        Log(conv.convert(i));
+    for (auto i : spesogon) {
+        Logvar(i);
     }
+
+    Logvar(std::is_scalar_v<decltype(spesogon)>);
+
+    ArrayView spiagron = spesogon;
+
+    for (auto i : spiagron) {
+        Logvar(i);
+    }
+
 
     return 0;
 
