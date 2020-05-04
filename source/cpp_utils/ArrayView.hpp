@@ -27,8 +27,8 @@ namespace cu {
 
         explicit ArrayView(const T* data, size_t size) : _data(data), _size(size) { }
 
-        template<template<class> class Container>
-        ArrayView(const Container<T>& container) : _data(container.data()), _size(container.size()) { }
+        template<class Container>
+        ArrayView(const Container& container) : _data(container.data()), _size(container.size()) { }
 
         bool empty() const { return _size == 0; }
         size_t size() const { return _size; }
