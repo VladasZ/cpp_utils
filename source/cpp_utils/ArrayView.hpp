@@ -18,15 +18,17 @@ namespace cu {
 
     private:
 
-        const size_t _size;
         const T* const _data;
+        const size_t _size;
 
     public:
 
-        explicit ArrayView() : _size(0), _data(nullptr) { }
+        explicit ArrayView() : _data(nullptr), _size(0) { }
+
+        explicit ArrayView(const T* data, size_t size) : _data(data), _size(size) { }
 
         template<template<class> class Container>
-        ArrayView(const Container<T>& container) : _size(container.size()), _data(container.data()) { }
+        ArrayView(const Container<T>& container) : _data(container.data()), _size(container.size()) { }
 
         bool empty() const { return _size == 0; }
         size_t size() const { return _size; }
