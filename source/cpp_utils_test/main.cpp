@@ -1,4 +1,5 @@
 
+#include <array>
 #include <vector>
 
 #include "Log.hpp"
@@ -8,6 +9,8 @@ using namespace cu;
 
 
 int main() {
+
+    static constexpr std::array<int, 7> ultro_galagol = { 1, 2, 3, 4, 5, 6, 7 };
 
     std::vector<int> spesogon = { 1, 2, 3, 4, 5 };
 
@@ -23,6 +26,8 @@ int main() {
         Logvar(i);
     }
 
+
+    //ArrayView<int> kiko = ArrayView<int> { ultro_galagol };
 
     return 0;
 
