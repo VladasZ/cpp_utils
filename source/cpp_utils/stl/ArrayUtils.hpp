@@ -14,6 +14,7 @@
 #include <functional>
 #include <type_traits>
 
+#include "Log.hpp"
 #include "System.hpp"
 #include "MetaHelpers.hpp"
 
@@ -28,6 +29,17 @@ namespace cu::array {
     template <class Type, class Array>
     constexpr static size_t size_in(const Array& array) {
         return bytes_size(array) / sizeof(Type);
+    }
+
+    template <class Array>
+    static std::string to_string(const Array& array) {
+        if (array.empty()) return "[]";
+        std::string result = "[";
+        for (auto& val : array) {
+            result += cu::Log::to_string((int)val) + " ";
+        }
+        result.pop_back();
+        return result + "]";
     }
 
     template <class Array>

@@ -1,33 +1,33 @@
 
-#include <array>
-#include <vector>
-
 #include "Log.hpp"
-#include "ArrayView.hpp"
+#include "ArrayUtils.hpp"
+#include "CircularBuffer.hpp"
 
 using namespace cu;
 
 
 int main() {
 
-    static constexpr std::array<int, 7> ultro_galagol = { 1, 2, 3, 4, 5, 6, 7 };
+    CircularBuffer<7> buf;
 
-    std::vector<int> spesogon = { 1, 2, 3, 4, 5 };
+    std::array<uint8_t, 5> dote = { 1, 2, 3, 4, 5 };
 
-    for (auto i : spesogon) {
-        Logvar(i);
+    std::array<uint8_t, 5> rodoko;
+
+
+
+    for (int i = 0; i < 200000000; i++) {
+        buf.add(dote);
+        //Log(buf.dump());
+        buf.get(rodoko);
+        //Logvar(cu::array::to_string(rodoko));
+        assert(dote == rodoko);
+
     }
 
-    Logvar(std::is_scalar_v<decltype(spesogon)>);
 
-    ArrayView<int> spiagron = spesogon;
+    Log("spes");
 
-    for (auto i : spiagron) {
-        Logvar(i);
-    }
-
-
-    //ArrayView<int> kiko = ArrayView<int> { ultro_galagol };
 
     return 0;
 
