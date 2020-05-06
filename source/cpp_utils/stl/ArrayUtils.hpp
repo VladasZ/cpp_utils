@@ -94,7 +94,7 @@ namespace cu::array {
     class backwards {
         T& _arr;
     public:
-        backwards(T &arr) : _arr(arr) { }
+        explicit backwards(T &arr) : _arr(arr) { }
         auto begin() { return _arr.rbegin(); }
         auto end() { return _arr.rend(); }
     };

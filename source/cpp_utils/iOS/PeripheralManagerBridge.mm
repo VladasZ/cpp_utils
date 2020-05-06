@@ -221,7 +221,7 @@
  */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
-    Log();
+    Ping;
     // Start sending again
     [self sendData];
 }

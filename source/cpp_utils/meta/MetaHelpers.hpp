@@ -35,7 +35,6 @@ namespace cu {
     template <class T> constexpr bool is_std_vector_v = __is_vector<remove_all_t<T>>::value;
 
 
-
     //MARK: - Pointer to member tools
 
     template <class           > struct __is_pointer_to_member         : std::false_type { };
@@ -87,39 +86,24 @@ namespace cu {
         });
     }
 
-#include <type_traits>
-
-// Primary template with a static assertion
-// for a meaningful error message
-// if it ever gets instantiated.
-// We could leave it undefined if we didn't care.
-
-    template<typename, typename T>
+    template<class Class>
     struct has_to_string {
-        static_assert(
-                std::integral_constant<T, false>::value,
-                "Second template parameter needs to be of function type.");
-    };
-
-// specialization that does the checking
-
-    template<typename C, typename Ret, typename... Args>
-    struct has_to_string<C, Ret(Args...)> {
     private:
-        template<typename T>
+        template<class T>
         static constexpr auto check(T*) -> typename
         std::is_same<
-                decltype( std::declval<T>().to_string( std::declval<Args>()... ) ),
-                Ret    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        >::type;  // attempt to call it and see if the return type is correct
+                decltype(std::declval<T>().to_string()),
+                std::string
+        >::type;
 
-        template<typename>
+        template<class>
         static constexpr std::false_type check(...);
 
-        typedef decltype(check<C>(0)) type;
-
     public:
-        static constexpr bool value = type::value;
+        static constexpr bool value = decltype(check<Class>(nullptr))::value;
     };
+
+    template<class Class>
+    inline constexpr bool has_to_string_v = has_to_string<Class>::value;
 
 }

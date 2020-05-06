@@ -21,6 +21,7 @@
 
 #define UTILS_LOG_ENABLED
 
+
 namespace cu {
 
     class Log {
@@ -88,10 +89,10 @@ namespace cu {
                 return [[value description] UTF8String];
             }
 #endif
-            else if constexpr (has_to_string<T, std::string()>::value) {
+            else if constexpr (has_to_string_v<T>) {
                 return value.to_string();
             }
-            else if constexpr (std::is_same<bool, T>::value) {
+            else if constexpr (std::is_same_v<bool, T>) {
                 return value ? "true" : "false";
             }
             else {
@@ -109,8 +110,7 @@ namespace cu {
 
 #ifdef UTILS_LOG_ENABLED
 
-#define _Log_0()        cu::Log::log("", __FILE__, __func__, __LINE__)
-#define _Log_1(message) cu::Log::log(message, __FILE__, __func__, __LINE__)
+#define Log(message) cu::Log::log(message, __FILE__, __func__, __LINE__)
 
 #define Separator std::cout << "========================================" << std::endl
 
@@ -122,18 +122,13 @@ namespace cu {
 
 #else
 
-#define _Log_0()
-#define _Log_1(message)
-
 #define Separator
 
+#define Log(message)
 #define Fatal(message)
 
 #endif
 
-#define _Log_X(x, A, FUNC, ...) FUNC
-
-#define Log(...) _Log_X(, ##__VA_ARGS__, _Log_1(__VA_ARGS__), _Log_0(__VA_ARGS__))
 
 #define Ping Log("");
 
