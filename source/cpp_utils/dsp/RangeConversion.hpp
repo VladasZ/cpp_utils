@@ -8,40 +8,72 @@
 
 #pragma once
 
+#include "Log.hpp"
+
+
 namespace cu {
 
     class RangeConversion {
 
+        bool _is_clipping = false;
+        float _clip_shift = 0;
+        float _clipping_range = 0;
+
+        float _value_range = 1;
+        float _converted_range = 1;
+
+        float _min = 0;
+        float _max = 1;
+
+        float _target_min = 0;
+        float _target_max = 1;
+
     public:
 
-        bool flip = false;
-
-        float minimum = 0;
-        float maximum = 1;
-
-        float converted_minimum = 0;
-        float converted_maximum = 1;
+        bool _log = false;
 
         RangeConversion() = default;
-        RangeConversion(float minumum, float maximum, float converted_minimum = 0, float converted_maximum = 1)
-                : minimum(minumum), maximum(maximum), converted_minimum(converted_minimum), converted_maximum(converted_maximum) { }
+
+        RangeConversion(float min, float max, float t_min = 0, float t_max = 1);
 
         float convert(float value) const {
-            auto value_range      = maximum - minimum;
-            auto normalized_value = value - minimum;
+//            if (_log) {
+//                Logvar(_is_clipping);
+//                Logvar(value < _min);
+//                Logvar(_max);
+//                Logvar(_min);
+//                Logvar(value);
+//            }
 
-            normalized_value /= value_range;
-
-            auto converted_range = converted_maximum - converted_minimum;
-
-            auto result = converted_range * normalized_value;
-
-            if (flip) {
-                result = converted_range - result;
+            if (_is_clipping && value < _max) {
+                value += _clip_shift;
             }
 
-            return result + converted_minimum;
+//            if (_log) {
+//                Logvar(value);
+//                Separator;
+//            }
+
+            auto normalized_value = (value - _min) / _value_range;
+
+            return _converted_range * normalized_value + _target_min;
         }
+
+        float min() const { return _min; }
+        float max() const { return _max; }
+
+        void set_min(float);
+        void set_max(float);
+
+        void set_target_min(float);
+        void set_target_max(float);
+
+        void set_clipping_range(float);
+
+    private:
+
+        void _check_clipping();
+        void _update_converted_range();
 
     };
 

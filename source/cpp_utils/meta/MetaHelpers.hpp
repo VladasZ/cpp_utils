@@ -36,7 +36,7 @@ namespace cu {
 
     namespace _is_stl_container_impl{
         template <class T>                struct is_stl_container                       : std::false_type { };
-        template <class T, std::size_t N> struct is_stl_container<std::array<T,N>>      : std::true_type { };
+        template <class T, std::size_t N> struct is_stl_container<std::array<T, N>>     : std::true_type { };
         template <class... Args>          struct is_stl_container<std::vector<Args...>> : std::true_type { };
     }
 
