@@ -34,6 +34,19 @@ namespace cu {
     template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
     template <class T> constexpr bool is_std_vector_v = __is_vector<remove_all_t<T>>::value;
 
+    namespace _is_stl_container_impl{
+        template <class T>                struct is_stl_container                       : std::false_type { };
+        template <class T, std::size_t N> struct is_stl_container<std::array<T,N>>      : std::true_type { };
+        template <class... Args>          struct is_stl_container<std::vector<Args...>> : std::true_type { };
+    }
+
+    template <class T> struct is_stl_container {
+        static constexpr bool value = _is_stl_container_impl::is_stl_container<std::decay_t<T>>::value;
+    };
+
+    template <class T>
+    constexpr bool is_std_container_v = is_stl_container<T>::value;
+
 
     //MARK: - Pointer to member tools
 

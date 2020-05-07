@@ -4,6 +4,7 @@
 
 
 #include "Log.hpp"
+#include "DataUtils.hpp"
 #include "ArrayUtils.hpp"
 #include "CircularBuffer.hpp"
 
@@ -19,6 +20,14 @@ int main() {
     CircularBuffer<7> buf;
 
     std::array<uint8_t, 5> dote = { 1, 2, 3, 4, 5 };
+
+
+    Logvar(dote);
+    add_byte(dote, 10);
+    Logvar(dote);
+
+
+    return 0;
 
     std::array<uint8_t, 5> rodoko;
 

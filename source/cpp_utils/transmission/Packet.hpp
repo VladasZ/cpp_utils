@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "PacketHeader.hpp"
 
+#include "PacketHeader.hpp"
+#include "PacketFooter.hpp"
 
 namespace cu {
 
@@ -18,11 +19,9 @@ namespace cu {
 
     public:
 
-        const PacketHeader<Data> header;
-
+        const PacketHeader<Data> header { };
         Data data;
-
-        const uint16_t footer = static_cast<uint16_t>(~header._start_data);
+        const PacketFooter footer { };
 
     };
 

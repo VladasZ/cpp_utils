@@ -30,4 +30,15 @@ namespace cu {
         ptr[sizeof(data) - 1] = byte;
     }
 
+    template <class T>
+    std::string byte_string(const T& data) {
+        std::string result = "[";
+        auto ptr = reinterpret_cast<const uint8_t*>(&data);
+        for (int i = 0; i < sizeof(data); i++) {
+            result += std::to_string(static_cast<int>(ptr[i])) + " ";
+        }
+        result.pop_back();
+        return result + "]";
+    }
+
 }

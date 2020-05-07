@@ -69,12 +69,14 @@ namespace cu {
             buffer << value;
             return buffer.str();
 #else
-            if constexpr (cu::is_std_vector_v<T>) {
-                std::string result = "\n";
+            if constexpr (cu::is_std_container_v<T>) {
+                if (value.empty()) return "[]";
+                std::string result = "[";
                 for (auto val : value) {
-                    result += Log::to_string(val) + "\n";
+                    result += Log::to_string((int)val) + " ";
                 }
-                return result;
+                result.pop_back();
+                return result + "]";
             }
 #ifdef QSTRING_H
             else if constexpr (cu::is_same_v<T, QString>) {

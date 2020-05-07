@@ -23,13 +23,19 @@ namespace cu {
         static inline constexpr uint16_t _start_data = 0b1010'0010'0101'0110;
 
         uint16_t header = _start_data;
-        uint16_t size = sizeof(Data);
+        uint16_t data_size = sizeof(Data);
         uint16_t packet_id = Data::packet_id;
 
         bool is_valid() const {
             return header == _start_data;
         }
 
+        std::string to_string() const {
+            return std::to_string(data_size);
+        }
+
     };
+
+    using EmptyHeader = PacketHeader<_EmptyPacket>;
 
 }
