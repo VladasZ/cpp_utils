@@ -22,7 +22,7 @@ namespace cu {
     }
 
     template <class T>
-    void add_byte(T& data, uint8_t byte) {
+    void push_byte(T& data, uint8_t byte) {
         auto ptr = reinterpret_cast<uint8_t*>(&data);
         for (int i = 0; i < sizeof(data); i++) {
             ptr[i] = ptr[i + 1];

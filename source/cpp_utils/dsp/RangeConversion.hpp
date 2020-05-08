@@ -37,22 +37,19 @@ namespace cu {
         RangeConversion(float min, float max, float t_min = 0, float t_max = 1);
 
         float convert(float value) const {
-//            if (_log) {
-//                Logvar(_is_clipping);
-//                Logvar(value < _min);
-//                Logvar(_max);
-//                Logvar(_min);
-//                Logvar(value);
-//            }
+            if (_log) {
+                Logvar(_clip_shift);
+                Logvar(value);
+            }
 
-            if (_is_clipping && value < _max) {
+            if (_is_clipping && value < _min) {
                 value += _clip_shift;
             }
 
-//            if (_log) {
-//                Logvar(value);
-//                Separator;
-//            }
+            if (_log) {
+                Logvar(value);
+                Separator;
+            }
 
             auto normalized_value = (value - _min) / _value_range;
 

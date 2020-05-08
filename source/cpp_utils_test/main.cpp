@@ -23,7 +23,7 @@ int main() {
 
 
     Logvar(dote);
-    add_byte(dote, 10);
+    push_byte(dote, 10);
     Logvar(dote);
 
 

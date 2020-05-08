@@ -57,17 +57,21 @@ void RangeConversion::_check_clipping() {
     if (_max > _min) {
         _value_range = _max - _min;
         _is_clipping = false;
+        if (_log) {
+            Logvar(_is_clipping);
+        }
         return;
     }
 
     _is_clipping = true;
-    _clip_shift = _max;
+    _clip_shift = _clipping_range;
     _value_range = _clipping_range + _clip_shift - _min;
 
     if (_log) {
         Logvar(_clip_shift);
         Logvar(_value_range);
 
+        Logvar(_is_clipping);
         Separator;
     }
 
