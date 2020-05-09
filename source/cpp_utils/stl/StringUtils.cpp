@@ -39,6 +39,10 @@ string String::from_float(float val, int precision) {
     return stream.str();
 }
 
+string String::find_regexpr_match(const string& str, const string& query) {
+    return find_regexpr_matches(str, query).front();
+}
+
 vector<string> String::find_regexpr_matches(const string& str, const string& query) {
 
     vector<string> result;
@@ -71,10 +75,6 @@ string String::remove(const string& str, char symbol) {
     return result;
 }
 
-string String::find_regexpr_match(const string& str, const string& query) {
-    return find_regexpr_matches(str, query).front();
-}
-
 void String::drop_first(string& str, unsigned count) {
     str.erase(0, count);
 }
@@ -91,6 +91,14 @@ void String::trim(string& str) {
 string& String::trimmed(string& str) {
     trim(str);
     return str;
+}
+
+void String::replace(char replace, char with, std::string& string) {
+    for (auto& c : string) {
+        if (c == replace) {
+            c = with;
+        }
+    }
 }
 
 void String::replace(const string& replace, const string& with, string& str) {

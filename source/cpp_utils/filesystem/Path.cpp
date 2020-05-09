@@ -15,12 +15,17 @@
 
 using namespace cu;
 
+
 Path::Path(const char* path) : Path(std::string(path)) {
 
 }
 
-Path::Path(const std::string& path) : _info(path), _path(path)  {
-
+Path::Path(const std::string& path)  {
+    _path = path;
+#ifdef WINDOWS_BUILD
+    String::replace('\\', '/', _path);
+#endif
+    _info = _path;
 }
 
 void Path::trim_relative() {
@@ -43,7 +48,7 @@ Path Path::operator / (const Path& path) const {
     if (this->_path.empty()) {
         return path;
     }
-    return Path(this->_path + "/" + path._path);
+    return Path(_path + "/" + path._path);
 }
 
 Path::operator std::string() const {
@@ -51,7 +56,14 @@ Path::operator std::string() const {
 }
 
 Path::Array Path::ls() const {
-    return System::ls(this->_path);
+    return System::ls(_path);
+}
+
+Path Path::parent() const {
+    auto last_part = Log::last_path_component(_path);
+    std::string parent = _path;
+    String::drop_last(parent, last_part.size() + 1);
+    return parent;
 }
 
 std::string Path::file_name() const {
@@ -60,7 +72,7 @@ std::string Path::file_name() const {
 
 std::string Path::to_string() const {
     return std::string() +
-    "Path: " + this->_path + " " + _info.to_string();
+    "Path: " + _path + " " + _info.to_string();
 }
 
 #endif

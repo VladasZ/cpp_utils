@@ -45,6 +45,8 @@ namespace cu {
 
         Array ls() const;
 
+        Path parent() const;
+
         std::string file_name() const;
 
         std::string to_string() const;
