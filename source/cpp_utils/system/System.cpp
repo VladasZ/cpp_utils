@@ -143,6 +143,7 @@ Path::Array System::ls(const std::string& path, bool full_path) {
 }
 
 void System::execute(const std::string& command) {
+#ifndef WINDOWS_BUILD
     char buffer[128];
     std::string result = "";
     FILE* pipe = popen(command.c_str(), "r");
@@ -151,12 +152,14 @@ void System::execute(const std::string& command) {
         while (fgets(buffer, sizeof buffer, pipe) != NULL) {
             result += buffer;
         }
-    } catch (...) {
+    }
+    catch (...) {
         pclose(pipe);
         Fatal(what());
     }
     pclose(pipe);
     Log(result);
+#endif
 }
 
 #endif
