@@ -15,10 +15,6 @@ namespace cu {
 
     class RangeConversion {
 
-        bool _is_clipping = false;
-        float _clip_shift = 0;
-        float _clipping_range = 0;
-
         float _value_range = 1;
         float _converted_range = 1;
 
@@ -30,30 +26,19 @@ namespace cu {
 
     public:
 
-        bool _log = false;
+        bool flip = false;
 
         RangeConversion() = default;
 
         RangeConversion(float min, float max, float t_min = 0, float t_max = 1);
 
         float convert(float value) const {
-            if (_log) {
-                Logvar(_clip_shift);
-                Logvar(value);
-            }
-
-            if (_is_clipping && value < _min) {
-                value += _clip_shift;
-            }
-
-            if (_log) {
-                Logvar(value);
-                Separator;
-            }
-
             auto normalized_value = (value - _min) / _value_range;
-
-            return _converted_range * normalized_value + _target_min;
+            auto result = _converted_range * normalized_value + _target_min;
+            if (flip) {
+                result = _converted_range - result;
+            }
+            return result;
         }
 
         float min() const { return _min; }
@@ -65,11 +50,9 @@ namespace cu {
         void set_target_min(float);
         void set_target_max(float);
 
-        void set_clipping_range(float);
-
     private:
 
-        void _check_clipping();
+        void _update_range();
         void _update_converted_range();
 
     };

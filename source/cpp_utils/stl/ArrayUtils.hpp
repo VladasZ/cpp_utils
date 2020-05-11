@@ -65,9 +65,8 @@ namespace cu::array {
     template <class Array, class Value = typename Array::value_type>
     static void remove(Array& array, const Value& value) {
         auto position = std::find(array.begin(), array.end(), value);
-        if (position != array.end()) {
-            array.erase(position);
-        }
+        if (position == array.end()) return;
+        array.erase(position);
     }
 
     template <class Array, class ArrayToRemove>
@@ -78,7 +77,7 @@ namespace cu::array {
     }
 
     template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
-    static void remove_where(Array& array, Predicate predicate) {
+    static void  remove_where(Array& array, Predicate predicate) {
         auto position = std::find_if(array.begin(), array.end(), predicate);
         if (position != array.end()) {
             array.erase(position);

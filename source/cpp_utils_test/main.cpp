@@ -3,7 +3,9 @@
 #include <cassert>
 
 
+#include "App.hpp"
 #include "Log.hpp"
+#include "System.hpp"
 #include "DataUtils.hpp"
 #include "ArrayUtils.hpp"
 #include "CircularBuffer.hpp"
@@ -26,6 +28,8 @@ int main() {
     push_byte(dote, 10);
     Logvar(dote);
 
+
+    System::execute(std::string() + "\"" + "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" + "\"");
 
     return 0;
 

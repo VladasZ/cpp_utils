@@ -38,6 +38,8 @@ namespace cu::String {
     void replace(char replace, char with, std::string& string);
     void replace(const std::string& replace, const std::string& with, std::string& string);
 
+    std::string to_lower(const std::string& string);
+
     template<class T>
     static std::string from_container(const T& container) {
         if (container.empty()) return "[]";

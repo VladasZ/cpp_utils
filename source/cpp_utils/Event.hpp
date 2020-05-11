@@ -58,6 +58,10 @@ namespace cu {
             linked_events.push_back(&event);
         }
 
+        void unlink(This& event) {
+            cu::array::remove(linked_events, &event);
+        }
+
         void operator()(Params... parameters) const {
             for (auto& subscriber : subscribers) {
                 subscriber(parameters...);

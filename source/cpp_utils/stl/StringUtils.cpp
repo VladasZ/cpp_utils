@@ -17,6 +17,7 @@
 using namespace cu;
 using namespace std;
 
+
 string String::file_name(const string& str) {
     if (str.empty()) return "";
     auto len   = str.length();
@@ -64,7 +65,9 @@ string String::from_bool(bool value) {
 }
 
 bool String::contains(const string& str, const string& part) {
-    return str.find(part) != string::npos;
+    string _part = to_lower(part);
+    string _str = to_lower(str);
+    return _str.find(_part) != string::npos;
 }
 
 string String::remove(const string& str, char symbol) {
@@ -110,4 +113,12 @@ void String::replace(const string& replace, const string& with, string& str) {
         str.erase(position, replace.length());
         str.insert(position, with);
     }
+}
+
+string String::to_lower(const string& str) {
+    string result;
+    for (auto c : str) {
+        result += tolower(c);
+    }
+    return result;
 }

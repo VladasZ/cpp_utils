@@ -8,7 +8,9 @@
 
 #pragma once
 
-namespace Time {
-    long long now();
-    int interval();
+#include <cstdint>
+
+namespace cu::Time {
+    uint64_t now();
+    uint64_t interval();
 }

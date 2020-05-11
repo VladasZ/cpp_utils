@@ -27,6 +27,7 @@
 
 #include "Log.hpp"
 #include "System.hpp"
+#include "ExceptionCatch.hpp"
 
 using namespace cu;
 using namespace std;
@@ -128,6 +129,9 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     }
     dirent* ent = nullptr;
     while ((ent = readdir(dir))) {
+        if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, "..")) {
+            continue;
+        }
         result.emplace_back(path + "/" + ent->d_name);
     }
     closedir(dir);
@@ -136,6 +140,23 @@ Path::Array System::ls(const std::string& path, bool full_path) {
 #else
     return { "Not implemented on this platform" };
 #endif
+}
+
+void System::execute(const std::string& command) {
+    char buffer[128];
+    std::string result = "";
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    try {
+        while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+            result += buffer;
+        }
+    } catch (...) {
+        pclose(pipe);
+        Fatal(what());
+    }
+    pclose(pipe);
+    Log(result);
 }
 
 #endif
