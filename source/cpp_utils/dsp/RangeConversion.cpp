@@ -11,13 +11,12 @@
 using namespace cu;
 
 
-RangeConversion::RangeConversion(float min, float max, float t_min, float t_max) {
-    _min = min;
-    _max = max;
-    _target_min = t_min;
-    _target_max = t_max;
-    _update_range();
-    _update_converted_range();
+float RangeConversion::min() const {
+    return _min;
+}
+
+float RangeConversion::max() const {
+    return _max;
 }
 
 void RangeConversion::set_min(float min) {

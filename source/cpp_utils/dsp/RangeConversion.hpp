@@ -15,6 +15,8 @@ namespace cu {
 
     class RangeConversion {
 
+    protected:
+
         float _value_range = 1;
         float _converted_range = 1;
 
@@ -28,11 +30,7 @@ namespace cu {
 
         bool flip = false;
 
-        RangeConversion() = default;
-
-        RangeConversion(float min, float max, float t_min = 0, float t_max = 1);
-
-        float convert(float value) const {
+        virtual float convert(float value) const {
             auto normalized_value = (value - _min) / _value_range;
             auto result = _converted_range * normalized_value + _target_min;
             if (flip) {
@@ -41,8 +39,8 @@ namespace cu {
             return result;
         }
 
-        float min() const { return _min; }
-        float max() const { return _max; }
+        float min() const;
+        float max() const;
 
         void set_min(float);
         void set_max(float);
@@ -50,9 +48,9 @@ namespace cu {
         void set_target_min(float);
         void set_target_max(float);
 
-    private:
+    protected:
 
-        void _update_range();
+        virtual void _update_range();
         void _update_converted_range();
 
     };
