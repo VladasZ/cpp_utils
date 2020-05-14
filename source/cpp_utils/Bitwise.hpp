@@ -57,15 +57,15 @@ namespace bitwise {
     }
 
     template <class T>
-    constexpr bool get_byte(uint8_t index, const T& value) {
+    constexpr bool get_bit(uint8_t index, const T& value) {
         return static_cast<bool>(to_number(value) & flag(index));
     }
 
     template <class T>
-    constexpr T set_byte(const T& value, uint8_t index, bool byte = true) {
+    constexpr T set_bit(const T& value, uint8_t index, bool bit = true) {
         auto result = to_number(value);
         result &= ~flag(index);
-        result |= flag(index, byte);
+        result |= flag(index, bit);
         return to_type<T>(result);
     }
 
@@ -74,7 +74,7 @@ namespace bitwise {
         constexpr uint8_t span = end - begin + 1;
         fits_t<span> result { 0 };
         for (int i = 0; i < span; i++) {
-            result = set_byte(result, i, get_byte(begin + i, value));
+            result = set_bit(result, i, get_bit(begin + i, value));
         }
         return result;
     }
