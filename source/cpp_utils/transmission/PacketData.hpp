@@ -8,13 +8,14 @@
 
 #pragma once
 
+#include "NonCopyable.hpp"
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
 
 
 namespace cu {
 
-    struct PacketData {
+    struct PacketData : NonCopyable {
 
         const EmptyHeader header;
 
@@ -34,9 +35,6 @@ namespace cu {
             moved._size = -1;
             moved._data = nullptr;
         }
-
-        PacketData(const PacketData&) = delete;
-        PacketData& operator = (const PacketData&) = delete;
 
         size_t size() const { return _size; }
         uint8_t* data() { return sizeof(EmptyHeader) + _data; }

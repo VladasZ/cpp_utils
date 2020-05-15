@@ -14,6 +14,8 @@
 
 #include <mbed.h>
 
+#include "Packet.hpp"
+
 
 namespace cu {
 
@@ -29,12 +31,20 @@ namespace cu {
 
         template<class T>
         int read(T& value) {
+            wait_for_read();
             return read(&value, sizeof(T));
         }
 
         template <class T>
         int write(const T& value) {
             return write(&value, sizeof(T));
+        }
+
+        template <class T>
+        int write_as_packet(const T& value) {
+            static Packet<T> packet;
+            packet.set_data(value);
+            return write(packet);
         }
 
         bool is_readable() {
@@ -51,6 +61,10 @@ namespace cu {
 
         int write(const void* data, int size) {
             return mbed_serial.write(static_cast<const uint8_t*>(data), size, dummy_callback);
+        }
+
+        void wait_for_read() {
+            while (!is_readable()) { }
         }
 
     };

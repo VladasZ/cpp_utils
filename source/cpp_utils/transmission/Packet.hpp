@@ -8,7 +8,7 @@
 
 #pragma once
 
-
+#include "NonCopyable.hpp"
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
 
@@ -16,13 +16,22 @@
 namespace cu {
 
     template<class Data>
-    class Packet {
+    class Packet : NonCopyable {
 
     public:
-
         const PacketHeader<Data> header { };
-        Data data;
+    private:
+        Data _data;
+    public:
         const PacketFooter footer { };
+
+        void set_data(const Data& data) {
+            _data = data;
+        }
+
+        const Data& data() const {
+            return _data;
+        }
 
     };
 
