@@ -19,20 +19,20 @@ namespace arm {
 
     static inline DigitalOut led(LED1);
 
-    void blink(float interval = 1) {
+    static void blink(float interval = 1) {
         led = 1;
         cu::System::sleep(interval / 2);
         led = 0;
         cu::System::sleep(interval / 2);
     }
 
-    void flash(int frequency = 10) {
+    static void flash(int frequency = 10) {
         for (int i = 0; i < frequency; ++i) {
             blink(1.0f / frequency);
         }
     }
 
-    void hello() {
+    static void hello() {
         arm::flash(4);
         cu::System::sleep(1);
         arm::flash(8);

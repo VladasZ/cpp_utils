@@ -14,13 +14,13 @@
 namespace cu {
 
     struct _EmptyPacket {
-        static inline constexpr uint16_t packet_id = 0;
+        static inline const uint16_t packet_id = 0;
     };
 
     template<class Data = _EmptyPacket>
     struct PacketHeader {
 
-        static inline constexpr uint16_t _start_data = 0b1010'0010'0101'0110;
+        static inline const uint16_t _start_data = 0b1010'0010'0101'0110;
 
         uint16_t header = _start_data;
         uint16_t data_size = sizeof(Data);
