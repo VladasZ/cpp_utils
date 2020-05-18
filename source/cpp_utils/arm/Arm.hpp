@@ -18,6 +18,8 @@
 namespace arm {
 
     static inline DigitalOut led(LED1);
+    static inline DigitalOut red(LED3);
+
 
     static void blink(float interval = 1) {
         led = 1;

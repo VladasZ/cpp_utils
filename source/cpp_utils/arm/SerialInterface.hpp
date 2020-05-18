@@ -14,6 +14,7 @@
 
 #include <mbed.h>
 
+#include "Error.hpp"
 #include "Packet.hpp"
 
 
@@ -45,6 +46,10 @@ namespace cu {
             static Packet<T> packet;
             packet.set_data(value);
             return write(packet);
+        }
+
+        int write_error(const std::string& error) {
+            return write_as_packet<Error>(error);
         }
 
         bool is_readable() {
