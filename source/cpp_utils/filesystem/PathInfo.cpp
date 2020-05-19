@@ -17,21 +17,23 @@
 using namespace cu;
 using namespace std;
 
+struct _Info {
+    bool is_file = false;
+    bool is_dir  = false;
+};
 
-static pair<bool, bool> get_info(const string& path) {
+static _Info get_info(const string& path) {
 #ifdef MICROCONTROLLER_BUILD
-    return { false, false };
+    return { };
 #else
-    static struct stat s;
-    if (stat(path.c_str(), &s) == 0) {
-        if (s.st_mode & S_IFDIR) {
-            return { false, true };
-        }
-        if (s.st_mode & S_IFREG) {
-            return { true, false };
-        }
-    }
-    return { false, false };
+    struct stat s;
+    if (stat(path.c_str(), &s) != 0) return { };
+
+    _Info info;
+    info.is_dir  = s.st_mode & S_IFDIR;
+    info.is_file = s.st_mode & S_IFREG;
+    return info;
+
 #endif
 }
 
@@ -49,15 +51,18 @@ PathInfo::PathInfo() {
 
 PathInfo::PathInfo(const string& path) {
     auto info = get_info(path);
-    _is_valid     = info.first || info.second;
-    _is_file      = info.first;
-    _is_directory = info.second;
+    if (path.length() == 0) {
+        Log("KRIKET!");
+
+        Log("KRIKET!");
+    }
+    _is_valid     = info.is_file || info.is_dir;
+    _is_file      = info.is_file;
+    _is_directory = info.is_dir;
     _extension = get_extension(path);
+    _path = path;
 }
 
 std::string PathInfo::to_string() const {
-    if (!_is_valid)    return "is not valid";
-    if (_is_file)      return "is file";
-    if (_is_directory) return "is directory";
-    Fatal("Invalid path");
+    return VarString(_is_valid) + ", " + VarString(_is_file) + ", " + VarString(_is_directory) + ", " + VarString(spisok);
 }

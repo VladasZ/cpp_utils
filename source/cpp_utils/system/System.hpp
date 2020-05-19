@@ -59,7 +59,7 @@ namespace cu {
         static const Path& home();
 
         static Path pwd();
-        static Path::Array ls(const std::string& path = ".", bool full_path = false);
+        static std::vector<Path> ls(const std::string& path = ".", bool full_path = false);
 
         static void execute(const std::string&);
 

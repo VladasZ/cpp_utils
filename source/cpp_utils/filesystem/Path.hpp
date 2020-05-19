@@ -25,8 +25,6 @@ namespace cu {
 
     public:
 
-        using Array = std::vector<Path>;
-
         Path() = default;
         Path(const char*);
         Path(const std::string&);
@@ -43,7 +41,7 @@ namespace cu {
 
         operator std::string() const;
 
-        Array ls() const;
+        std::vector<Path> ls() const;
 
         Path parent() const;
 

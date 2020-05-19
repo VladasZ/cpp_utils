@@ -15,9 +15,12 @@ namespace cu {
 
     class PathInfo {
 
+        int spisok = 44433;
+
         bool _is_valid;
         bool _is_file;
         bool _is_directory;
+        std::string _path;
         std::string _extension;
 
     public:

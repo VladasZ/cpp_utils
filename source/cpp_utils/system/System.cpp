@@ -105,7 +105,7 @@ Path System::pwd() {
 }
 
 
-Path::Array System::ls(const std::string& path, bool full_path) {
+std::vector<Path> System::ls(const std::string& path, bool full_path) {
 #ifdef DESKTOP_BUILD
 #ifdef WINDOWS_BUILD
     Path::Array names;
@@ -122,7 +122,7 @@ Path::Array System::ls(const std::string& path, bool full_path) {
     }
     return names;
 #else
-    Path::Array result;
+    std::vector<Path> result;
     auto dir = opendir(path.c_str());
     if (!dir) {
         Fatal("Path not found " + path);

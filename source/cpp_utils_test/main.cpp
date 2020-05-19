@@ -22,18 +22,9 @@ int rglica = 4;
 int spesica = 10;
 
 
-template <class ...Args>
-void apply_rglica(std::function<void(Args& ...)> action, Args& ... args) {
-    action(args ...);
-}
-
 
 
 int main() {
-
-    apply_rglica([](int& rg, int& sp) {
-
-    }, rglica, spesica);
 
 //    System::execute(std::string() + "\"" + "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" + "\"");
 

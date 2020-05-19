@@ -97,6 +97,10 @@ namespace cu {
             else if constexpr (std::is_same_v<bool, T>) {
                 return value ? "true" : "false";
             }
+            else if constexpr (std::is_same_v<std::string, T>) {
+                if (value.empty()) return "\"Empty string\"";
+                return value;
+            }
             else {
                 std::stringstream buffer;
                 buffer << value;

@@ -55,7 +55,7 @@ Path::operator std::string() const {
     return _path;
 }
 
-Path::Array Path::ls() const {
+std::vector<Path> Path::ls() const {
     return System::ls(_path);
 }
 
@@ -71,8 +71,7 @@ std::string Path::file_name() const {
 }
 
 std::string Path::to_string() const {
-    return std::string() +
-    "Path: " + _path + " " + _info.to_string();
+    return VarString(_path) + ", " + VarString(_info);
 }
 
 #endif
