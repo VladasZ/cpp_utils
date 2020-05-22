@@ -16,7 +16,7 @@ namespace cu {
 
     class Error {
 
-        std::array<char, 64> message;
+        std::array<char, 256> message;
 
     public:
 

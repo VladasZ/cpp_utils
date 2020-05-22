@@ -17,9 +17,9 @@
 
 namespace arm {
 
-    static inline DigitalOut led(LED1);
-    static inline DigitalOut red(LED3);
-
+    static inline DigitalOut led  { LED1 };
+    static inline DigitalOut blue { LED2 };
+    static inline DigitalOut red  { LED3 };
 
     static void blink(float interval = 1) {
         led = 1;
@@ -35,10 +35,12 @@ namespace arm {
     }
 
     static void hello() {
-        arm::flash(4);
+        flash(4);
         cu::System::sleep(1);
-        arm::flash(8);
-        cu::System::sleep(1);
+        flash(8);
+        red = 1;
+        cu::System::sleep(0.1);
+        red = 0;
     }
 
 }

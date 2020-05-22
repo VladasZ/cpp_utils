@@ -32,7 +32,6 @@ namespace cu {
 
         template<class T>
         int read(T& value) {
-            wait_for_read();
             return read(&value, sizeof(T));
         }
 
@@ -61,15 +60,21 @@ namespace cu {
         }
 
         int read(void* data, int size) {
+            wait_for_read();
             return mbed_serial.read(static_cast<uint8_t*>(data), size, dummy_callback);
         }
 
         int write(const void* data, int size) {
+            wait_for_write();
             return mbed_serial.write(static_cast<const uint8_t*>(data), size, dummy_callback);
         }
 
         void wait_for_read() {
             while (!is_readable()) { }
+        }
+
+        void wait_for_write() {
+            while (!is_writeable()) { }
         }
 
     };

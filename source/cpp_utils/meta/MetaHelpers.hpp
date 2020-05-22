@@ -9,6 +9,7 @@
 #pragma once
 
 #include <tuple>
+#include <list>
 #include <vector>
 #include <string>
 #include <type_traits>
@@ -38,6 +39,7 @@ namespace cu {
         template <class T>                struct is_stl_container                       : std::false_type { };
         template <class T, std::size_t N> struct is_stl_container<std::array<T, N>>     : std::true_type { };
         template <class... Args>          struct is_stl_container<std::vector<Args...>> : std::true_type { };
+        template <class... Args>          struct is_stl_container<std::list<Args...>>   : std::true_type { };
     }
 
     template <class T> struct is_stl_container {
