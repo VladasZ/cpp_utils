@@ -44,4 +44,19 @@ namespace cu {
         var = static_cast<T>(val);
     }
 
+    template <class Checksum = uint16_t>
+    static Checksum checksum(const void* data, size_t size) {
+        auto ptr = static_cast<const uint8_t*>(data);
+        Checksum result { 0 };
+        for (int i = 0; i < size; i++) {
+            result += ptr[i];
+        }
+        return result;
+    }
+
+    template <class T, class Checksum = uint16_t>
+    static Checksum checksum(const T& data) {
+        return checksum(reinterpret_cast<const void*>(&data), sizeof(data));
+    }
+
 }

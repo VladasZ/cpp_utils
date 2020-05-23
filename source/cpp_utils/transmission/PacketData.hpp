@@ -15,7 +15,9 @@
 
 namespace cu {
 
-    struct PacketData : NonCopyable {
+    class PacketData : NonCopyable {
+
+    public:
 
         const EmptyHeader header;
 
@@ -40,6 +42,16 @@ namespace cu {
         uint8_t* data() { return sizeof(EmptyHeader) + _data; }
         PacketFooter* footer() const {
             return reinterpret_cast<PacketFooter*>(sizeof(EmptyHeader) + header.data_size + _data);
+        }
+
+        bool checksum_is_valid() const {
+            auto received_summ = checksum(sizeof(EmptyHeader) + _data, header.data_size);
+            bool valid = footer()->checksum == received_summ;
+            if (!valid) {
+                Logvar(received_summ);
+                Logvar(footer()->checksum);
+            }
+            return valid;
         }
 
     private:

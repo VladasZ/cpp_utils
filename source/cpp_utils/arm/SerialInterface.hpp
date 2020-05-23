@@ -14,15 +14,13 @@
 
 #include <mbed.h>
 
-#include "Error.hpp"
 #include "Packet.hpp"
+#include "BoardMessage.hpp"
 
 
 namespace cu {
 
     class SerialInterface {
-
-        const event_callback_t dummy_callback;
 
         Serial& mbed_serial;
 
@@ -47,8 +45,8 @@ namespace cu {
             return write(packet);
         }
 
-        int write_error(const std::string& error) {
-            return write_as_packet<Error>(error);
+        int write_message(const std::string& error) {
+            return write_as_packet<BoardMessage>(error);
         }
 
         bool is_readable() {
@@ -59,22 +57,34 @@ namespace cu {
             return mbed_serial.writeable();
         }
 
+        bool used = false;
+
         int read(void* data, int size) {
             wait_for_read();
-            return mbed_serial.read(static_cast<uint8_t*>(data), size, dummy_callback);
+            used = true;
+            return mbed_serial.read(static_cast<uint8_t*>(data), size, [&] (auto) {
+                used = false;
+            });
+            return 0;
         }
 
         int write(const void* data, int size) {
             wait_for_write();
-            return mbed_serial.write(static_cast<const uint8_t*>(data), size, dummy_callback);
+            used = true;
+            return mbed_serial.write(static_cast<const uint8_t*>(data), size, [&](auto) {
+                used = false;
+            });
+            return 0;
         }
 
         void wait_for_read() {
-            while (!is_readable()) { }
+            while (!is_readable()) { __NOP(); }
+            while (used) { __NOP(); }
         }
 
         void wait_for_write() {
-            while (!is_writeable()) { }
+            while (!is_writeable()) { __NOP(); }
+            while (used) { __NOP(); }
         }
 
     };

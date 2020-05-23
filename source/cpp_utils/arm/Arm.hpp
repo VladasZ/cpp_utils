@@ -35,12 +35,13 @@ namespace arm {
     }
 
     static void hello() {
-        flash(4);
-        cu::System::sleep(1);
         flash(8);
         red = 1;
         cu::System::sleep(0.1);
         red = 0;
+        blue = 1;
+        cu::System::sleep(0.1);
+        blue = 0;
     }
 
 }

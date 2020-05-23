@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "DataUtils.hpp"
 #include "NonCopyable.hpp"
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
@@ -23,10 +24,15 @@ namespace cu {
     private:
         Data _data;
     public:
-        const PacketFooter footer { };
+        PacketFooter footer { };
 
         void set_data(const Data& data) {
             _data = data;
+            footer.checksum = checksum(_data);
+        }
+
+        bool checksum_is_valid() const {
+            return footer.checksum == checksum(_data);
         }
 
         const Data& data() const {

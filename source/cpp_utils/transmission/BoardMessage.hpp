@@ -1,5 +1,5 @@
 //
-//  Error.hpp
+//  BoardMessage.hpp
 //  smon
 //
 //  Created by Vladas Zakrevskis on 18/05/20.
@@ -14,17 +14,19 @@
 
 namespace cu {
 
-    class Error {
+    class BoardMessage {
 
-        std::array<char, 256> message;
+        static inline const size_t size = 128;
+
+        std::array<char, size> message { 0 };
 
     public:
 
         static const inline uint16_t packet_id = 200;
 
-        Error() : message({ 0 }) { }
+        BoardMessage() : message({ 0 }) { }
 
-        Error(const std::string& error) {
+        BoardMessage(const std::string& error) {
             strcpy(message.data(), error.c_str());
         }
 
