@@ -13,17 +13,16 @@
 
 namespace cu {
 
-    struct _EmptyPacket {
-        static inline const uint16_t packet_id = 0;
-    };
-
-    template<class Data = _EmptyPacket>
+    template<class Data>
     struct PacketHeader {
 
-        static inline const uint16_t _start_data = 0b1010'0010'0101'0110;
+        using StartData = uint16_t;
 
-        uint16_t header = _start_data;
+        static inline const StartData _start_data = 'ts';
+
+        StartData header = _start_data;
         uint16_t data_size = sizeof(Data);
+
         uint16_t packet_id = Data::packet_id;
 
         bool is_valid() const {
@@ -34,6 +33,10 @@ namespace cu {
             return std::to_string(data_size);
         }
 
+    };
+
+    struct _EmptyPacket {
+        static inline const uint16_t packet_id = -1;
     };
 
     using EmptyHeader = PacketHeader<_EmptyPacket>;

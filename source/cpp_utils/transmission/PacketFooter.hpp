@@ -15,10 +15,12 @@ namespace cu {
 
     struct PacketFooter {
 
-        static constexpr auto _end_data = static_cast<uint16_t>(~EmptyHeader::_start_data);
+        using EndData = uint16_t;
+
+        static constexpr EndData _end_data = 'ne';
 
         uint16_t checksum = 0;
-        uint16_t value = _end_data;
+        EndData value = _end_data;
 
         bool is_valid() const { return value == _end_data; }
 

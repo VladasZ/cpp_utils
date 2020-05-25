@@ -32,11 +32,25 @@ namespace cu {
     static std::string byte_string(const T& data) {
         std::string result = "[";
         auto ptr = reinterpret_cast<const uint8_t*>(&data);
-        for (int i = 0; i < sizeof(data); i++) {
+        for (int i = 0; i < sizeof(T); i++) {
             result += std::to_string(static_cast<int>(ptr[i])) + " ";
         }
         result.pop_back();
         return result + "]";
+    }
+
+    static std::string char_string(const void* data, size_t size) {
+        std::string result;
+        auto ptr = reinterpret_cast<const uint8_t*>(data);
+        for (int i = 0; i < size; i++) {
+            result += ptr[i];
+        }
+        return result;
+    }
+
+    template <class T>
+    static std::string char_string(const T& data) {
+        return char_string(&data, sizeof(data));
     }
 
     template <class T, class U>

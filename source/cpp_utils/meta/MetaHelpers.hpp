@@ -102,18 +102,10 @@ namespace cu {
     }
 
     template<class Class>
-    struct has_to_string {
-    private:
-        template<class T>
-        static constexpr auto check(T*) -> typename
-        std::is_same<
-                decltype(std::declval<T>().to_string()),
-                std::string
-        >::type;
-
-        template<class>
-        static constexpr std::false_type check(...);
-
+    class has_to_string {
+        template<class T> static constexpr auto check(T*) -> typename
+        std::is_same<decltype(std::declval<T>().to_string()), std::string>::type;
+        template<class> static constexpr std::false_type check(...);
     public:
         static constexpr bool value = decltype(check<Class>(nullptr))::value;
     };

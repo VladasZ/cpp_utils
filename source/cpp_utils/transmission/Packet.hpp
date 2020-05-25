@@ -25,6 +25,7 @@ namespace cu {
         Data _data;
     public:
         PacketFooter footer { };
+        uint8_t endline = '\n';
 
         void set_data(const Data& data) {
             _data = data;

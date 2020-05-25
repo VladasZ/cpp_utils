@@ -45,8 +45,8 @@ namespace cu {
             return write(packet);
         }
 
-        int write_message(const std::string& error) {
-            return write_as_packet<BoardMessage>(error);
+        int write_message(const std::string& message) {
+            return write_as_packet<BoardMessage>(message);
         }
 
         bool is_readable() {
@@ -57,34 +57,35 @@ namespace cu {
             return mbed_serial.writeable();
         }
 
-        bool used = false;
+        bool used_read = false;
+        bool used_write = false;
 
         int read(void* data, int size) {
             wait_for_read();
-            used = true;
-            return mbed_serial.read(static_cast<uint8_t*>(data), size, [&] (auto) {
-                used = false;
+            used_read = true;
+            return mbed_serial.read(static_cast<uint8_t*>(data), size, [&] (auto m) {
+                used_read = false;
             });
             return 0;
         }
 
         int write(const void* data, int size) {
             wait_for_write();
-            used = true;
-            return mbed_serial.write(static_cast<const uint8_t*>(data), size, [&](auto) {
-                used = false;
+            used_write = true;
+            return mbed_serial.write(static_cast<const uint8_t*>(data), size, [&] (auto m) {
+                used_write = false;
             });
             return 0;
         }
 
         void wait_for_read() {
-            while (!is_readable()) { __NOP(); }
-            while (used) { __NOP(); }
+            //while (!is_readable()) { __NOP(); }
+            while (used_read) { __NOP(); }
         }
 
         void wait_for_write() {
-            while (!is_writeable()) { __NOP(); }
-            while (used) { __NOP(); }
+            //while (!is_writeable()) { __NOP(); }
+            while (used_write) { __NOP(); }
         }
 
     };
