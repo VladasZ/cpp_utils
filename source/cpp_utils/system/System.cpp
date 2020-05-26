@@ -108,7 +108,7 @@ Path System::pwd() {
 std::vector<Path> System::ls(const std::string& path, bool full_path) {
 #ifdef DESKTOP_BUILD
 #ifdef WINDOWS_BUILD
-    Path::Array names;
+    std::vector<Path> names;
     string search_path = path + "/*.*";
     WIN32_FIND_DATA fd;
     HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
