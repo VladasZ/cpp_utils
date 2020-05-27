@@ -34,32 +34,13 @@ namespace cu {
 
         static constexpr bool is_std_vector = cu::is_std_vector_v<Class>;
 
+        static constexpr bool is_std_map = cu::is_std_map_v<Class>;
+
         static constexpr bool is_base_type     = is_string || is_float || is_integer;
         static constexpr bool is_array_type    = is_std_vector;
-        static constexpr bool is_embedded_type = is_base_type || is_array_type;
+        static constexpr bool is_map_type      = is_std_map;
+        static constexpr bool is_embedded_type = is_base_type || is_array_type || is_map_type;
         static constexpr bool is_custom_type   = !is_embedded_type && !is_enum;
-
-        static constexpr bool is_array_of_pointers = [] {
-            if constexpr (is_array_type) {
-                return std::is_pointer_v<typename Class::value_type>;
-            }
-            else {
-                return false;
-            }
-        }();
-
-        static constexpr bool is_array_of_embedded_types = [] {
-            if constexpr (is_array_type) {
-                using ArrayValue = typename Class::value_type;
-                using ArrayValueInfo = TypeInfo<ArrayValue>;
-                return ArrayValueInfo::is_embedded_type;
-            }
-            else {
-                return false;
-            }
-        }();
-
-        static constexpr bool is_array_of_custom_types = is_array_type && !is_array_of_embedded_types;
 
         static std::string to_string() {
             return std::string() +
@@ -70,8 +51,7 @@ namespace cu {
                    ", is enum type: "             + (is_enum                  ? "true" : "false") + "\n" +
                    ", is custom type: "           + (is_custom_type           ? "true" : "false") + "\n" +
                    ", is pointer: "               + (is_pointer               ? "true" : "false") + "\n" +
-                   ", is array: "                 + (is_array_type            ? "true" : "false") + "\n" +
-                   ", is array of custom types: " + (is_array_of_custom_types ? "true" : "false");
+                   ", is array: "                 + (is_array_type            ? "true" : "false");
         }
 
     };

@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include <tuple>
+#include <map>
 #include <list>
+#include <tuple>
 #include <vector>
 #include <string>
 #include <type_traits>
@@ -34,6 +35,10 @@ namespace cu {
     template <class  > struct __is_vector                 : std::false_type { };
     template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
     template <class T> constexpr bool is_std_vector_v = __is_vector<remove_all_t<T>>::value;
+
+    template <class>            struct __is_map                 : std::false_type { };
+    template <class T, class U> struct __is_map<std::map<T, U>> : std::true_type  { };
+    template <class T> constexpr bool is_std_map_v = __is_map<remove_all_t<T>>::value;
 
     namespace _is_stl_container_impl{
         template <class T>                struct is_stl_container                       : std::false_type { };
