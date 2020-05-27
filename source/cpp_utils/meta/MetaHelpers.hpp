@@ -13,6 +13,7 @@
 #include <tuple>
 #include <vector>
 #include <string>
+#include <optional>
 #include <type_traits>
 
 
@@ -31,6 +32,9 @@ namespace cu {
     template <class T, class U> constexpr bool is_same_v    = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
     template <class T, class U> constexpr bool is_base_of_v = std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
 
+    template <class  > struct __is_optional                   : std::false_type { };
+    template <class T> struct __is_optional<std::optional<T>> : std::true_type { };
+    template <class T> constexpr bool is_std_optional_v = __is_optional<remove_all_t<T>>::value;
 
     template <class  > struct __is_vector                 : std::false_type { };
     template <class T> struct __is_vector<std::vector<T>> : std::true_type  { };
@@ -61,7 +65,7 @@ namespace cu {
     template <class T, class U> struct __is_pointer_to_member<T U::*> : std::true_type  { };
     template <class T> constexpr bool is_pointer_to_member_v = __is_pointer_to_member<remove_all_t<T>>::value;
 
-    template<class T>struct pointer_to_member_class;
+    template<class T> struct pointer_to_member_class;
     template<class Class, class Value> struct pointer_to_member_class<Value Class::*> { using type = Class; };
 
     template<class T> struct pointer_to_member_value;

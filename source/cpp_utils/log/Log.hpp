@@ -78,6 +78,14 @@ namespace cu {
                 result.pop_back();
                 return result + "]";
             }
+            else if constexpr (cu::is_std_optional_v<T>) {
+                if (value) {
+                    return to_string(value.value());
+                }
+                else {
+                    return "nullopt";
+                }
+            }
 #ifdef QSTRING_H
             else if constexpr (cu::is_same_v<T, QString>) {
                 return value.toStdString();
