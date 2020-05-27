@@ -16,6 +16,9 @@
 #include "Path.hpp"
 #endif
 
+#include "Log.hpp"
+
+
 namespace cu {
 
     class System {
@@ -48,6 +51,11 @@ namespace cu {
 
         static unsigned random(unsigned range) {
             return random() % range;
+        }
+
+        template <class T>
+        static void alert(const T& value) {
+            alert(Log::to_string(value));
         }
 
         static void alert(const std::string& message);

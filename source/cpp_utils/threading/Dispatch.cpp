@@ -8,17 +8,12 @@
 
 #ifndef MICROCONTROLLER_BUILD
 
-#include <mutex>
 #include <thread>
-#include <vector>
 
 #include "Dispatch.hpp"
 
 using namespace cu;
 
-static std::mutex _mutex;
-
-static std::vector<Dispatch::Task> _tasks;
 
 void Dispatch::async(Task task) {
     std::thread(task).detach();
@@ -32,9 +27,7 @@ void Dispatch::on_main(Task task) {
 
 void Dispatch::execute_tasks() {
 
-    if (_tasks.empty()) {
-        return;
-    }
+    if (_tasks.empty()) return;
 
     _mutex.lock();
     for (const auto& task : _tasks) {

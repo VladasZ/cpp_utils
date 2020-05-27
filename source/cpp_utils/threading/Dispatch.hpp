@@ -10,7 +10,10 @@
 
 #ifndef MICROCONTROLLER_BUILD
 
+#include <mutex>
+#include <vector>
 #include <functional>
+
 
 namespace cu {
 
@@ -24,6 +27,11 @@ namespace cu {
         static void on_main(Task);
 
         static void execute_tasks();
+
+    private:
+
+        static inline std::mutex _mutex;
+        static inline std::vector<Dispatch::Task> _tasks;
 
     };
 
