@@ -51,11 +51,6 @@ PathInfo::PathInfo() {
 
 PathInfo::PathInfo(const string& path) {
     auto info = get_info(path);
-    if (path.length() == 0) {
-        Log("KRIKET!");
-
-        Log("KRIKET!");
-    }
     _is_valid     = info.is_file || info.is_dir;
     _is_file      = info.is_file;
     _is_directory = info.is_dir;
