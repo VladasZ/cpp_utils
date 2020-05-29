@@ -83,7 +83,7 @@ namespace cu {
                     return to_string(value.value());
                 }
                 else {
-                    return "nullopt";
+                    return "(cu::Log nullopt)";
                 }
             }
 #ifdef QSTRING_H
@@ -94,7 +94,7 @@ namespace cu {
 #ifdef __OBJC__
             else if constexpr (cu::is_objc_object_v<T>) {
                 if (value == nullptr) {
-                    return "nil";
+                    return "(cu::Log nil)";
                 }
                 return [[value description] UTF8String];
             }
@@ -106,7 +106,7 @@ namespace cu {
                 return value ? "true" : "false";
             }
             else if constexpr (std::is_same_v<std::string, T>) {
-                if (value.empty()) return "\"Empty string\"";
+                if (value.empty()) return "(cu::Log Empty string)";
                 return value;
             }
             else {
