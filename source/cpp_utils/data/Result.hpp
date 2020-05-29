@@ -11,28 +11,38 @@
 #include "Log.hpp"
 #include "MetaHelpers.hpp"
 
+
 namespace cu {
 
     template<class T>
     class Result {
 
+        bool _found;
+        T _object;
+
     public:
 
-        const bool found;
-		const bool not_found;
-        const T object;
+        const std::optional<std::string> error;
 
-        constexpr Result() : found(false), not_found(!found), object(T { }) {
+        constexpr Result() : _found(false) { }
+
+        constexpr Result(const T& object) : _found(true), _object(object) { }
+
+        Result(const std::string& error) : _found(false), error(error) { }
+
+        constexpr bool found()     const { return  _found; }
+        constexpr bool not_found() const { return !_found; }
+
+        constexpr bool ok() const { return _found; }
+        constexpr bool errored() const { return !_found; }
+
+        constexpr const T& object() const {
+            if (not_found()) Fatal("Conversion of not found result of type: " + cu::class_name<T>);
+            return _object;
         }
 
-        constexpr Result(const T& object) : object(object), found(true), not_found(!found) {
-        }
-
-        constexpr operator T() const {
-            if (!found) {
-                Fatal("Conversion of not found result of type: " + cu::class_name<T>);
-            }
-            return object;
+        constexpr operator const T&() const {
+            return object();
         }
 
     };

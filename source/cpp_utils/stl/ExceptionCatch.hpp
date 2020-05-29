@@ -15,9 +15,7 @@
 [[maybe_unused]]
 static std::string what() {
     auto eptr = std::current_exception();
-    if (!eptr) { 
-        return "Invalid exception";
-    }
+    if (!eptr) Fatal("There is no exception.");
     try   { rethrow_exception(eptr); }
     catch (const std::exception& e) { return e.what(); }
     catch (const std::string&    e) { return e; }
