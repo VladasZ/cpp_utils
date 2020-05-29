@@ -10,7 +10,9 @@
 
 #ifdef ARDUINO
 #elif MBED_BUILD
-#include "mbed.h"
+#include <mbed.h>
+#elif USE_FULL_LL_DRIVER
+#include <stm32f7xx_ll_utils.h>
 #else
 #include <thread>
 #include "Path.hpp"
@@ -27,10 +29,11 @@ namespace cu {
 
         static void sleep(double interval) {
 #ifdef ARDUINO
-        delay(1000.0 * interval);
+            delay(1000.0 * interval);
 #elif MBED_BUILD
             wait_us(1000000.0 * interval);
-            //ThisThread::sleep_for(1000000 * interval);
+#elif USE_FULL_LL_DRIVER
+            LL_mDelay(1000.0 * interval);
 #else
             std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
 #endif
@@ -39,6 +42,8 @@ namespace cu {
         static unsigned random() {
 #ifdef APPLE
             return arc4random();
+#elif USE_FULL_LL_DRIVER
+            return 0;
 #else
             static bool first_call = true;
             if (first_call) {
