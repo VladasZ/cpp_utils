@@ -21,6 +21,10 @@
 
 #define UTILS_LOG_ENABLED
 
+#ifdef MICROCONTROLLER_BUILD
+#include <stm32f7xx_ll_utils.h>
+__weak void __cu_log_print_impl(const std::string&);
+#endif
 
 namespace cu {
 
@@ -44,6 +48,8 @@ namespace cu {
             Serial.println(result_message.c_str());
 #elif ANDROID_BUILD
             __android_log_print(ANDROID_LOG_DEBUG, "C++ Log", "%s", result_message.c_str());
+#elif MICROCONTROLLER_BUILD
+            __cu_log_print_impl(result_message);
 #else
             std::cout << result_message << std::endl;
 #endif
@@ -126,7 +132,7 @@ namespace cu {
 
 #define Log(message) cu::Log::log(message, __FILE__, __func__, __LINE__)
 
-#define Separator std::cout << "========================================" << std::endl
+#define Separator Log("========================================")
 
 #ifdef __cpp_exceptions
 #define Fatal(message) { Log(message); throw std::runtime_error(message); };

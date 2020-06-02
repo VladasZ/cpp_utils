@@ -8,7 +8,7 @@
 
 #pragma once
 
-#ifdef MICROCONTROLLER_BUILD
+#ifdef MBED_BUILD
 
 #include "mbed.h"
 

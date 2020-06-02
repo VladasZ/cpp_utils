@@ -8,12 +8,11 @@
 
 #pragma once
 
-#ifdef MICROCONTROLLER_BUILD
+#ifdef USE_FULL_LL_DRIVER
 
 #include <stdint.h>
 
-#include <mbed.h>
-
+#include "UART.hpp"
 #include "Packet.hpp"
 #include "BoardMessage.hpp"
 
@@ -22,70 +21,27 @@ namespace cu {
 
     class SerialInterface {
 
-        Serial& mbed_serial;
-
     public:
 
-        SerialInterface(Serial& mbed_serial) : mbed_serial(mbed_serial) { }
-
         template<class T>
-        int read(T& value) {
-            return read(&value, sizeof(T));
+        bool get(T& value) {
+            return UART::get(value);
         }
 
         template <class T>
-        int write(const T& value) {
-            return write(&value, sizeof(T));
+        void write(const T& value) {
+            UART::write(value);
         }
 
         template <class T>
-        int write_as_packet(const T& value) {
+        void write_as_packet(const T& value) {
             static Packet<T> packet;
             packet.set_data(value);
-            return write(packet);
+            write(packet);
         }
 
-        int write_message(const std::string& message) {
-            return write_as_packet<BoardMessage>(message);
-        }
-
-        bool is_readable() {
-            return mbed_serial.readable();
-        }
-
-        bool is_writeable() {
-            return mbed_serial.writeable();
-        }
-
-        bool used_read = false;
-        bool used_write = false;
-
-        int read(void* data, int size) {
-            wait_for_read();
-            used_read = true;
-            return mbed_serial.read(static_cast<uint8_t*>(data), size, [&] (auto m) {
-                used_read = false;
-            });
-            return 0;
-        }
-
-        int write(const void* data, int size) {
-            wait_for_write();
-            used_write = true;
-            return mbed_serial.write(static_cast<const uint8_t*>(data), size, [&] (auto m) {
-                used_write = false;
-            });
-            return 0;
-        }
-
-        void wait_for_read() {
-            //while (!is_readable()) { __NOP(); }
-            while (used_read) { __NOP(); }
-        }
-
-        void wait_for_write() {
-            //while (!is_writeable()) { __NOP(); }
-            while (used_write) { __NOP(); }
+        void write_message(const std::string& message) {
+            write_as_packet<BoardMessage>(message);
         }
 
     };
