@@ -40,6 +40,8 @@ namespace cu::String {
 
     std::string to_lower(const std::string& string);
 
+    std::string all_chars();
+
     template<class T>
     static std::string from_container(const T& container) {
         if (container.empty()) return "[]";

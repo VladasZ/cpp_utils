@@ -122,3 +122,11 @@ string String::to_lower(const string& str) {
     }
     return result;
 }
+
+string String::all_chars() {
+    string result;
+    for (char i = 0; i < 127; i++) {
+        result += i;
+    }
+    return result;
+}
