@@ -21,8 +21,10 @@
 
 #define UTILS_LOG_ENABLED
 
-#ifdef MICROCONTROLLER_BUILD
+#ifdef STM32_F7
 #include <stm32f7xx_ll_utils.h>
+#endif
+#ifdef MICROCONTROLLER_BUILD
 __weak void __cu_log_print_impl(const std::string&);
 #endif
 
