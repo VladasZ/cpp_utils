@@ -20,6 +20,7 @@
 #endif
 
 #define UTILS_LOG_ENABLED
+//#define UTILS_LOG_FUNCTION_NAMES
 
 #ifdef STM32_F7
 #include <stm32f7xx_ll_utils.h>
@@ -62,7 +63,11 @@ namespace cu {
             if (clean_file.back() == 'm') {
                 return func + " - " + to_string(line) + "] ";
             }
+#ifdef UTILS_LOG_FUNCTION_NAMES
             return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
+#else
+            return "[" + clean_file + " - " + to_string(line) + "]";
+#endif
         }
 
         template <class T>
@@ -129,6 +134,7 @@ namespace cu {
 }
 
 #define VarString(variable) (std::string() + #variable + " : " + cu::Log::to_string(variable))
+#define IntString(variable) (std::string() + #variable + " : " + cu::Log::to_string(static_cast<int>(variable)))
 
 #ifdef UTILS_LOG_ENABLED
 
