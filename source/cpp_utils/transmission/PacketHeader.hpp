@@ -18,7 +18,7 @@ namespace cu {
 
         using StartData = uint16_t;
 
-        static inline const StartData _start_data = 'ts';
+        static inline const StartData _start_data = 'gb';
 
         StartData header = _start_data;
         uint16_t data_size = sizeof(Data);

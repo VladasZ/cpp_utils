@@ -17,7 +17,7 @@ namespace cu {
 
     class BoardMessage {
 
-        static inline const size_t size = 128;
+        static inline const size_t size = 256;
 
         std::array<char, size> message { 0 };
 
