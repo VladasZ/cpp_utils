@@ -139,6 +139,8 @@ namespace cu {
 #ifdef UTILS_LOG_ENABLED
 
 #define Log(message) cu::Log::log(message, __FILE__, __func__, __LINE__)
+#define LogInt(message) Log(IntString(message))
+#define CleanLog(message) std::cout << cu::Log::to_string(message) << std::endl;
 
 #define Separator Log("========================================")
 
@@ -153,6 +155,7 @@ namespace cu {
 #define Separator
 
 #define Log(message)
+#define CleanLog(message)
 #define Fatal(message)
 
 #endif
