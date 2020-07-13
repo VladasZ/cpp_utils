@@ -84,7 +84,7 @@ namespace bitwise {
         static_assert(size<T> <= 64, "bitwise::to_string value is too big");
         std::string result;
         for (int i = size<T> - 1; i >= 0; i--) {
-            result += std::to_string(get_byte(i, value));
+            result += std::to_string(get_bit(i, value));
             if (i % 8 == 0) {
                 result += " ";
             }

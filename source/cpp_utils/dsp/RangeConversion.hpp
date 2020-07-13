@@ -39,6 +39,10 @@ namespace cu {
             return result;
         }
 
+        float convert_back(float value) const {
+            return value / _target_max;
+        }
+
         float min() const;
         float max() const;
 
