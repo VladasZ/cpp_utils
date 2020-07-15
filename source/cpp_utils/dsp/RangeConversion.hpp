@@ -43,19 +43,19 @@ namespace cu {
             return value / _target_max;
         }
 
-        float min() const;
-        float max() const;
+        float min() const { return _min; }
+        float max() const { return _max; }
 
-        void set_min(float);
-        void set_max(float);
+        void set_min(float min) { _min = min; _update_range(); }
+        void set_max(float max) { _max = max; _update_range(); }
 
-        void set_target_min(float);
-        void set_target_max(float);
+        void set_target_min(float min) { _target_min = min; _update_converted_range(); }
+        void set_target_max(float max) { _target_max = max; _update_converted_range(); }
 
     protected:
 
-        virtual void _update_range();
-        void _update_converted_range();
+        virtual void _update_range() { _value_range = _max - _min; }
+        void _update_converted_range() { _converted_range = _target_max - _target_min; }
 
     };
 
