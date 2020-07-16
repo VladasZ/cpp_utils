@@ -8,9 +8,34 @@
 
 #pragma once
 
+#include <chrono>
 #include <cstdint>
 
-namespace cu::Time {
-    uint64_t now();
-    uint64_t interval();
+namespace cu {
+
+    using nanoseconds  = std::chrono::nanoseconds;
+    using milliseconds = std::chrono::milliseconds;
+    using seconds      = std::chrono::seconds;
+    using minutes      = std::chrono::minutes;
+    using hours        = std::chrono::hours;
+
+    template<class T>
+    class Time {
+
+    public:
+
+        static inline uint64_t now() {
+            return duration_cast<T>(std::chrono::system_clock::now().time_since_epoch()).count();
+        }
+
+        static inline uint64_t interval() {
+            static uint64_t prev_interval = 1;
+            auto result = now() - prev_interval;
+            prev_interval = now();
+            if (result == 0) return 1;
+            return result;
+        }
+
+    };
+
 }
