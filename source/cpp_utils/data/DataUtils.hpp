@@ -62,7 +62,7 @@ namespace cu {
     static Checksum checksum(const void* data, size_t size) {
         auto ptr = static_cast<const uint8_t*>(data);
         Checksum result { 0 };
-        for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
             result += ptr[i];
         }
         return result;
