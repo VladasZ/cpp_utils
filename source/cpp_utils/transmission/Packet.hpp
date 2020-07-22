@@ -9,7 +9,6 @@
 #pragma once
 
 #include "DataUtils.hpp"
-#include "NonCopyable.hpp"
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
 
@@ -17,7 +16,7 @@
 namespace cu {
 
     template<class Data>
-    class Packet : NonCopyable {
+    class Packet {
 
     public:
         const PacketHeader<Data> header { };

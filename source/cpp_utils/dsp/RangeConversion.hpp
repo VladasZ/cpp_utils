@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "Log.hpp"
-
 
 namespace cu {
 
@@ -51,10 +49,6 @@ namespace cu {
 
         void set_target_min(float min) { _target_min = min; _update_converted_range(); }
         void set_target_max(float max) { _target_max = max; _update_converted_range(); }
-
-        std::string to_string() const {
-            return VarString(_min) + " " + VarString(_max) + " " + VarString(_target_min) + " " + VarString(_target_max);
-        }
 
     protected:
 
