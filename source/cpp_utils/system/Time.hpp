@@ -25,7 +25,7 @@ namespace cu {
     public:
 
         static inline uint64_t now() {
-            return duration_cast<T>(std::chrono::system_clock::now().time_since_epoch()).count();
+            return std::chrono::duration_cast<T>(std::chrono::system_clock::now().time_since_epoch()).count();
         }
 
         static inline uint64_t interval() {
