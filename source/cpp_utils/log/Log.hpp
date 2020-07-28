@@ -86,7 +86,7 @@ namespace cu {
                 if (value.empty()) return "[]";
                 std::string result = "[";
                 for (auto val : value) {
-                    result += Log::to_string((int)val) + " ";
+                    result += Log::to_string(val) + " ";
                 }
                 result.pop_back();
                 return result + "]";
