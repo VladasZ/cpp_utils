@@ -122,6 +122,9 @@ namespace cu {
                 if (value.empty()) return "(cu::Log Empty string)";
                 return value;
             }
+            else if constexpr (std::is_same_v<std::wstring, T>) {
+                return { value.begin(), value.end() };
+            }
             else {
                 std::stringstream buffer;
                 buffer << value;
