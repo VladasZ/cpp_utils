@@ -13,9 +13,13 @@
 #include <tuple>
 #include <vector>
 #include <string>
-#include <optional>
 #include <type_traits>
 
+#ifdef EXPERIMENTAL_OPTIONAL
+#include <experimental/optional>
+#else
+#include <optional>
+#endif
 
 namespace cu {
 
