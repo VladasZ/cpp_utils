@@ -15,11 +15,7 @@
 #include <string>
 #include <type_traits>
 
-#ifdef EXPERIMENTAL_OPTIONAL
-#include <experimental/optional>
-#else
-#include <optional>
-#endif
+#include "STDExperimental.hpp"
 
 namespace cu {
 

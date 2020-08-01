@@ -40,11 +40,8 @@
 #include <type_traits>
 #include <utility>
 
-#ifdef EXPERIMENTAL_OPTIONAL
-#include <experimental/optional>
-#else
-#include <optional>
-#endif
+#include "STDExperimental.hpp"
+
 
 namespace magic_enum {
 
