@@ -22,3 +22,13 @@ paths NewPath::ls(const std::string& path) {
 fs::path NewPath::pwd() {
 	return fs::current_path();
 }
+
+void NewPath::write(const std::string& path, const std::string& text) {
+	fs::ofstream stream { path, fs::ofstream::app };
+	std::string new_line = text + "\n";
+	stream.write(new_line.c_str(), new_line.size());
+}
+
+void NewPath::remove(const std::string& path) {
+	fs::remove(path);
+}

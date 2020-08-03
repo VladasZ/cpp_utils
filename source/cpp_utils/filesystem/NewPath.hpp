@@ -26,6 +26,10 @@ namespace cu {
 		static paths ls(const std::string& = ".");
 		static fs::path pwd();
 
+		static void write(const std::string& path, const std::string& text);
+
+		static void remove(const std::string&);
+
 	};
 
 }

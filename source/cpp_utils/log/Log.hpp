@@ -20,14 +20,18 @@
 #endif
 
 #define UTILS_LOG_ENABLED
-//#define UTILS_LOG_FUNCTION_NAMES
+#define UTILS_LOG_FUNCTION_NAMES
 
 #ifdef STM32_F7
 #include <stm32f7xx_ll_utils.h>
 #endif
 
 #ifdef CU_CUSTOM_LOG_OUTPUT
-__weak void __cu_log_print_impl(const std::string&);
+[[weak]] void __cu_log_print_impl(const std::string&);
+#endif
+
+#ifdef CU_LOG_TO_FILE
+#include "NewPath.hpp"
 #endif
 
 namespace cu {
@@ -46,7 +50,7 @@ namespace cu {
             return pos ? pos + 1 : path;
         }
 
-        static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
+        static inline void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
             std::string result_message = location(file, func, line) + " " + message;
 #ifdef CU_CUSTOM_LOG_OUTPUT
             __cu_log_print_impl(result_message);
@@ -56,6 +60,15 @@ namespace cu {
             Serial.println(result_message.c_str());
 #else
             std::cout << result_message << std::endl;
+#ifdef CU_LOG_TO_FILE
+            static bool first_call = true;
+            static const std::string log_file = "cu_log.txt";
+            if (first_call) {
+                first_call = false;
+                NewPath::remove(log_file);
+            }
+            NewPath::write(log_file, result_message);
+#endif
 #endif
         }
 
