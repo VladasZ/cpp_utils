@@ -37,9 +37,11 @@
 #include <iosfwd>
 #include <limits>
 #include <string_view>
-#include <optional>
 #include <type_traits>
 #include <utility>
+
+#include "STDExperimental.hpp"
+
 
 namespace magic_enum {
 
