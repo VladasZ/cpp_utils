@@ -25,7 +25,8 @@
 #ifdef STM32_F7
 #include <stm32f7xx_ll_utils.h>
 #endif
-#ifdef MICROCONTROLLER_BUILD
+
+#ifdef CU_CUSTOM_LOG_OUTPUT
 __weak void __cu_log_print_impl(const std::string&);
 #endif
 
@@ -47,12 +48,12 @@ namespace cu {
 
         static void internal_log(const std::string& message, const std::string& file, const std::string& func, int line) {
             std::string result_message = location(file, func, line) + " " + message;
-#ifdef ARDUINO
-            Serial.println(result_message.c_str());
+#ifdef CU_CUSTOM_LOG_OUTPUT
+            __cu_log_print_impl(result_message);
 #elif ANDROID_BUILD
             __android_log_print(ANDROID_LOG_DEBUG, "C++ Log", "%s", result_message.c_str());
-#elif MICROCONTROLLER_BUILD
-            __cu_log_print_impl(result_message);
+#elif ARDUINO
+            Serial.println(result_message.c_str());
 #else
             std::cout << result_message << std::endl;
 #endif
@@ -145,7 +146,7 @@ namespace cu {
 #define LogInt(message) Log(IntString(message))
 #define CleanLog(message) std::cout << cu::Log::to_string(message) << std::endl;
 
-#define Separator Log("========================================")
+#define SeparatorLine Log("========================================")
 
 #ifdef __cpp_exceptions
 #define Fatal(message) { Log(message); throw std::runtime_error(message); };
