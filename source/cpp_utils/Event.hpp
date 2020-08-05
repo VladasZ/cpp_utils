@@ -55,18 +55,14 @@ namespace cu {
 
         template <class T>
         void operator = (T& param) {
-            if constexpr (one_param) {
-                using FirstType = std::tuple_element_t<0, std::tuple<Params...>>;
-                if constexpr (std::is_same_v<T, FirstType>) {
-                    subscribers.push_back([&](auto value) { param = value; });
-                }
-                else {
-                    subscribers.push_back(param);
-                }
-            }
-            else {
-                subscribers.push_back(param);
-            }
+            static_assert(one_param);
+            using FirstType = std::tuple_element_t<0, std::tuple<Params...>>;
+            static_assert(std::is_same_v<T, FirstType>);
+            subscribers.push_back([&](auto value) { param = value; });
+        }
+
+        void operator = (const Callback& callback) {
+            subscribers.push_back(callback);
         }
 
         void link(This& event) {
