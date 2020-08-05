@@ -53,7 +53,7 @@ namespace cu {
             });
         }
 
-        template <class T>
+        template <class T, class = std::enable_if_t<!std::is_same_v<T, Callback>>>
         void operator = (T& param) {
             static_assert(one_param);
             using FirstType = std::tuple_element_t<0, std::tuple<Params...>>;
