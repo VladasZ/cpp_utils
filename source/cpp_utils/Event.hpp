@@ -31,6 +31,9 @@ namespace cu {
 
     private:
 
+        static constexpr auto params_count = sizeof...(Params);
+        static constexpr bool one_param = params_count == 1;
+
         std::vector<Callback> subscribers;
         std::vector<ObjectSubscriber> object_subscribers;
         std::vector<This*> linked_events;
@@ -50,8 +53,20 @@ namespace cu {
             });
         }
 
-        void operator = (Callback action) {
-            subscribers.push_back(action);
+        template <class T>
+        void operator = (T& param) {
+            if constexpr (one_param) {
+                using FirstType = std::tuple_element_t<0, std::tuple<Params...>>;
+                if constexpr (std::is_same_v<T, FirstType>) {
+                    subscribers.push_back([&](auto value) { param = value; });
+                }
+                else {
+                    subscribers.push_back(param);
+                }
+            }
+            else {
+                subscribers.push_back(param);
+            }
         }
 
         void link(This& event) {
