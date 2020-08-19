@@ -55,3 +55,5 @@ inline cu::log::Logger& operator<<(cu::log::Logger& logger, const T& message) {
 #define IntString(variable) (std::string() + #variable + " : " + cu::log::to_string(static_cast<int>(variable)))
 
 #define Logvar(variable) Log << VarString(variable)
+
+#define CleanLog(message) std::cout << cu::log::to_string(message) << std::endl;
