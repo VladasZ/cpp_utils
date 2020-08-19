@@ -40,14 +40,14 @@
 #pragma mark - View Lifecycle
 
 + (void)setup {
-    Log("Setup");
+    Log << "Setup";
     static PeripheralManagerBridge* instance = nil;
     instance = [[PeripheralManagerBridge alloc] init];
 }
 
 - (instancetype)init {
     // Start up the CBPeripheralManager
-    Log("Init");
+    Log << "Init";
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     return self;
 }
@@ -66,7 +66,7 @@
     }
     
     // We're in CBPeripheralManagerStatePoweredOn state...
-    Log(@"self.peripheralManager powered on.");
+    Log << @"self.peripheralManager powered on.";
     
     // ... so build our service.
     
@@ -92,7 +92,7 @@
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
-    Log(@"Central subscribed to characteristic");
+    Log << @"Central subscribed to characteristic";
     
     
     static int a = 0;
@@ -114,7 +114,7 @@
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic
 {
-    Log(@"Central unsubscribed from characteristic");
+    Log << @"Central unsubscribed from characteristic";
 }
 
 
@@ -144,7 +144,7 @@
             // It did, so mark it as sent
             sendingEOM = NO;
             
-            Log(@"Sent: EOM");
+            Log << @"Sent: EOM";
         }
         
         // It didn't send, so we'll exit and wait for peripheralManagerIsReadyToUpdateSubscribers to call sendData again
@@ -207,7 +207,7 @@
                 // It sent, we're all done
                 sendingEOM = NO;
                 
-                Log(@"Sent: EOM");
+                Log << @"Sent: EOM";
             }
             
             return;
@@ -221,7 +221,7 @@
  */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
-    Ping;
+    Log;
     // Start sending again
     [self sendData];
 }

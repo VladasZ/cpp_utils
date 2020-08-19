@@ -36,7 +36,7 @@ namespace cu::array {
         if (array.empty()) return "[]";
         std::string result = "[";
         for (auto& val : array) {
-            result += cu::Log::to_string((int)val) + " ";
+            result += cu::log::to_string((int)val) + " ";
         }
         result.pop_back();
         return result + "]";

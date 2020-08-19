@@ -60,7 +60,7 @@ namespace cu {
 
         template <class T>
         static void alert(const T& value) {
-            alert(Log::to_string(value));
+            alert(log::to_string(value));
         }
 
         static void alert(const std::string& message);

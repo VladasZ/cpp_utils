@@ -158,7 +158,7 @@ void System::execute(const std::string& command) {
         Fatal(what());
     }
     pclose(pipe);
-    Log(result);
+    Log << result;
 #endif
 }
 

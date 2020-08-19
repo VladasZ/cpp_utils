@@ -36,7 +36,7 @@
 
 - (instancetype)init {
     // Start up the CBCentralManager
-    Ping
+    Log;
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
     // And somewhere to store the incoming data
@@ -57,7 +57,7 @@
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
     
-    Ping
+    Log;
     
     if (central.state != CBManagerStatePoweredOn) {
         // In a real app, you'd deal with all the states correctly
@@ -82,7 +82,7 @@
 
     [self.centralManager scanForPeripheralsWithServices:nil options:nil];
 
-    Log(@"Scanning started");
+    Log << @"Scanning started";
 }
 
 
@@ -100,11 +100,11 @@
         // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
         self.discoveredPeripheral = peripheral;
 
-        Log(peripheral.name);
+        Log << peripheral.name;
 
         // And connect
       //  Log(@"Connecting to peripheral");
-        Log(peripheral);
+        Log << peripheral;
        // [self.centralManager connectPeripheral:peripheral options:nil];
     }
 }
@@ -114,7 +114,7 @@
  */
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    Log(@"Failed to connect to:");
+    Log << @"Failed to connect to:";
     Logvar(peripheral);
     Logvar([error localizedDescription]);
     [self cleanup];
@@ -125,11 +125,11 @@
  */
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    Log(@"Peripheral Connected");
+    Log << @"Peripheral Connected";
     
     // Stop scanning
     [self.centralManager stopScan];
-    Log(@"Scanning stopped");
+    Log << @"Scanning stopped";
     
     // Clear the data that we may already have
     [self.data setLength:0];
@@ -202,7 +202,7 @@
     // Have we got everything we need?
     if ([stringFromData isEqualToString:@"EOM"]) {
         
-        Log("GOT DOTO!");
+        Log << "GOT DOTO!";
         Logvar([[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding]);
         
         // Cancel our subscription to the characteristic

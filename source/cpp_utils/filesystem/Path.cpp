@@ -29,10 +29,10 @@ Path::Path(const std::string& path)  {
 }
 
 void Path::trim_relative() {
-    auto last_component = Log::last_path_component(_path);
+    auto last_component = log::last_path_component(_path);
     if (last_component == "..") {
         String::drop_last(_path, 3);
-        auto folder_name = Log::last_path_component(_path);
+        auto folder_name = log::last_path_component(_path);
         String::drop_last(_path, folder_name.size() + 1);
     }
     else if (last_component == ".") {
@@ -60,14 +60,14 @@ std::vector<Path> Path::ls() const {
 }
 
 Path Path::parent() const {
-    auto last_part = Log::last_path_component(_path);
+    auto last_part = log::last_path_component(_path);
     std::string parent = _path;
     String::drop_last(parent, last_part.size() + 1);
     return parent;
 }
 
 std::string Path::file_name() const {
-    return Log::last_path_component(_path);
+    return log::last_path_component(_path);
 }
 
 std::string Path::to_string() const {
