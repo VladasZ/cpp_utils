@@ -25,7 +25,7 @@ fs::path NewPath::pwd() {
 
 void NewPath::write(const std::string& path, const std::string& text) {
 	fs::ofstream stream { path, fs::ofstream::app };
-	std::string new_line = text + "\n";
+	std::string new_line = text;
 	stream.write(new_line.c_str(), new_line.size());
 }
 

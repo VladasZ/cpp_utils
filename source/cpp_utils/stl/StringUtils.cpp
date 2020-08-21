@@ -78,11 +78,11 @@ string String::remove(const string& str, char symbol) {
     return result;
 }
 
-void String::drop_first(string& str, unsigned count) {
+void String::drop_first(string& str, size_t count) {
     str.erase(0, count);
 }
 
-void String::drop_last(string& str, unsigned count) {
+void String::drop_last(string& str, size_t count) {
     str.erase(str.size() - count);
 }
 

@@ -18,6 +18,13 @@
 
 namespace cu::log {
 
+    struct Settings {
+        bool log_to_file        = false;
+        bool log_function_names = false;
+    };
+
+    inline Settings settings;
+
     static std::string last_path_component(const std::string& path) {
 #ifdef WINDOWS_BUILD
         static const char slash = '\\';
@@ -72,8 +79,7 @@ namespace cu::log {
             return value ? "true" : "false";
         }
         else if constexpr (std::is_same_v<std::string, T>) {
-            if (value.empty()) return "(cu::Log Empty string)";
-            return value;
+            return value.empty() ? "(cu::Log Empty string)" : value;
         }
         else if constexpr (std::is_same_v<std::wstring, T>) {
             return { value.begin(), value.end() };
@@ -91,11 +97,12 @@ namespace cu::log {
         if (clean_file.back() == 'm') {
             return func + " - " + to_string(line) + "] ";
         }
-#ifdef UTILS_LOG_FUNCTION_NAMES
-        return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
-#else
-        return "[" + clean_file + " - " + to_string(line) + "]";
-#endif
+        if (settings.log_function_names) {
+            return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
+        }
+        else {
+            return "[" + clean_file + " - " + to_string(line) + "]";
+        }
     }
 
 }

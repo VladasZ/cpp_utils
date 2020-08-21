@@ -27,9 +27,9 @@ namespace cu::String {
 
     std::string remove(const std::string& string, char symbol);
 
-    void drop_first(std::string& string, unsigned count = 1);
+    void drop_first(std::string& string, size_t count = 1);
 
-    void drop_last(std::string& string, unsigned count = 1);
+    void drop_last(std::string& string, size_t count = 1);
 
     void trim(std::string& string);
 
