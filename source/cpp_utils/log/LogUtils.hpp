@@ -75,6 +75,9 @@ namespace cu::log {
         else if constexpr (has_to_string_v<T>) {
             return value.to_string();
         }
+        else if constexpr (std::is_pointer_v<T> && has_to_string_v<std::remove_pointer_t<T>>) {
+            return value->to_string();
+        }
         else if constexpr (std::is_same_v<bool, T>) {
             return value ? "true" : "false";
         }
