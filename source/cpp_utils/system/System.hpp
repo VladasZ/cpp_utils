@@ -78,6 +78,10 @@ namespace cu {
 
 #endif
 
+#ifdef _WINDOWS
+        static std::vector<std::string> get_com_ports();
+#endif
+
     };
 
 }

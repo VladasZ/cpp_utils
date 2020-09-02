@@ -72,11 +72,11 @@ const Path System::user_name() {
 const Path& System::home() {
     static const Path result = [] {
 #ifdef WINDOWS
-        Path users { "C:/Users" };
+        Path users{ "C:/Users" };
 #elif APPLE
-        Path users { "/Users" };
+        Path users{ "/Users" };
 #else
-        Path users { "/home" };
+        Path users{ "/home" };
 #endif
         return users / user_name();
     }();
@@ -97,7 +97,7 @@ Path System::pwd() {
     chdir("/path/to/change/directory/to");
     getcwd(cwd, sizeof(cwd));
     printf("Current working dir: %s\n", cwd);
-    return Path { cwd };
+    return Path{ cwd };
 #endif
 #else
     return "Not implemented on this platform";
@@ -160,6 +160,29 @@ void System::execute(const std::string& command) {
     pclose(pipe);
     Log << result;
 #endif
+}
+
+#endif
+
+#ifdef _WINDOWS
+
+vector<string> System::get_com_ports() {
+
+    static TCHAR path[5000];
+
+    vector<string> result;
+
+    for (auto i = 0; i < 255; i++) {
+        std::string name = "COM" + std::to_string(i);
+
+        if (QueryDosDevice(name.c_str(), (LPSTR)path, 5000)) {
+            result.push_back(name);
+        }
+
+    }
+
+    return result;
+
 }
 
 #endif
