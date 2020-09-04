@@ -26,7 +26,7 @@ namespace cu::log {
     inline Settings settings;
 
     static std::string last_path_component(const std::string& path) {
-#ifdef WINDOWS_BUILD
+#ifdef _WINDOWS
         static const char slash = '\\';
 #else
         static const char slash = '/';

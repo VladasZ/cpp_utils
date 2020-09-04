@@ -121,33 +121,33 @@ void _SHA3_IMPL::processBlock(const void* data)
     }
 
     // temporary
-    uint64_t one;
+    uint64_t _one;
 
     // Rho Pi
     uint64_t last = m_hash[1];
-    one = m_hash[10]; m_hash[10] = rotateLeft(last,  1); last = one;
-    one = m_hash[ 7]; m_hash[ 7] = rotateLeft(last,  3); last = one;
-    one = m_hash[11]; m_hash[11] = rotateLeft(last,  6); last = one;
-    one = m_hash[17]; m_hash[17] = rotateLeft(last, 10); last = one;
-    one = m_hash[18]; m_hash[18] = rotateLeft(last, 15); last = one;
-    one = m_hash[ 3]; m_hash[ 3] = rotateLeft(last, 21); last = one;
-    one = m_hash[ 5]; m_hash[ 5] = rotateLeft(last, 28); last = one;
-    one = m_hash[16]; m_hash[16] = rotateLeft(last, 36); last = one;
-    one = m_hash[ 8]; m_hash[ 8] = rotateLeft(last, 45); last = one;
-    one = m_hash[21]; m_hash[21] = rotateLeft(last, 55); last = one;
-    one = m_hash[24]; m_hash[24] = rotateLeft(last,  2); last = one;
-    one = m_hash[ 4]; m_hash[ 4] = rotateLeft(last, 14); last = one;
-    one = m_hash[15]; m_hash[15] = rotateLeft(last, 27); last = one;
-    one = m_hash[23]; m_hash[23] = rotateLeft(last, 41); last = one;
-    one = m_hash[19]; m_hash[19] = rotateLeft(last, 56); last = one;
-    one = m_hash[13]; m_hash[13] = rotateLeft(last,  8); last = one;
-    one = m_hash[12]; m_hash[12] = rotateLeft(last, 25); last = one;
-    one = m_hash[ 2]; m_hash[ 2] = rotateLeft(last, 43); last = one;
-    one = m_hash[20]; m_hash[20] = rotateLeft(last, 62); last = one;
-    one = m_hash[14]; m_hash[14] = rotateLeft(last, 18); last = one;
-    one = m_hash[22]; m_hash[22] = rotateLeft(last, 39); last = one;
-    one = m_hash[ 9]; m_hash[ 9] = rotateLeft(last, 61); last = one;
-    one = m_hash[ 6]; m_hash[ 6] = rotateLeft(last, 20); last = one;
+    _one = m_hash[10]; m_hash[10] = rotateLeft(last,  1); last = _one;
+    _one = m_hash[ 7]; m_hash[ 7] = rotateLeft(last,  3); last = _one;
+    _one = m_hash[11]; m_hash[11] = rotateLeft(last,  6); last = _one;
+    _one = m_hash[17]; m_hash[17] = rotateLeft(last, 10); last = _one;
+    _one = m_hash[18]; m_hash[18] = rotateLeft(last, 15); last = _one;
+    _one = m_hash[ 3]; m_hash[ 3] = rotateLeft(last, 21); last = _one;
+    _one = m_hash[ 5]; m_hash[ 5] = rotateLeft(last, 28); last = _one;
+    _one = m_hash[16]; m_hash[16] = rotateLeft(last, 36); last = _one;
+    _one = m_hash[ 8]; m_hash[ 8] = rotateLeft(last, 45); last = _one;
+    _one = m_hash[21]; m_hash[21] = rotateLeft(last, 55); last = _one;
+    _one = m_hash[24]; m_hash[24] = rotateLeft(last,  2); last = _one;
+    _one = m_hash[ 4]; m_hash[ 4] = rotateLeft(last, 14); last = _one;
+    _one = m_hash[15]; m_hash[15] = rotateLeft(last, 27); last = _one;
+    _one = m_hash[23]; m_hash[23] = rotateLeft(last, 41); last = _one;
+    _one = m_hash[19]; m_hash[19] = rotateLeft(last, 56); last = _one;
+    _one = m_hash[13]; m_hash[13] = rotateLeft(last,  8); last = _one;
+    _one = m_hash[12]; m_hash[12] = rotateLeft(last, 25); last = _one;
+    _one = m_hash[ 2]; m_hash[ 2] = rotateLeft(last, 43); last = _one;
+    _one = m_hash[20]; m_hash[20] = rotateLeft(last, 62); last = _one;
+    _one = m_hash[14]; m_hash[14] = rotateLeft(last, 18); last = _one;
+    _one = m_hash[22]; m_hash[22] = rotateLeft(last, 39); last = _one;
+    _one = m_hash[ 9]; m_hash[ 9] = rotateLeft(last, 61); last = _one;
+    _one = m_hash[ 6]; m_hash[ 6] = rotateLeft(last, 20); last = _one;
                       m_hash[ 1] = rotateLeft(last, 44);
 
     // Chi

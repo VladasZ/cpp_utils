@@ -15,15 +15,15 @@ namespace cu {
 
 		std::string _path;
 		char* _data = nullptr;
-        unsigned _size;
+        size_t _size;
 
 	public:
 
-		File(char* data, unsigned size);
+		File(char* data, size_t size);
 		File(const std::string& path);
 		~File();
 
-        unsigned size() const;
+		size_t size() const;
 		char* data() const;
 
 		std::string to_string() const;

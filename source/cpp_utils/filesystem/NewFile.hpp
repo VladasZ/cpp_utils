@@ -35,9 +35,6 @@ namespace cu {
 
     private:
 
-        void _read(uint8_t* buffer, unsigned size);
-        void _write(uint8_t* buffer, unsigned size);
-
 	};
 
 }

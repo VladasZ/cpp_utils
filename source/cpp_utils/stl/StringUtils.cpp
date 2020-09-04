@@ -118,7 +118,7 @@ void String::replace(const string& replace, const string& with, string& str) {
 string String::to_lower(const string& str) {
     string result;
     for (auto c : str) {
-        result += tolower(c);
+        result += static_cast<char>(tolower(c));
     }
     return result;
 }

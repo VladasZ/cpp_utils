@@ -6,6 +6,8 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#ifdef __OBJC__
+
 #include "Log.hpp"
 
 #import "OBJBridge.h"
@@ -72,3 +74,5 @@ static UIViewController *topmostController() {
 }
 
 @end
+
+#endif

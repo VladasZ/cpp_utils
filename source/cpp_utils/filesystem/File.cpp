@@ -6,6 +6,8 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <fstream>
 
 #include "Log.hpp"
@@ -62,7 +64,7 @@ static std::string read_to_string(const string& path) {
 
 #endif
 
-cu::File::File(char* data, unsigned size) : _data(data), _size(size) {
+cu::File::File(char* data, size_t size) : _data(data), _size(size) {
 
 }
 
@@ -78,7 +80,7 @@ cu::File::~File() {
     }
 }
 
-unsigned cu::File::size() const {
+size_t cu::File::size() const {
     return _size;
 }
 

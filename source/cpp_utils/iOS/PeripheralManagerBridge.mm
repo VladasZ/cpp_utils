@@ -6,6 +6,8 @@
 //  Copyright © 2020 VladasZ. All rights reserved.
 //
 
+#ifdef __OBJC__
+
 #import <CoreBluetooth/CoreBluetooth.h>
 
 #include "Log.hpp"
@@ -250,3 +252,5 @@
 
 
 @end
+
+#endif

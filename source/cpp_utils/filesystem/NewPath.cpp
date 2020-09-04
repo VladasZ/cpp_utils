@@ -13,8 +13,8 @@ using namespace cu;
 
 paths NewPath::ls(const std::string& path) {
 	paths result;
-	for (const auto& path : fs::directory_iterator(path)) {
-		result.push_back(fs::canonical(path));
+	for (const auto& subpath : fs::directory_iterator(path)) {
+		result.push_back(fs::canonical(subpath));
 	}
 	return result;
 }

@@ -23,15 +23,5 @@ NewFile::~NewFile() {
 }
 
 FileData* NewFile::data() const {
-
-
     return nullptr;
-}
-
-void NewFile::_read(uint8_t* buffer, unsigned size) {
-
-}
-
-void NewFile::_write(uint8_t* buffer, unsigned size) {
-
 }

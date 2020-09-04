@@ -13,7 +13,7 @@
 #include <string>
 
 [[maybe_unused]]
-static std::string what() {
+static inline std::string what() {
     auto eptr = std::current_exception();
     if (!eptr) Fatal("There is no exception.");
     try   { rethrow_exception(eptr); }

@@ -6,14 +6,13 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-
+#define _CRT_SECURE_NO_WARNINGS
 
 #ifdef APPLE
 #include "CallObj.hpp"
 #endif
 
-#ifdef DESKTOP_BUILD
-#ifdef WINDOWS_BUILD
+#ifdef _WINDOWS
 #include <stdio.h>
 #include <direct.h>
 #include <windows.h>
@@ -22,8 +21,6 @@
 #include <unistd.h>
 #include "dirent.h"
 #endif
-#endif
-
 
 #include "Log.hpp"
 #include "System.hpp"
@@ -34,13 +31,13 @@ using namespace std;
 
 
 void System::alert(const std::string& message) {
-#ifdef WINDOWS
+#ifdef _WINDOWS
     MessageBox(0, message.c_str(), "System alert.", MB_OK);
 #elif APPLE
     obj_c::show_alert(message);
 #else
-    Log("System::alert is not implemented for this platform.");
-    Log(message);
+    Log << "System::alert is not implemented for this platform.";
+    Log << message;
 #endif
 }
 
@@ -48,7 +45,7 @@ void System::alert(const std::string& message) {
 
 const Path System::user_name() {
     static const Path user = [] {
-#ifdef WINDOWS
+#ifdef _WINDOWS
         char username[UNLEN + 1];
         DWORD username_len = UNLEN + 1;
         GetUserName(username, &username_len);
@@ -58,11 +55,11 @@ const Path System::user_name() {
 #elif ANDROID_BUILD
         return "NOT IMPLEMENTED FOR THIS PLATFORM";
 #else
-        auto user = getenv("USER");
-        if (!user) {
+        auto _user = getenv("USER");
+        if (!_user) {
             return Path("No USER enviroment variable.");
         }
-        return Path(string(user));
+        return Path(string(_user));
 #endif
     }();
 
@@ -71,7 +68,7 @@ const Path System::user_name() {
 
 const Path& System::home() {
     static const Path result = [] {
-#ifdef WINDOWS
+#ifdef _WINDOWS
         Path users{ "C:/Users" };
 #elif APPLE
         Path users{ "/Users" };
@@ -84,8 +81,7 @@ const Path& System::home() {
 }
 
 Path System::pwd() {
-#ifdef DESKTOP_BUILD
-#ifdef WINDOWS_BUILD
+#ifdef _WINDOWS
     static char cCurrentPath[FILENAME_MAX];
     if (!_getcwd(cCurrentPath, sizeof(cCurrentPath))) {
         Fatal("");
@@ -99,15 +95,11 @@ Path System::pwd() {
     printf("Current working dir: %s\n", cwd);
     return Path{ cwd };
 #endif
-#else
-    return "Not implemented on this platform";
-#endif
 }
 
 
-std::vector<Path> System::ls(const std::string& path, bool full_path) {
-#ifdef DESKTOP_BUILD
-#ifdef WINDOWS_BUILD
+std::vector<Path> System::ls(const std::string& path) {
+#ifdef _WINDOWS
     std::vector<Path> names;
     string search_path = path + "/*.*";
     WIN32_FIND_DATA fd;
@@ -137,13 +129,10 @@ std::vector<Path> System::ls(const std::string& path, bool full_path) {
     closedir(dir);
     return result;
 #endif
-#else
-    return { "Not implemented on this platform" };
-#endif
 }
 
 void System::execute(const std::string& command) {
-#ifndef WINDOWS_BUILD
+#ifndef _WINDOWS
     char buffer[128];
     std::string result = "";
     FILE* pipe = popen(command.c_str(), "r");
@@ -159,6 +148,8 @@ void System::execute(const std::string& command) {
     }
     pclose(pipe);
     Log << result;
+#else
+	Log << "Executing:" << command << "is not implemented on this platform.";
 #endif
 }
 
