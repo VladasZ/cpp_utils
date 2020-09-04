@@ -39,7 +39,7 @@ namespace cu {
         return result + "]";
     }
 
-    static std::string char_string(const void* data, size_t size) {
+    static inline std::string char_string(const void* data, size_t size) {
         std::string result;
         auto ptr = reinterpret_cast<const uint8_t*>(data);
         for (int i = 0; i < size; i++) {

@@ -37,7 +37,7 @@ namespace cu {
     };
 
     struct _EmptyPacket {
-        static inline const uint16_t packet_id = -1;
+        static inline const uint16_t packet_id = static_cast<uint16_t >(-1);
     };
 
     using EmptyHeader = PacketHeader<_EmptyPacket>;

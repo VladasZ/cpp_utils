@@ -34,7 +34,7 @@ namespace cu {
         PacketData(PacketData&& moved) {
             _size = moved._size;
             _data = moved._data;
-            moved._size = -1;
+            moved._size = static_cast<size_t>(-1);
             moved._data = nullptr;
         }
 

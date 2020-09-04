@@ -28,7 +28,11 @@ namespace cu {
         BoardMessage() : message({ 0 }) { }
 
         BoardMessage(const std::string& error) {
+#ifdef _WINDOWS
+			strcpy_s(message.data(), error.size() + 1, error.c_str());
+#else
             strcpy(message.data(), error.c_str());
+#endif
         }
 
         operator std::string() const {
