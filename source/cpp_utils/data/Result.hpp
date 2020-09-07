@@ -28,8 +28,6 @@ namespace cu {
 
         constexpr Result(const T& object) : _found(true), _object(object) { }
 
-        Result(const std::string& error) : _found(false), error(error) { }
-
         constexpr bool found()     const { return  _found; }
         constexpr bool not_found() const { return !_found; }
 
