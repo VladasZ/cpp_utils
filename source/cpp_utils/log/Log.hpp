@@ -20,11 +20,9 @@ namespace cu::log {
 
     public:
 
-        const Logger& start_log(const std::string& file,
-                                const std::string& func,
-                                int line,
+        const Logger& start_log(const std::string& location,
                                 const std::string& message = "") const {
-            std::string result_message = "\n" + log::location(file, func, line) + " ";
+            std::string result_message = "\n" + location + " ";
             if (!message.empty()) {
                 result_message += message + " ";
             }
@@ -64,8 +62,11 @@ inline const cu::log::Logger& operator<<(const cu::log::Logger& logger, const T&
     return logger.log(message);
 }
 
-#define Log cu::log::_logger_instance.start_log(__FILE__, __func__, __LINE__)
-#define LogMessage(message) cu::log::_logger_instance.start_log(__FILE__, __func__, __LINE__, (message))
+#define CU_LOG_LOCATION cu::log::location(__FILE__, __func__, __LINE__)
+#define CU_LOG_WITH_LOCATION(message) CU_LOG_LOCATION + " " + (message)
+
+#define Log cu::log::_logger_instance.start_log(CU_LOG_LOCATION)
+#define LogMessage(message) cu::log::_logger_instance.start_log(CU_LOG_LOCATION, (message))
 
 #define Fatal(message) { Log << message; throw std::runtime_error(message); }
 

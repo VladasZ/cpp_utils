@@ -78,7 +78,7 @@ namespace cu {
 
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
         static std::vector<std::string> get_com_ports();
 #endif
 

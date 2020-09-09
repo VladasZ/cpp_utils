@@ -6,7 +6,9 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <fstream>
 

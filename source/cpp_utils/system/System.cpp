@@ -6,13 +6,14 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #ifdef APPLE
 #include "CallObj.hpp"
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include <stdio.h>
 #include <direct.h>
 #include <windows.h>
@@ -31,7 +32,7 @@ using namespace std;
 
 
 void System::alert(const std::string& message) {
-#ifdef _WINDOWS
+#ifdef _WIN32
     MessageBox(0, message.c_str(), "System alert.", MB_OK);
 #elif APPLE
     obj_c::show_alert(message);
@@ -45,7 +46,7 @@ void System::alert(const std::string& message) {
 
 const Path System::user_name() {
     static const Path user = [] {
-#ifdef _WINDOWS
+#if (_WIN32)
         char username[UNLEN + 1];
         DWORD username_len = UNLEN + 1;
         GetUserName(username, &username_len);
@@ -60,6 +61,7 @@ const Path System::user_name() {
             return Path("No USER enviroment variable.");
         }
         return Path(string(_user));
+
 #endif
     }();
 
@@ -68,7 +70,7 @@ const Path System::user_name() {
 
 const Path& System::home() {
     static const Path result = [] {
-#ifdef _WINDOWS
+#ifdef _WIN32
         Path users{ "C:/Users" };
 #elif APPLE
         Path users{ "/Users" };
@@ -81,7 +83,7 @@ const Path& System::home() {
 }
 
 Path System::pwd() {
-#ifdef _WINDOWS
+#ifdef _WIN32
     static char cCurrentPath[FILENAME_MAX];
     if (!_getcwd(cCurrentPath, sizeof(cCurrentPath))) {
         Fatal("");
@@ -99,7 +101,7 @@ Path System::pwd() {
 
 
 std::vector<Path> System::ls(const std::string& path) {
-#ifdef _WINDOWS
+#ifdef _WIN32
     std::vector<Path> names;
     string search_path = path + "/*.*";
     WIN32_FIND_DATA fd;
@@ -132,7 +134,7 @@ std::vector<Path> System::ls(const std::string& path) {
 }
 
 void System::execute(const std::string& command) {
-#ifndef _WINDOWS
+#ifndef _WIN32
     char buffer[128];
     std::string result = "";
     FILE* pipe = popen(command.c_str(), "r");
@@ -155,7 +157,7 @@ void System::execute(const std::string& command) {
 
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 vector<string> System::get_com_ports() {
 

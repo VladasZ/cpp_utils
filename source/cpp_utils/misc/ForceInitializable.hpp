@@ -10,24 +10,12 @@
 
 namespace cu {
 
-    template <class T>
-    class ForceInitializable {
-    public:
-
-        template <class Other>
-        Other force_convert() const {
-            Other result { };
-            memcpy(&result, this, sizeof(T));
-            return result;
-        }
-
-        template <class Other>
-        static T force_create(const Other& other) {
-            T result;
-            memcpy(&result, &other, sizeof(T));
-            return result;
-        }
-
-    };
+    template <class To, class From>
+    static inline constexpr To force_convert(const From& from) {
+        static_assert(sizeof(From) == sizeof(To));
+        To result{ };
+        memcpy(&result, &from, sizeof(To));
+        return result;
+    }
 
 }
