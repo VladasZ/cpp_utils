@@ -8,16 +8,9 @@
 
 #pragma once
 
-#if __APPLE__
-#include "TargetConditionals.h"
-#if TARGET_IPHONE_SIMULATOR
-#define IOS_SIMULATOR
-#elif TARGET_OS_IPHONE
-#define IOS_DEVICE
-#endif
-#endif
-
 #include "Log.hpp"
+#include "Platform.hpp"
+
 
 namespace cu {
 

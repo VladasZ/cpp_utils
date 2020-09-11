@@ -14,9 +14,9 @@
 #elif __APPLE__
 #include <TargetConditionals.h>
 #if TARGET_IPHONE_SIMULATOR
-#define IOS_BUILD
+#define IOS_BUILD 1
 #elif TARGET_OS_IPHONE
-#define IOS_BUILD
+#define IOS_BUILD 1
 #elif TARGET_OS_MAC
 #define DESKTOP_BUILD 1
 #else

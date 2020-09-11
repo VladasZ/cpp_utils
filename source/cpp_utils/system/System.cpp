@@ -11,9 +11,6 @@
 #endif
 
 #ifdef _WIN32
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
 #include <stdio.h>
 #include <direct.h>
 #include <windows.h>
@@ -25,6 +22,7 @@
 
 #include "Log.hpp"
 #include "System.hpp"
+#include "Platform.hpp"
 #include "ExceptionCatch.hpp"
 
 using namespace cu;
@@ -41,8 +39,6 @@ void System::alert(const std::string& message) {
     Log << message;
 #endif
 }
-
-#ifndef MICROCONTROLLER_BUILD
 
 const Path System::user_name() {
     static const Path user = [] {
@@ -99,7 +95,6 @@ Path System::pwd() {
 #endif
 }
 
-
 std::vector<Path> System::ls(const std::string& path) {
 #ifdef _WIN32
     std::vector<Path> names;
@@ -115,6 +110,8 @@ std::vector<Path> System::ls(const std::string& path) {
         ::FindClose(hFind);
     }
     return names;
+#elif IOS_BUILD
+    return { };
 #else
     std::vector<Path> result;
     auto dir = opendir(path.c_str());
@@ -154,8 +151,6 @@ void System::execute(const std::string& command) {
 	Log << "Executing:" << command << "is not implemented on this platform.";
 #endif
 }
-
-#endif
 
 #ifdef _WIN32
 

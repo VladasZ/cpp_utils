@@ -40,15 +40,15 @@ namespace cu::log {
 
         void system_log(const std::string& message) const {
             std::cout << message;
-            if (settings.log_to_file) {
-                static bool first_call = true;
-                static const std::string log_file = "cu_log.txt";
-                if (first_call) {
-                    first_call = false;
-                    NewPath::remove(log_file);
-                }
-                NewPath::write(log_file, message);
-            }
+//            if (settings.log_to_file) {
+//                static bool first_call = true;
+//                static const std::string log_file = "cu_log.txt";
+//                if (first_call) {
+//                    first_call = false;
+//                    NewPath::remove(log_file);
+//                }
+//                NewPath::write(log_file, message);
+//            }
         }
 
     };

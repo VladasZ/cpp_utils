@@ -8,8 +8,6 @@
 
 #pragma once
 
-#ifndef MICROCONTROLLER_BUILD
-
 #include <string>
 #include <vector>
 
@@ -52,5 +50,3 @@ namespace cu {
     };
     
 }
-
-#endif

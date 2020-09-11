@@ -6,8 +6,6 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifndef MICROCONTROLLER_BUILD
-
 #include "Log.hpp"
 #include "Path.hpp"
 #include "System.hpp"
@@ -22,7 +20,7 @@ Path::Path(const char* path) : Path(std::string(path)) {
 
 Path::Path(const std::string& path)  {
     _path = path;
-#ifdef WINDOWS_BUILD
+#ifdef _WIN32
     String::replace('\\', '/', _path);
 #endif
     _info = _path;
@@ -73,5 +71,3 @@ std::string Path::file_name() const {
 std::string Path::to_string() const {
     return VarString(_path) + ", " + VarString(_info);
 }
-
-#endif
