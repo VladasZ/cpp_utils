@@ -8,7 +8,7 @@
 
 #pragma once
 
-#ifdef APPLE
+#ifdef __APPLE__
 
 #include <string>
 #include <vector>

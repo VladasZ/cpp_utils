@@ -40,7 +40,7 @@ namespace cu {
         }
 
         static unsigned random() {
-#ifdef APPLE
+#ifdef __APPLE__
             return arc4random();
 #elif USE_FULL_LL_DRIVER
             return 0;

@@ -6,7 +6,7 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef APPLE
+#ifdef __APPLE__
 
 #include "CallObj.hpp"
 #include "OBJBridge.h"

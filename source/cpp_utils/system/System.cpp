@@ -6,7 +6,7 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef APPLE
+#ifdef __APPLE__
 #include "CallObj.hpp"
 #endif
 
@@ -34,7 +34,7 @@ using namespace std;
 void System::alert(const std::string& message) {
 #ifdef _WIN32
     MessageBox(0, message.c_str(), "System alert.", MB_OK);
-#elif APPLE
+#elif __APPLE__
     obj_c::show_alert(message);
 #else
     Log << "System::alert is not implemented for this platform.";
@@ -46,7 +46,7 @@ void System::alert(const std::string& message) {
 
 const Path System::user_name() {
     static const Path user = [] {
-#if (_WIN32)
+#ifdef _WIN32
         char username[UNLEN + 1];
         DWORD username_len = UNLEN + 1;
         GetUserName(username, &username_len);
@@ -71,11 +71,11 @@ const Path System::user_name() {
 const Path& System::home() {
     static const Path result = [] {
 #ifdef _WIN32
-        Path users{ "C:/Users" };
-#elif APPLE
-        Path users{ "/Users" };
+        Path users { "C:/Users" };
+#elif __APPLE__
+        Path users { "/Users" };
 #else
-        Path users{ "/home" };
+        Path users { "/home" };
 #endif
         return users / user_name();
     }();

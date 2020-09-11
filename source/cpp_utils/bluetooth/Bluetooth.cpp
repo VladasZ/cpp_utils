@@ -6,7 +6,7 @@
 //  Copyright © 2020 VladasZ. All rights reserved.
 //
 
-#ifdef APPLE
+#ifdef __APPLE__
 #include "CallObj.hpp"
 #endif
 
@@ -15,13 +15,13 @@
 using namespace cu;
 
 void Bluetooth::test_central() {
-#ifdef APPLE
+#ifdef __APPLE__
     obj_c::test_central();
 #endif
 }
 
 void Bluetooth::test_peripheral() {
-#ifdef APPLE
+#ifdef __APPLE__
     obj_c::test_peripheral();
 #endif
 }
