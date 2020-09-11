@@ -16,7 +16,7 @@ class AllocTest {
 
 public:
 
-	 AllocTest() { Log("Alloc");   }
-	~AllocTest() { Log("Dealloc"); }
+	 AllocTest() { Log << "Alloc";   }
+	~AllocTest() { Log << "Dealloc"; }
 
 };

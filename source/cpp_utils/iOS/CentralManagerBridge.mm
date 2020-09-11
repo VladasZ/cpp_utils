@@ -105,7 +105,6 @@
         Log << peripheral.name;
 
         // And connect
-      //  Log(@"Connecting to peripheral");
         Log << peripheral;
        // [self.centralManager connectPeripheral:peripheral options:nil];
     }

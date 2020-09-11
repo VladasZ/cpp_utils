@@ -15,6 +15,11 @@
 
 #include "MetaHelpers.hpp"
 
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4505)
+#endif
+
 
 namespace cu::log {
 
@@ -26,7 +31,7 @@ namespace cu::log {
     inline Settings settings;
 
     static std::string last_path_component(const std::string& path) {
-#ifdef _WINDOWS
+#ifdef _WIN32
         static const char slash = '\\';
 #else
         static const char slash = '/';
@@ -109,3 +114,7 @@ namespace cu::log {
     }
 
 }
+
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
