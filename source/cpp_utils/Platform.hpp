@@ -23,5 +23,5 @@
 #   error "Unknown Apple platform"
 #endif
 #elif __linux__
-
+#define DESKTOP_BUILD 1
 #endif
