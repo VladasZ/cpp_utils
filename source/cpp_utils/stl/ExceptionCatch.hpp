@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include <string>
-
+#include "Log.hpp"
 
 namespace cu {
 
