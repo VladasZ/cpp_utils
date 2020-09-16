@@ -1,16 +1,16 @@
+////
+////  CentralManagerBridge.h
+////  cpp_utils
+////
+////  Created by Vladas Zakrevskis on 24/03/20.
+////  Copyright © 2020 VladasZ. All rights reserved.
+////
 //
-//  CentralManagerBridge.h
-//  cpp_utils
+//#import <Foundation/Foundation.h>
 //
-//  Created by Vladas Zakrevskis on 24/03/20.
-//  Copyright © 2020 VladasZ. All rights reserved.
 //
-
-#import <Foundation/Foundation.h>
-
-
-@interface CentralManagerBridge : NSObject
-
-+ (void)testCentral;
-
-@end
+//@interface CentralManagerBridge : NSObject
+//
+//+ (void)testCentral;
+//
+//@end
