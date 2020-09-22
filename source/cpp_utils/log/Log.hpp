@@ -9,6 +9,8 @@
 #pragma once
 
 #include <string>
+#include <stdio.h>
+#include <fstream>
 
 #include "NewPath.hpp"
 #include "LogUtils.hpp"
@@ -39,16 +41,22 @@ namespace cu::log {
     private:
 
         void system_log(const std::string& message) const {
-            std::cout << message;
-//            if (settings.log_to_file) {
-//                static bool first_call = true;
-//                static const std::string log_file = "cu_log.txt";
-//                if (first_call) {
-//                    first_call = false;
-//                    NewPath::remove(log_file);
-//                }
-//                NewPath::write(log_file, message);
-//            }
+			if (settings.custom_output) {
+				settings.custom_output(message);
+			}
+			else {
+				std::cout << message;
+			}
+            if (settings.log_to_file) {
+                static bool first_call = true;
+                if (first_call) {
+                    first_call = false;
+					remove(settings.log_file_name.c_str());
+                }
+				std::ofstream outfile;
+				outfile.open(settings.log_file_name, std::ios_base::app);
+				outfile << message;
+            }
         }
 
     };

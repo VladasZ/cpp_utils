@@ -12,6 +12,7 @@
 #include <cstring>
 #include <sstream>
 #include <iostream>
+#include <functional>
 
 #include "MetaHelpers.hpp"
 
@@ -26,6 +27,8 @@ namespace cu::log {
     struct Settings {
         bool log_to_file        = false;
         bool log_function_names = false;
+		std::string log_file_name = "cu_log.txt";
+		std::function<void(const std::string&)> custom_output = nullptr;
     };
 
     inline Settings settings;
