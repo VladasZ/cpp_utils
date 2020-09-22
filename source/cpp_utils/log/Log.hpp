@@ -9,10 +9,9 @@
 #pragma once
 
 #include <string>
-#include <stdio.h>
 #include <fstream>
 
-#include "NewPath.hpp"
+#include "File.hpp"
 #include "LogUtils.hpp"
 
 
@@ -51,11 +50,9 @@ namespace cu::log {
                 static bool first_call = true;
                 if (first_call) {
                     first_call = false;
-					remove(settings.log_file_name.c_str());
+					File::remove(settings.log_file_name);
                 }
-				std::ofstream outfile;
-				outfile.open(settings.log_file_name, std::ios_base::app);
-				outfile << message;
+                File::append(settings.log_file_name, message);
             }
         }
 

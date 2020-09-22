@@ -67,7 +67,7 @@ namespace cu {
 
 #ifndef MICROCONTROLLER_BUILD
 
-        static const Path user_name();
+        static const Path& user_name();
 
         static const Path& home();
 

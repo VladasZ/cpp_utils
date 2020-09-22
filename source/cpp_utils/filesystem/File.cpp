@@ -6,53 +6,50 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
+#include <cstdio>
 #include <fstream>
+#include <filesystem>
 
 #include "Log.hpp"
 #include "File.hpp"
 
+using namespace cu;
 using namespace std;
 
-#ifdef ANDROID_BUILD
-
-#include "AndroidSystem.hpp"
-
-static pair<char*, size_t> read(const string& path) {
-    auto file = AndroidSystem::load_file(path);
-    return { file.first,  file.second };
-}
-
-static string read_to_string(const string& path) {
-    auto file = AndroidSystem::load_file(path);
-    return string(file.first, file.second);
-}
-
-#else
-
-static pair<char*, size_t> read(const string& path) {
+File::File(const string& path) : _path(path) {
     FILE* file = fopen(path.c_str(), "rb");
-    if (file == nullptr) {
-        Fatal("Failed to open file: " + path);
-    }
+    if (file == nullptr) Fatal("Failed to open file: " + path);
     fseek(file, 0, SEEK_END);
-    auto size = static_cast<size_t>(ftell(file));
+    _size = static_cast<size_t>(ftell(file));
     fseek(file, 0, SEEK_SET);
-    auto data = new char[size];
-    fread(data, 1, size, file);
+    _data = new char[_size];
+    fread(_data, 1, _size, file);
     fclose(file);
-    return { data, size };
 }
 
-static std::string read_to_string(const string& path) {
+File::~File() {
+    delete[] _data;
+}
+
+size_t File::size() const {
+    return _size;
+}
+
+char* File::data() const {
+    return _data;
+}
+
+string File::to_string() const {
+    return string() +
+        "\nFile: " + _path + "\nsize: " + ::to_string(_size) + "\n";
+}
+
+string File::read(const string& path) {
     ifstream stream(path.c_str(), ios::in);
     string result;
 
     if (stream.is_open()) {
-        string line = "";
+        string line;
         while (getline(stream, line))
             result += "\n" + line;
         stream.close();
@@ -64,37 +61,26 @@ static std::string read_to_string(const string& path) {
     return result;
 }
 
-#endif
-
-cu::File::File(char* data, size_t size) : _data(data), _size(size) {
-
+bool File::exists(const std::string& path) {
+    return std::filesystem::exists(path);
 }
 
-cu::File::File(const string& path) : _path(path) {
-    auto file = read(path);
-    _data = file.first;
-    _size = file.second;
+std::string File::full_path(const std::string& path) {
+    return std::filesystem::canonical(path);
 }
 
-cu::File::~File() {
-    if (_data != nullptr) {
-        delete[] _data;
-    }
+void File::write(const std::string& path, const std::string& string) {
+    std::ofstream outfile;
+    outfile.open(path, std::ios_base::trunc);
+    outfile << string;
 }
 
-size_t cu::File::size() const {
-    return _size;
+void File::append(const std::string& path, const std::string& string) {
+    std::ofstream outfile;
+    outfile.open(path, std::ios_base::app);
+    outfile << string;
 }
 
-char* cu::File::data() const {
-    return _data;
-}
-
-string cu::File::to_string() const {
-    return string() +
-        "\nFile: " + _path + "\nsize: " + ::to_string(_size) + "\n";
-}
-
-string cu::File::read_to_string(const string& path) {
-	return ::read_to_string(path);
+void File::remove(const std::string& path) {
+    ::remove(path.c_str());
 }

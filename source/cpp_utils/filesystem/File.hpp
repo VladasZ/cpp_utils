@@ -28,7 +28,13 @@ namespace cu {
 
 		std::string to_string() const;
 
-		static std::string read_to_string(const std::string& path);
+		static bool exists(const std::string& path);
+        static std::string full_path(const std::string& path = ".");
+
+		static std::string read(const std::string& path);
+        static void write(const std::string& path, const std::string& string);
+		static void append(const std::string& path, const std::string& string);
+		static void remove(const std::string& path);
 
 	};
 

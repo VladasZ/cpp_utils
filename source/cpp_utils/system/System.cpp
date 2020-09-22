@@ -35,12 +35,11 @@ void System::alert(const std::string& message) {
 #elif __APPLE__
     obj_c::show_alert(message);
 #else
-    Log << "System::alert is not implemented for this platform.";
-    Log << message;
+    execute(string() + "zenity --info --text=\"" + message + "\"");
 #endif
 }
 
-const Path System::user_name() {
+const Path& System::user_name() {
     static const Path user = [] {
 #ifdef _WIN32
         char username[UNLEN + 1];
@@ -133,11 +132,11 @@ std::vector<Path> System::ls(const std::string& path) {
 void System::execute(const std::string& command) {
 #ifndef _WIN32
     char buffer[128];
-    std::string result = "";
+    std::string result;
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) throw std::runtime_error("popen() failed!");
     try {
-        while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+        while (fgets(buffer, sizeof buffer, pipe) != nullptr) {
             result += buffer;
         }
     }
