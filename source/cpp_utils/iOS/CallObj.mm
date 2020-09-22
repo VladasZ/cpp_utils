@@ -35,11 +35,11 @@ vector<string> obj_c::ls(const string& path) {
 }
 
 void obj_c::test_central() {
-    [CentralManagerBridge testCentral];
+   // [CentralManagerBridge testCentral];
 }
 
 void obj_c::test_peripheral() {
-    [PeripheralManagerBridge setup];
+//    [PeripheralManagerBridge setup];
 }
 
 #endif
