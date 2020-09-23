@@ -23,6 +23,7 @@ namespace cu::log {
 
         const Logger& start_log(const std::string& location,
                                 const std::string& message = "") const {
+			if (settings.disabled) return *this;
             std::string result_message = "\n" + location + " ";
             if (!message.empty()) {
                 result_message += message + " ";
@@ -33,6 +34,7 @@ namespace cu::log {
 
         template <class T>
         const Logger& log(const T& message) const {
+			if (settings.disabled) return *this;
             system_log(log::to_string(message) + " ");
             return *this;
         }
@@ -40,6 +42,7 @@ namespace cu::log {
     private:
 
         void system_log(const std::string& message) const {
+			if (settings.disabled) return;
 			if (settings.custom_output) {
 				settings.custom_output(message);
 			}
@@ -64,6 +67,7 @@ namespace cu::log {
 
 template<class T>
 inline const cu::log::Logger& operator<<(const cu::log::Logger& logger, const T& message) {
+	if (cu::log::settings.disabled) return logger;
     return logger.log(message);
 }
 

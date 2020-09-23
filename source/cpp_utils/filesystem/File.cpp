@@ -6,6 +6,12 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
+#ifdef _WIN32
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+#endif
+
 #include <cstdio>
 #include <fstream>
 #include <filesystem>
@@ -66,7 +72,7 @@ bool File::exists(const std::string& path) {
 }
 
 std::string File::full_path(const std::string& path) {
-    return std::filesystem::canonical(path);
+    return std::filesystem::canonical(path).string();
 }
 
 void File::write(const std::string& path, const std::string& string) {

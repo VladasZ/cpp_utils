@@ -25,6 +25,7 @@
 namespace cu::log {
 
     struct Settings {
+		bool disabled = false;
         bool log_to_file        = false;
         bool log_function_names = false;
 		std::string log_file_name = "cu_log.txt";
