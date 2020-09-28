@@ -14,13 +14,18 @@
 
 #include <cstdio>
 #include <fstream>
+#include <sys/stat.h>
+
+#ifndef __MINGW32__
 #include <filesystem>
+#endif
 
 #include "Log.hpp"
 #include "File.hpp"
 
 using namespace cu;
 using namespace std;
+
 
 File::File(const string& path) : _path(path) {
     FILE* file = fopen(path.c_str(), "rb");
@@ -68,11 +73,16 @@ string File::read(const string& path) {
 }
 
 bool File::exists(const std::string& path) {
-    return std::filesystem::exists(path);
+    struct stat buffer = { };
+    return (::stat(path.c_str(), &buffer) == 0);
 }
 
 std::string File::full_path(const std::string& path) {
+#ifdef __MINGW32__
+    return "File::full_path is not supported in MinGW";
+#else
     return std::filesystem::canonical(path).string();
+#endif
 }
 
 void File::write(const std::string& path, const std::string& string) {

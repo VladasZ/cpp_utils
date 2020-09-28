@@ -16,23 +16,8 @@
 
 #include "MetaHelpers.hpp"
 
-#ifdef _WIN32
-#pragma warning(push)
-#pragma warning(disable: 4505)
-#endif
-
 
 namespace cu::log {
-
-    struct Settings {
-		bool disabled = false;
-        bool log_to_file        = false;
-        bool log_function_names = false;
-		std::string log_file_name = "cu_log.txt";
-		std::function<void(const std::string&)> custom_output = nullptr;
-    };
-
-    inline Settings settings;
 
     static std::string last_path_component(const std::string& path) {
 #ifdef _WIN32
@@ -48,8 +33,8 @@ namespace cu::log {
     static std::string to_string(const T& value) {
 #ifdef ARDUINO
         std::stringstream buffer;
-            buffer << value;
-            return buffer.str();
+        buffer << value;
+        return buffer.str();
 #else
         if constexpr (cu::is_std_container_v<T>) {
             if (value.empty()) return "[]";
@@ -69,17 +54,17 @@ namespace cu::log {
             }
         }
 #ifdef QSTRING_H
-            else if constexpr (cu::is_same_v<T, QString>) {
+        else if constexpr (cu::is_same_v<T, QString>) {
                 return value.toStdString();
-            }
+        }
 #endif
 #ifdef __OBJC__
-            else if constexpr (cu::is_objc_object_v<T>) {
-                if (value == nullptr) {
-                    return "(cu::Log nil)";
-                }
-                return [[value description] UTF8String];
+        else if constexpr (cu::is_objc_object_v<T>) {
+            if (value == nullptr) {
+                return "(cu::Log nil)";
             }
+            return [[value description] UTF8String];
+        }
 #endif
         else if constexpr (has_to_string_v<T>) {
             return value.to_string();
@@ -104,12 +89,12 @@ namespace cu::log {
 #endif
     }
 
-    static std::string location(const std::string& file, const std::string& func, int line) {
+    static std::string location(const std::string& file, const std::string& func, int line, bool log_func = false) {
         std::string clean_file = log::last_path_component(file);
         if (clean_file.back() == 'm') {
             return func + " - " + to_string(line) + "] ";
         }
-        if (settings.log_function_names) {
+        if (log_func) {
             return "[" + clean_file + "::" + func + " - " + to_string(line) + "]";
         }
         else {
@@ -119,6 +104,7 @@ namespace cu::log {
 
 }
 
-#ifdef _WIN32
-#pragma warning(pop)
-#endif
+#define CU_LOG_LOCATION cu::log::location(__FILE__, __func__, __LINE__)
+
+#define VarString(variable) (std::string() + #variable + " : " + cu::log::to_string(variable)) + " "
+#define IntString(variable) (std::string() + #variable + " : " + cu::log::to_string(static_cast<int>(variable))) + " "

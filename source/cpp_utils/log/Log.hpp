@@ -17,6 +17,16 @@
 
 namespace cu::log {
 
+    struct Settings {
+        bool disabled = false;
+        bool log_to_file        = false;
+        bool log_function_names = false;
+        std::string log_file_name = "cu_log.txt";
+        std::function<void(const std::string&)> custom_output = nullptr;
+    };
+
+    inline Settings settings;
+
     class Logger {
 
     public:
@@ -41,7 +51,7 @@ namespace cu::log {
 
     private:
 
-        void system_log(const std::string& message) const {
+        static void system_log(const std::string& message) {
 			if (settings.disabled) return;
 			if (settings.custom_output) {
 				settings.custom_output(message);
@@ -71,19 +81,11 @@ inline const cu::log::Logger& operator<<(const cu::log::Logger& logger, const T&
     return logger.log(message);
 }
 
-#define CU_LOG_LOCATION cu::log::location(__FILE__, __func__, __LINE__)
-#define CU_LOG_WITH_LOCATION(message) CU_LOG_LOCATION + " " + (message)
-
 #define Log cu::log::_logger_instance.start_log(CU_LOG_LOCATION)
 #define LogMessage(message) cu::log::_logger_instance.start_log(CU_LOG_LOCATION, (message))
 
 #define Fatal(message) { Log << message; throw std::runtime_error(message); }
 
-#define VarString(variable) (std::string() + #variable + " : " + cu::log::to_string(variable)) + " "
-#define IntString(variable) (std::string() + #variable + " : " + cu::log::to_string(static_cast<int>(variable))) + " "
-
 #define Logvar(variable) Log << VarString(variable)
-
-#define CleanLog(message) std::cout << cu::log::to_string(message)
 
 #define LogReturn(value) LogMessage("return: " + cu::log::to_string(value)); return value

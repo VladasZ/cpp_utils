@@ -1,6 +1,4 @@
 
-#define CU_LOG_TO_FILE
-
 #include "Log.hpp"
 
 
@@ -8,7 +6,7 @@ int main() {
 
     Log << "a" << "b";
 
-    Logvar("Spesogon");
+    Logvar("Spesogon1");
 
 
     return 0;
