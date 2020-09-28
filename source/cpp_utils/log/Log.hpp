@@ -79,8 +79,8 @@ inline const cu::log::Logger& operator<<(const cu::log::Logger& logger, const T&
 
 #define Fatal(message) { Log << message; throw std::runtime_error(message); }
 
-#define VarString(variable) (std::string() + #variable + " : " + cu::log::to_string(variable))
-#define IntString(variable) (std::string() + #variable + " : " + cu::log::to_string(static_cast<int>(variable)))
+#define VarString(variable) (std::string() + #variable + " : " + cu::log::to_string(variable)) + " "
+#define IntString(variable) (std::string() + #variable + " : " + cu::log::to_string(static_cast<int>(variable))) + " "
 
 #define Logvar(variable) Log << VarString(variable)
 
