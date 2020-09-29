@@ -22,6 +22,7 @@
 
 #include "Log.hpp"
 #include "File.hpp"
+#include "Platform.hpp"
 
 using namespace cu;
 using namespace std;
@@ -79,7 +80,9 @@ bool File::exists(const std::string& path) {
 
 std::string File::full_path(const std::string& path) {
 #ifdef __MINGW32__
-    return "File::full_path is not supported in MinGW";
+    return "File::full_path is not supported in MinGW yet.";
+#elif IOS_BUILD
+    return "File::full_path is not supported in iOS yet.";
 #else
     return std::filesystem::canonical(path).string();
 #endif
