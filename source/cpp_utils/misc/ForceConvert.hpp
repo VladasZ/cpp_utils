@@ -1,5 +1,5 @@
 //
-//  ForceInitializable.hpp
+//  ForceConvert.hpp
 //  cpp_utils
 //
 //  Created by Vladas Zakrevskis on 02/02/20.
@@ -7,6 +7,7 @@
 //
 
 #pragma once
+
 
 namespace cu {
 

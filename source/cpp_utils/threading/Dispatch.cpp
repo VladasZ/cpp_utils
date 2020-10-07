@@ -13,28 +13,26 @@
 #include "Dispatch.hpp"
 
 using namespace cu;
+using namespace std;
 
 
 void Dispatch::async(Task task) {
-    std::thread(task).detach();
+    thread(task).detach();
 }
 
 void Dispatch::on_main(Task task) {
-    _mutex.lock();
+    lock_guard lock(_mutex);
     _tasks.push_back(task);
-    _mutex.unlock();
 }
 
 void Dispatch::execute_tasks() {
-
     if (_tasks.empty()) return;
 
-    _mutex.lock();
+    lock_guard lock(_mutex);
     for (const auto& task : _tasks) {
         task();
     }
     _tasks.clear();
-    _mutex.unlock();
 }
 
 #endif
