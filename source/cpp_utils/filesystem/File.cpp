@@ -10,15 +10,12 @@
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
+#include <windows.h>
 #endif
 
 #include <cstdio>
 #include <fstream>
 #include <sys/stat.h>
-
-#ifndef __MINGW32__
-#include <filesystem>
-#endif
 
 #include "Log.hpp"
 #include "File.hpp"
@@ -84,7 +81,7 @@ std::string File::full_path(const std::string& path) {
 #elif IOS_BUILD
     return "File::full_path is not supported in iOS yet.";
 #else
-    return std::filesystem::canonical(path).string();
+	return "File::full_path is not supported anywhere yet. =(";
 #endif
 }
 
