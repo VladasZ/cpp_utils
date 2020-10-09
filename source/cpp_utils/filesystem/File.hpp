@@ -19,8 +19,7 @@ namespace cu {
 
 	public:
 
-		File(char* data, size_t size);
-		File(const std::string& path);
+		explicit File(const std::string& path);
 		~File();
 
 		size_t size() const;

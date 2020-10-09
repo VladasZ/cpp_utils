@@ -6,13 +6,6 @@
 //  Copyright © 2017 VladasZ. All rights reserved.
 //
 
-#ifdef _WIN32
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-#include <windows.h>
-#endif
-
 #include <cstdio>
 #include <fstream>
 #include <sys/stat.h>
@@ -20,6 +13,8 @@
 #include "Log.hpp"
 #include "File.hpp"
 #include "Platform.hpp"
+#include "WindowsInclude.hpp"
+#include "FilesystemInclude.hpp"
 
 using namespace cu;
 using namespace std;
@@ -84,6 +79,7 @@ std::string File::full_path(const std::string& path) {
 	return "File::full_path is not supported anywhere yet. =(";
 #endif
 }
+
 
 void File::write(const std::string& path, const std::string& string) {
     std::ofstream outfile;
