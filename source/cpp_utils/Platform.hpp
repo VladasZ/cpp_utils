@@ -22,6 +22,7 @@
 #else
 #   error "Unknown Apple platform"
 #endif
+#elif __ANDROID__
 #elif __linux__
 #define DESKTOP_BUILD 1
 #endif
