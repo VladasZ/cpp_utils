@@ -16,9 +16,8 @@
 using namespace std;
 using namespace obj_c;
 
-const string obj_c::work_directory_path = [[OBJBridge workDirectoryPath] UTF8String];
 
-std::string obj_c::worara() {
+std::string obj_c::work_directory_path() {
     return [[OBJBridge workDirectoryPath] UTF8String];
 }
 
