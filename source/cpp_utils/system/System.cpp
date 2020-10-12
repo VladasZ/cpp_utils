@@ -15,6 +15,7 @@
 #include <direct.h>
 #include <windows.h>
 #include <Lmcons.h>
+#include <cstdlib>
 #else
 #include <unistd.h>
 #include "dirent.h"
@@ -66,6 +67,9 @@ const Path& System::user_name() {
 const Path& System::home() {
     static const Path result = [] {
 #ifdef _WIN32
+
+        return Path { std::getenv("HOME") };
+
         Path users { "C:/Users" };
 #elif __APPLE__
         Path users { "/Users" };
