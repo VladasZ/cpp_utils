@@ -57,7 +57,7 @@ namespace cu::log {
 				settings.custom_output(message);
 			}
 			else {
-				std::cout << message;
+				std::cout << message << std::flush;
 			}
             if (settings.log_to_file) {
                 static bool first_call = true;
