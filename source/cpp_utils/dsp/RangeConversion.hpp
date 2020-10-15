@@ -8,6 +8,8 @@
 
 #pragma once
 
+#undef min
+#undef max
 
 namespace cu {
 
