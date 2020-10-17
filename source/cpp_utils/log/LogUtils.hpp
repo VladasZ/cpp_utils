@@ -89,7 +89,7 @@ namespace cu::log {
 #endif
     }
 
-    static std::string location(const std::string& file, const std::string& func, int line, bool log_func = false) {
+    static std::string location(const std::string& file, const std::string& func, int line, bool log_func = true) {
         std::string clean_file = log::last_path_component(file);
         if (clean_file.back() == 'm') {
             return func + " - " + to_string(line) + "] ";
