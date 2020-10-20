@@ -61,6 +61,12 @@ namespace cu {
 		void set_min_sane(float min) { _min_sane = min; }
 		void set_max_sane(float max) { _max_sane = max; }
 
+		std::string to_string() const {
+			return std::string() +
+				"i: " + std::to_string(_min) + " a: " + std::to_string(_max) +
+				"ti: " + std::to_string(_target_min) + " ta: " + std::to_string(_target_max);
+		}
+
 	protected:
 
 		virtual void _update_range() { _value_range = _max - _min; }
