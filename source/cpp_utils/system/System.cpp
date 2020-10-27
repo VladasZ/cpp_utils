@@ -68,7 +68,11 @@ const Path& System::home() {
     static const Path result = [] {
 #ifdef _WIN32
 
-        return Path { std::getenv("HOME") };
+        auto _home = std::getenv("HOME");
+
+        if (_home) {
+            return Path { _home };
+        }
 
         Path users { "C:/Users" };
 #elif __APPLE__

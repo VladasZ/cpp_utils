@@ -14,8 +14,15 @@
 using namespace cu;
 
 
-Path::Path(const char* path) : Path(std::string(path)) {
-
+Path::Path(const char* path) {
+    if (!path) {
+        Fatal("Path init from nullptr");
+    }
+    _path = path;
+#ifdef _WIN32
+    String::replace('\\', '/', _path);
+#endif
+    _info = _path;
 }
 
 Path::Path(const std::string& path)  {
