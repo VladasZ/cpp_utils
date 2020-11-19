@@ -8,8 +8,6 @@
 
 #pragma once
 
-#ifndef MICROCONTROLLER_BUILD
-
 #include <mutex>
 #include <vector>
 #include <functional>
@@ -20,6 +18,8 @@ namespace cu {
     class Dispatch {
 
     public:
+
+		static inline bool enabled = true;
 
         using Task = std::function<void()>;
 
@@ -36,5 +36,3 @@ namespace cu {
     };
 
 }
-
-#endif
