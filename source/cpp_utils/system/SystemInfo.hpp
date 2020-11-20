@@ -8,44 +8,38 @@
 
 #pragma once
 
-#include "Log.hpp"
-#include "Platform.hpp"
+#include "Target.hpp"
 
 
 namespace cu {
 
-    class SystemInfo {
+	class SystemInfo {
 
-    public:
+	public:
 
-        static inline constexpr bool is_desktop = [] {
+		static inline constexpr bool is_desktop =
 #ifdef DESKTOP_BUILD
-            return true;
+			true;
 #else
-            return false;
+			false;
 #endif
-        }();
 
-        static inline constexpr bool is_ios = [] {
+		static inline constexpr bool is_ios =
 #ifdef IOS_BUILD
-            return true;
+			true;
 #else
-            return false;
+			false;
 #endif
-        }();
 
-        static inline constexpr bool is_android = [] {
+		static inline constexpr bool is_android =
 #ifdef ANDROID_BUILD
-            return true;
+			true;
 #else
-            return false;
+			false;
 #endif
-        }();
 
-        static inline constexpr bool is_mobile = [] {
-            return is_ios || is_android;
-        }();
+		static inline constexpr bool is_mobile = is_ios || is_android;
 
-    };
+	};
 
 }
