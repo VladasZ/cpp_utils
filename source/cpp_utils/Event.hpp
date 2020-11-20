@@ -36,7 +36,6 @@ namespace cu {
 
         std::vector<Callback> subscribers;
         std::vector<ObjectSubscriber> object_subscribers;
-        std::vector<This*> linked_events;
 
     public:
 
@@ -53,24 +52,8 @@ namespace cu {
             });
         }
 
-        template <class T, class = std::enable_if_t<!std::is_same_v<T, Callback>>>
-        void operator = (T& param) {
-            static_assert(one_param);
-            using FirstType = std::tuple_element_t<0, std::tuple<Params...>>;
-            static_assert(std::is_same_v<T, FirstType>);
-            subscribers.push_back([&](auto value) { param = value; });
-        }
-
         void operator = (const Callback& callback) {
             subscribers.push_back(callback);
-        }
-
-        void link(This& event) {
-            linked_events.push_back(&event);
-        }
-
-        void unlink(This& event) {
-            cu::array::remove(linked_events, &event);
         }
 
         void operator()(Params... parameters) const {
@@ -79,9 +62,6 @@ namespace cu {
             }
             for (auto& subscriber : object_subscribers) {
                 subscriber.callback(parameters...);
-            }
-            for (auto event : linked_events) {
-                event->operator()(parameters...);
             }
         }
 
