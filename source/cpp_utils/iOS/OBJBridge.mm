@@ -9,7 +9,7 @@
 #ifdef __OBJC__
 
 #include "Log.hpp"
-#include "Platform.hpp"
+#include "Target.hpp"
 
 #import "OBJBridge.h"
 
