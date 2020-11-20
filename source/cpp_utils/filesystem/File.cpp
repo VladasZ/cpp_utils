@@ -12,7 +12,7 @@
 
 #include "Log.hpp"
 #include "File.hpp"
-#include "Platform.hpp"
+#include "Target.hpp"
 #include "WindowsInclude.hpp"
 #include "FilesystemInclude.hpp"
 
@@ -79,7 +79,6 @@ std::string File::full_path(const std::string& path) {
 	return "File::full_path is not supported anywhere yet. =(";
 #endif
 }
-
 
 void File::write(const std::string& path, const std::string& string) {
     std::ofstream outfile;

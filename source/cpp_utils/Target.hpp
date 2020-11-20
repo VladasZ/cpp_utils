@@ -1,5 +1,5 @@
 //
-//  Platform.hpp
+//  Target.hpp
 //  cpp_utils
 //
 //  Created by Vladas Zakrevskis on 11/09/2020.

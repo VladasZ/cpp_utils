@@ -10,8 +10,8 @@
 
 
 #ifdef _WIN32
-    #ifndef _CRT_SECURE_NO_WARNINGS
-    #define _CRT_SECURE_NO_WARNINGS
-#endif
-    #include <windows.h>
+	#ifndef _CRT_SECURE_NO_WARNINGS
+		#define _CRT_SECURE_NO_WARNINGS
+	#endif
+	#include <windows.h>
 #endif

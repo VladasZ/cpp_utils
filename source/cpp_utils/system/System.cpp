@@ -23,7 +23,7 @@
 
 #include "Log.hpp"
 #include "System.hpp"
-#include "Platform.hpp"
+#include "Target.hpp"
 #include "ExceptionCatch.hpp"
 
 using namespace cu;
