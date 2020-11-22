@@ -14,7 +14,7 @@
 
 void AndroidSystem::set_asset_manager(AAssetManager* manager) {
     if (manager == nullptr) {
-        throw std::runtime_error("Failed to set asset manager.");
+        Fatal("Failed to set asset manager. Manager is nullptr.");
     }
     asset_manager = manager;
 }

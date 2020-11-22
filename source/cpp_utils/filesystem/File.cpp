@@ -16,11 +16,20 @@
 #include "WindowsInclude.hpp"
 #include "FilesystemInclude.hpp"
 
+#ifdef ANDROID_BUILD
+#include "AndroidSystem.hpp"
+#endif
+
 using namespace cu;
 using namespace std;
 
 
 File::File(const string& path) : _path(path) {
+#ifdef ANDROID_BUILD
+    auto file_data = AndroidSystem::load_file(path);
+    _data = file_data.first;
+    _size = file_data.second;
+#else
     FILE* file = fopen(path.c_str(), "rb");
     if (file == nullptr) Fatal("Failed to open file: " + path);
     fseek(file, 0, SEEK_END);
@@ -29,6 +38,7 @@ File::File(const string& path) : _path(path) {
     _data = new char[_size];
     fread(_data, 1, _size, file);
     fclose(file);
+#endif
 }
 
 File::~File() {
@@ -49,6 +59,9 @@ string File::to_string() const {
 }
 
 string File::read(const string& path) {
+#ifdef ANDROID_BUILD
+    return AndroidSystem::load_file(path).first;
+#else
     ifstream stream(path.c_str(), ios::in);
     string result;
 
@@ -63,6 +76,7 @@ string File::read(const string& path) {
     }
 
     return result;
+#endif
 }
 
 bool File::exists(const std::string& path) {
