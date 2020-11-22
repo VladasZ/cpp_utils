@@ -13,6 +13,7 @@
 
 #include "File.hpp"
 #include "LogUtils.hpp"
+#include "AndroidSystem.hpp"
 
 
 namespace cu::log {
@@ -57,7 +58,11 @@ namespace cu::log {
 				settings.custom_output(message);
 			}
 			else {
+#ifdef ANDROID_BUILD
+			    AndroidSystem::log(message);
+#else
 				std::cout << message << std::flush;
+#endif
 			}
             if (settings.log_to_file) {
                 static bool first_call = true;

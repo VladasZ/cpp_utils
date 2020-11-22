@@ -8,6 +8,8 @@
 
 #ifdef ANDROID_BUILD
 
+#include <android/log.h>
+
 #include "Log.hpp"
 #include "AndroidSystem.hpp"
 #include "ExceptionCatch.hpp"
@@ -41,6 +43,10 @@ AndroidSystem::FileData AndroidSystem::load_file(const std::string& path) {
 
     AAsset_close(asset);
     return  { data, static_cast<unsigned>(size) };
+}
+
+void AndroidSystem::log(const std::string& message) {
+    __android_log_print(ANDROID_LOG_INFO, "cu::Log", "%s", message.c_str());
 }
 
 #endif

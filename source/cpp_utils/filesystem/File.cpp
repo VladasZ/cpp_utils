@@ -60,7 +60,8 @@ string File::to_string() const {
 
 string File::read(const string& path) {
 #ifdef ANDROID_BUILD
-    return AndroidSystem::load_file(path).first;
+    auto file_data = AndroidSystem::load_file(path);
+    return { file_data.first, file_data.second };
 #else
     ifstream stream(path.c_str(), ios::in);
     string result;

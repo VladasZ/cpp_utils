@@ -14,8 +14,6 @@
 
 #include <android/asset_manager.h>
 
-#include "File.hpp"
-
 class AndroidSystem {
 
 	static inline AAssetManager* asset_manager = nullptr;
@@ -27,6 +25,8 @@ public:
 	static void set_asset_manager(AAssetManager*);
 
 	static FileData load_file(const std::string& path);
+
+	static void log(const std::string&);
 
 };
 
