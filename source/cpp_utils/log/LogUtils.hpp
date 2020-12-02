@@ -14,20 +14,11 @@
 #include <iostream>
 #include <functional>
 
+#include "StringUtils.hpp"
 #include "MetaHelpers.hpp"
 
 
 namespace cu::log {
-
-    static std::string last_path_component(const std::string& path) {
-#ifdef _WIN32
-        static const char slash = '\\';
-#else
-        static const char slash = '/';
-#endif
-        auto pos = strrchr(path.c_str(), slash);
-        return pos ? pos + 1 : path;
-    }
 
     template <class T>
     static std::string to_string(const T& value) {
@@ -90,7 +81,7 @@ namespace cu::log {
     }
 
     static std::string location(const std::string& file, const std::string& func, int line, bool log_func = true) {
-        std::string clean_file = log::last_path_component(file);
+        std::string clean_file = String::last_path_component(file);
         if (clean_file.back() == 'm') {
             return func + " - " + to_string(line) + "] ";
         }

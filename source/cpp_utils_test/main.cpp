@@ -1,6 +1,8 @@
 
 #include "Log.hpp"
+#include "LineID.hpp"
 
+static constexpr auto kok = __FILE__;
 
 int main() {
 

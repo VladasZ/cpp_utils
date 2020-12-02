@@ -86,12 +86,10 @@ bool File::exists(const std::string& path) {
 }
 
 std::string File::full_path(const std::string& path) {
-#ifdef __MINGW32__
-    return "File::full_path is not supported in MinGW yet.";
-#elif IOS_BUILD
-    return "File::full_path is not supported in iOS yet.";
+#ifdef CU_USING_FILESYSTEM
+	return std::filesystem::canonical(path).u8string();
 #else
-	return "File::full_path is not supported anywhere yet. =(";
+	return "File::full_path is not supported on this platform yet.";
 #endif
 }
 

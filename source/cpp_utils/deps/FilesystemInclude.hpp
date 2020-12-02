@@ -12,6 +12,7 @@
 
     #if __has_include(<filesystem>)
         #include <filesystem>
+		#define CU_USING_FILESYSTEM
     #endif
 
 #endif

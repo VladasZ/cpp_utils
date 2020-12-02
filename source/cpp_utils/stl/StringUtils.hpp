@@ -54,4 +54,13 @@ namespace cu::String {
         return result + "]";
     }
 
+    static std::string last_path_component(const std::string& path) {
+#ifdef _WIN32
+        auto pos = strrchr(path.c_str(), '\\');
+#else
+        auto pos = strrchr(path.c_str(), '/');
+#endif
+        return pos ? pos + 1 : path;
+    }
+
 }
