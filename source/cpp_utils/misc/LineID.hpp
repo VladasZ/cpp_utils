@@ -10,35 +10,23 @@
 
 #include <string>
 #include <unordered_map>
+#include <frozen/string.h>
 
 #include "StringUtils.hpp"
 
 
 namespace cu {
 
-	class LineID {
+	class FunctionInfo {
 
 		static inline std::unordered_map<size_t, size_t> call_counter;
 
 	public:
 
-		using str = std::string_view;
+		using str = frozen::string;
 
-		constexpr LineID(str file, str func, int line) : file(file), func(func), line(line) {
+		constexpr FunctionInfo(str file, str func) : file(file), func(func) {
 
-		}
-
-		std::string location(bool log_func = true) const {
-			auto clean_file = this->clean_file();
-			if (clean_file.back() == 'm') {
-				return "[" + func_string() + " - " + std::to_string(line) + "] ";
-			}
-			if (log_func) {
-				return "[" + clean_file + "::" + func_string() + " - " + std::to_string(line) + "]";
-			}
-			else {
-				return "[" + clean_file + " - " + std::to_string(line) + "]";
-			}
 		}
 
 		void operator++(int) const {
@@ -49,10 +37,9 @@ namespace cu {
 			return call_counter[hash()];
 		}
 
-		std::size_t hash() const {
-			return std::hash<str>()(file) +
-				   std::hash<str>()(func) +
-			       line;
+		constexpr std::size_t hash() const {
+			return frozen::elsa<str>()(file) +
+				   frozen::elsa<str>()(func);
 		}
 
 	private:
@@ -73,10 +60,9 @@ namespace cu {
 
 		str file;
 		str func;
-		int line;
 
 	};
 
 }
 
-#define CU_LINE_ID cu::LineID(__FILE__, __func__, __LINE__)
+#define CU_FUN_ID cu::FunctionInfo(__FILE__, __func__)

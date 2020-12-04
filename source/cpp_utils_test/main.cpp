@@ -2,17 +2,15 @@
 #include "Log.hpp"
 #include "LineID.hpp"
 
+#define CU_CALL_COUNTER static constexpr auto id = CU_FUN_ID; id++; Log << id.call_count()
+
 void cooo() {
-    CU_LINE_ID++; Log << CU_LINE_ID.call_count();
+
+    CU_CALL_COUNTER;
+
 }
 
 int main() {
-
-    constexpr auto id = CU_LINE_ID;
-
-    CU_LINE_ID++; Log << CU_LINE_ID.call_count();
-
-    Log << id.location(false);
 
     for (int i = 0; i < 20; i++) {
         cooo();
