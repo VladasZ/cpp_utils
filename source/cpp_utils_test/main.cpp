@@ -2,13 +2,21 @@
 #include "Log.hpp"
 #include "LineID.hpp"
 
-static constexpr auto kok = __FILE__;
+void cooo() {
+    CU_LINE_ID++; Log << CU_LINE_ID.call_count();
+}
 
 int main() {
 
-    Log << "a" << "b";
+    constexpr auto id = CU_LINE_ID;
 
-    Logvar("Spesogon1");
+    CU_LINE_ID++; Log << CU_LINE_ID.call_count();
+
+    Log << id.location(false);
+
+    for (int i = 0; i < 20; i++) {
+        cooo();
+    }
 
 
     return 0;
