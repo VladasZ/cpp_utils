@@ -8,8 +8,11 @@
 
 #pragma once
 
+#include <ctime>
+#include <string>
 #include <chrono>
 #include <cstdint>
+
 
 namespace cu {
 
@@ -19,22 +22,27 @@ namespace cu {
     using minutes      = std::chrono::minutes;
     using hours        = std::chrono::hours;
 
-    template<class T>
     class Time {
+
+		static inline uint64_t prev_interval = 1;
 
     public:
 
         static inline uint64_t now() {
-            return std::chrono::duration_cast<T>(std::chrono::system_clock::now().time_since_epoch()).count();
+            return std::chrono::duration_cast<nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         }
 
         static inline uint64_t interval() {
-            static uint64_t prev_interval = 1;
             auto result = now() - prev_interval;
             prev_interval = now();
             if (result == 0) return 1;
             return result;
         }
+
+		static inline std::string date_time() {
+			auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+			return std::ctime(&time);
+		}
 
     };
 

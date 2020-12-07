@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 
+#include "Time.hpp"
 #include "File.hpp"
 #include "LogUtils.hpp"
 #include "AndroidSystem.hpp"
@@ -19,7 +20,8 @@
 namespace cu::log {
 
     struct Settings {
-        bool disabled = false;
+        bool disabled           = false;
+		bool log_time           = false;
         bool log_to_file        = false;
         bool log_function_names = false;
         std::string log_file_name = "cu_log.txt";
@@ -35,7 +37,11 @@ namespace cu::log {
         const Logger& start_log(const std::string& location,
                                 const std::string& message = "") const {
 			if (settings.disabled) return *this;
-            std::string result_message = "\n" + location + " ";
+			std::string result_message = "\n";
+			if (settings.log_time) {
+				result_message += Time::date_time() + " ";
+			}
+			result_message += location + " ";
             if (!message.empty()) {
                 result_message += message + " ";
             }
