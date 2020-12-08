@@ -31,7 +31,7 @@ namespace cu {
     private:
 
         static inline std::mutex _mutex;
-        static inline std::vector<Dispatch::Task> _tasks;
+        static inline std::vector<Task> _tasks;
 
     };
 
