@@ -10,8 +10,8 @@
 
 #ifdef __GNUG__
 
-#include <cstdlib>
 #include <memory>
+#include <cstdlib>
 #include <cxxabi.h>
 
 std::string cu::demangle(const std::string& name) {
