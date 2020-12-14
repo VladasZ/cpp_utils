@@ -12,11 +12,14 @@
 namespace cu {
 
     template <class To, class From>
-    static inline constexpr To force_convert(const From& from) {
+    static inline const To& cast(const From& from) {
         static_assert(sizeof(From) == sizeof(To));
-        To result{ };
-        memcpy(&result, &from, sizeof(To));
-        return result;
+        return reinterpret_cast<const To&>(from);
     }
 
+    template <class To, class From>
+    static inline const To& force_cast(const From& from) {
+        return reinterpret_cast<const To&>(from);
+    }
+    
 }
