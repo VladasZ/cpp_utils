@@ -96,18 +96,23 @@ namespace cu {
     using first_tuple_type = typename std::tuple_element_t<0, T>;
 
     template <int First, int Last, class Lambda>
-    constexpr void static_for([[maybe_unused]] const Lambda& f) {
+    constexpr void static_for_range([[maybe_unused]] const Lambda& f) {
         if constexpr (First < Last) {
             f(std::integral_constant<int, First> { });
-            static_for<First + 1, Last>(f);
+			static_for_range<First + 1, Last>(f);
         }
     }
+
+	template <int Last, class Lambda>
+	constexpr void static_for([[maybe_unused]] const Lambda& f) {
+		static_for_range<0, Last>(f);
+	}
 
     template <class Tuple, class Lambda>
     constexpr void iterate_tuple(Tuple& tup, const Lambda& f) {
         static_assert(is_tuple_v<Tuple>);
-        cu::static_for<0, std::tuple_size<Tuple>::value>([&](auto i) {
-            f(std::get<i.value>(tup));
+        cu::static_for<std::tuple_size<Tuple>::value>([&](auto i) {
+            f(std::get<i>(tup));
         });
     }
 

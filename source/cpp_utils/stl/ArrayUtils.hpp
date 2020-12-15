@@ -103,7 +103,7 @@ namespace cu::array {
             class Value = typename Array::value_type>
     constexpr inline bool static_exists(const Value& value) {
         bool result = false;
-        static_for<0, array.size()>([&] (const auto& index) {
+        static_for<array.size()>([&] (const auto& index) {
             if (value == array[index.value]) {
                 result = true;
             }
