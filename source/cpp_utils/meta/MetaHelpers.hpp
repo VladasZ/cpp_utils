@@ -30,8 +30,13 @@ namespace cu {
     template <class T> std::string class_name = demangle(typeid(T).name());
 #endif
 
-    template <class T, class U> constexpr bool is_same_v    = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
-    template <class T, class U> constexpr bool is_base_of_v = std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
+    template <class T, class U> constexpr bool is_same_v = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
+
+    template <class T, class U> constexpr bool is_base_of_v = 
+        std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value ||
+        std::is_base_of<cu::remove_all_t<U>, cu::remove_all_t<T>>::value;
+
+    template <class T, class U> constexpr bool is_related_v = is_base_of_v<T, U> || is_same_v<T, U>;
 
     template <class  > struct __is_optional                   : std::false_type { };
     template <class T> struct __is_optional<std::optional<T>> : std::true_type { };
@@ -68,6 +73,9 @@ namespace cu {
 
     template<class T> struct pointer_to_member_class;
     template<class Class, class Value> struct pointer_to_member_class<Value Class::*> { using type = Class; };
+
+    template <class T>
+    using pointer_to_member_class_t = typename pointer_to_member_class<T>::type;
 
     template<class T> struct pointer_to_member_value;
     template<class Class, class Value> struct pointer_to_member_value<Value Class::*> { using type = Value; };
@@ -113,6 +121,14 @@ namespace cu {
         static_assert(is_tuple_v<Tuple>);
         cu::static_for<std::tuple_size<Tuple>::value>([&](auto i) {
             f(std::get<i>(tup));
+        });
+    }
+
+    template <class Tuple, class Lambda>
+    constexpr void indexed_iterate_tuple(Tuple& tup, const Lambda& f) {
+        static_assert(is_tuple_v<Tuple>);
+        cu::static_for<std::tuple_size<Tuple>::value>([&](auto i) {
+            f(i, std::get<i>(tup));
         });
     }
 
