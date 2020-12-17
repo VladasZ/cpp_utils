@@ -14,10 +14,6 @@
 #include <functional>
 #include <type_traits>
 
-#include "Log.hpp"
-#include "System.hpp"
-#include "MetaHelpers.hpp"
-
 
 namespace cu::array {
 
@@ -47,19 +43,6 @@ namespace cu::array {
         for (const auto& val : array) {
             std::cout << val.to_string() << std::endl;
         }
-    }
-
-    template <class Array>
-    inline constexpr auto static_size = std::tuple_size<Array>::value;
-
-    template <class TargetArray, class Array>
-    inline auto convert(const Array& array) {
-        using ArrayValue = typename Array::value_type;
-        using TargetValue = typename TargetArray::value_type;
-
-        const auto target_array_size = array.size() * (sizeof(ArrayValue) / sizeof(TargetValue));
-        auto data = reinterpret_cast<const TargetValue*>(array.data());
-        return TargetArray { data, data + target_array_size };
     }
 
     template <class Array, class Value = typename Array::value_type>
@@ -98,19 +81,6 @@ namespace cu::array {
         auto end() { return _arr.rend(); }
     };
 
-    template <auto& array,
-            class Array = cu::remove_all_t<decltype(array)>,
-            class Value = typename Array::value_type>
-    constexpr inline bool static_exists(const Value& value) {
-        bool result = false;
-        static_for<array.size()>([&] (const auto& index) {
-            if (value == array[index.value]) {
-                result = true;
-            }
-        });
-        return result;
-    }
-
     template <class A, class B>
     constexpr inline void append(A& a, const B& b) {
         a.insert(std::end(a), std::begin(b), std::end(b));
@@ -124,6 +94,11 @@ namespace cu::array {
         std::transform(array.begin(), array.end(), array.result(), transform);
         return result;
     }
+
+	template <class Array>
+	constexpr inline auto summ(const Array& array) {
+		return std::accumulate(array.begin(), array.end(), 0.0f);
+	}
 
 }
 

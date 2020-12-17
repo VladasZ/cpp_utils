@@ -46,7 +46,7 @@ namespace cu {
 		}
 
 		float convert_back(float value) const {
-			return value / _target_max;
+			return (value - _target_min) / _converted_range;
 		}
 
 		float min() const { return _min; }
