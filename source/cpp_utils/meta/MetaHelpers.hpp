@@ -96,9 +96,9 @@ namespace cu {
 
     //MARK: - Tuple tools
 
-    template <class     > struct __is_tuple                   : std::false_type { };
-    template <class ...T> struct __is_tuple<std::tuple<T...>> : std::true_type  { };
-    template <class T> constexpr bool is_tuple_v = __is_tuple<remove_all_t<T>>::value;
+    template <class     > struct is_tuple                   : std::false_type { };
+    template <class ...T> struct is_tuple<std::tuple<T...>> : std::true_type  { };
+    template <class T> constexpr bool is_tuple_v = is_tuple<remove_all_t<T>>::value;
 
     template <class T>
     using first_tuple_type = typename std::tuple_element_t<0, T>;

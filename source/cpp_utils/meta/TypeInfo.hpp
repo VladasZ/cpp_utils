@@ -12,12 +12,11 @@
 
 #include "MetaHelpers.hpp"
 
+
 namespace cu {
 
     template <class T>
-    class TypeInfo {
-
-    public:
+    struct TypeInfo {
 
         static constexpr auto is_pointer = std::is_pointer_v<T>;
 
@@ -41,6 +40,10 @@ namespace cu {
         static constexpr bool is_map_type      = is_std_map;
         static constexpr bool is_embedded_type = is_base_type || is_array_type || is_map_type;
         static constexpr bool is_custom_type   = !is_embedded_type && !is_enum;
+
+        static std::string name() {
+            return class_name<Class>;
+        }
 
         static std::string to_string() {
             return std::string() +
