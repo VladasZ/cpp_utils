@@ -11,8 +11,12 @@
 #ifndef __MINGW32__
 
     #if __has_include(<filesystem>)
-        #include <filesystem>
-		#define CU_USING_FILESYSTEM
+        #include "Target.hpp"
+        #ifdef IOS_BUILD
+        #else
+            #include <filesystem>
+            #define CU_USING_FILESYSTEM
+        #endif
     #endif
 
 #endif

@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <vector>
+#include <numeric>
 #include <iostream>
 #include <functional>
 #include <type_traits>
@@ -32,7 +33,7 @@ namespace cu::array {
         if (array.empty()) return "[]";
         std::string result = "[";
         for (auto& val : array) {
-            result += cu::log::to_string((int)val) + " ";
+            result += std::to_string((int)val) + " ";
         }
         result.pop_back();
         return result + "]";
