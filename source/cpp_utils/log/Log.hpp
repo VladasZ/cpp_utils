@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <mutex>
 #include <string>
 #include <fstream>
 
@@ -58,6 +59,8 @@ namespace cu::log {
 
     private:
 
+		static inline std::once_flag once;
+
         static void system_log(const std::string& message) {
 			if (settings.disabled) return;
 			if (settings.custom_output) {
@@ -71,11 +74,9 @@ namespace cu::log {
 #endif
 			}
             if (settings.log_to_file) {
-                static bool first_call = true;
-                if (first_call) {
-                    first_call = false;
+				std::call_once(once, [&] {
 					File::remove(settings.log_file_name);
-                }
+				});
                 File::append(settings.log_file_name, message);
             }
         }
