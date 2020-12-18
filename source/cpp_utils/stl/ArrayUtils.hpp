@@ -68,6 +68,11 @@ namespace cu::array {
         }
     }
 
+    template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
+    inline const Value& where(Array& array, Predicate predicate) {
+        return *std::find_if(array.begin(), array.end(), predicate);
+    }
+
     template <class Array, class Value = typename Array::value_type>
     constexpr inline bool contains(const Array& array, const Value& value) {
         return std::find(array.begin(), array.end(), value) != array.end();
