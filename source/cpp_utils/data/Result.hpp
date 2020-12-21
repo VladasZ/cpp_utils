@@ -34,7 +34,7 @@ namespace cu {
         constexpr bool errored() const { return !_found; }
 
         constexpr const T& object() const {
-            if (not_found()) Fatal("Conversion of not found result of type: " + cu::class_name<T>);
+            if (not_found()) Fatal("Conversion of not found result of type: " + cu::class_name<T>());
             return _object;
         }
 

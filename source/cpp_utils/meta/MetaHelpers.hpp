@@ -24,11 +24,7 @@ namespace cu {
 
     template <class T> using remove_all_t = std::remove_cv_t<std::remove_reference_t<std::remove_pointer_t<T>>>;
 
-#ifdef MICROCONTROLLER_BUILD
-    template <class T> std::string class_name = "Not supported on MC. sizeof: " + std::to_string(sizeof(T));
-#else
-    template <class T> std::string class_name = demangle(typeid(T).name());
-#endif
+    template <class T> std::string class_name() { return demangle(typeid(T).name()); };
 
     template <class T, class U> constexpr bool is_same_v = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
 

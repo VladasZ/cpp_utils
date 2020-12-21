@@ -44,6 +44,8 @@ namespace cu::String {
 
     std::string all_chars();
 
+    std::string only_letters(const std::string&);
+
     template<class T>
     static std::string from_container(const T& container) {
         if (container.empty()) return "[]";

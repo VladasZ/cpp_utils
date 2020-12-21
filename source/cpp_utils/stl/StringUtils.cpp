@@ -130,3 +130,12 @@ string String::all_chars() {
     }
     return result;
 }
+
+string String::only_letters(const string& str) {
+    string result;
+    for (auto ch : str) {
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+            result.push_back(ch);
+    }
+    return result;
+}
