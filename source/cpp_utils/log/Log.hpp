@@ -25,8 +25,15 @@ namespace cu::log {
 		bool log_time           = false;
         bool log_to_file        = false;
         bool log_function_names = false;
+        bool temp_disabled      = false;
         std::string log_file_name = "cu_log.txt";
         std::function<void(const std::string&)> custom_output = nullptr;
+    };
+
+    struct Off {
+        bool val;
+        Off(bool val) : val(val) { }
+        operator bool() const { return val; }
     };
 
     inline Settings settings;
@@ -38,6 +45,7 @@ namespace cu::log {
         const Logger& start_log(const std::string& location,
                                 const std::string& message = "") const {
 			if (settings.disabled) return *this;
+            settings.temp_disabled = false;
 			std::string result_message = "\n";
 			if (settings.log_time) {
 				result_message += Time::date_time() + " ";
@@ -51,9 +59,14 @@ namespace cu::log {
         }
 
         template <class T>
-        const Logger& log(const T& message) const {
+        const Logger& log(const T& val) const {
 			if (settings.disabled) return *this;
-            system_log(log::to_string(message) + " ");
+            if constexpr (std::is_same_v<T, Off>) {
+                settings.temp_disabled = val;
+            }
+            else {
+                system_log(log::to_string(val) + " ");
+            }
             return *this;
         }
 
@@ -62,7 +75,7 @@ namespace cu::log {
 		static inline std::once_flag once;
 
         static void system_log(const std::string& message) {
-			if (settings.disabled) return;
+			if (settings.disabled || settings.temp_disabled) return;
 			if (settings.custom_output) {
 				settings.custom_output(message);
 			}
