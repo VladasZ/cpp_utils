@@ -47,14 +47,14 @@ namespace cu {
 
         static std::string to_string() {
             return std::string() +
-                   ", is base char: "             + (is_char                  ? "true" : "false") + "\n" +
-                   ", is is c string: "           + (is_c_string              ? "true" : "false") + "\n" +
-                   ", is base type: "             + (is_base_type             ? "true" : "false") + "\n" +
-                   ", is embedded type: "         + (is_embedded_type         ? "true" : "false") + "\n" +
-                   ", is enum type: "             + (is_enum                  ? "true" : "false") + "\n" +
-                   ", is custom type: "           + (is_custom_type           ? "true" : "false") + "\n" +
-                   ", is pointer: "               + (is_pointer               ? "true" : "false") + "\n" +
-                   ", is array: "                 + (is_array_type            ? "true" : "false");
+                   ", is base char: "     + (is_char          ? "true" : "false") + "\n" +
+                   ", is is c string: "   + (is_c_string      ? "true" : "false") + "\n" +
+                   ", is base type: "     + (is_base_type     ? "true" : "false") + "\n" +
+                   ", is embedded type: " + (is_embedded_type ? "true" : "false") + "\n" +
+                   ", is enum type: "     + (is_enum          ? "true" : "false") + "\n" +
+                   ", is custom type: "   + (is_custom_type   ? "true" : "false") + "\n" +
+                   ", is pointer: "       + (is_pointer       ? "true" : "false") + "\n" +
+                   ", is array: "         + (is_array_type    ? "true" : "false");
         }
 
     };
