@@ -2,15 +2,6 @@
 #include <memory>
 
 #include "Log.hpp"
-#include "LineID.hpp"
-
-#define CU_CALL_COUNTER static constexpr auto id = CU_FUN_ID; id++; Log << id.call_count()
-
-void cooo() {
-
-    CU_CALL_COUNTER;
-
-}
 
 class ITest {
 public:
