@@ -98,7 +98,7 @@ Path System::pwd() {
     chdir("/path/to/change/directory/to");
     getcwd(cwd, sizeof(cwd));
     printf("Current working dir: %s\n", cwd);
-    return Path{ cwd };
+    return Path { cwd };
 #endif
 }
 

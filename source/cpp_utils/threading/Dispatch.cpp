@@ -8,6 +8,7 @@
 
 #include <thread>
 
+#include "System.hpp"
 #include "Dispatch.hpp"
 
 using namespace cu;
@@ -44,4 +45,13 @@ void Dispatch::execute_tasks() {
         task();
     }
     _tasks.clear();
+}
+
+void Dispatch::each(float delay, Task task) {
+	thread([=] {
+	    while (true) {
+            task();
+            System::sleep(delay);
+	    }
+	}).detach();
 }

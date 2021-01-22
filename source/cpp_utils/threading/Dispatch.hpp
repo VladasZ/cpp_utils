@@ -28,6 +28,8 @@ namespace cu {
 
         static void execute_tasks();
 
+        static void each(float delay, Task);
+
     private:
 
         static inline std::mutex _mutex;

@@ -22,11 +22,11 @@ namespace cu {
 
     public:
 
-        static void sleep(double interval) {
+        static void sleep(float interval) {
 #ifdef ARDUINO
-            delay(1000.0 * interval);
+            delay(1000 * interval);
 #elif USE_FULL_LL_DRIVER
-            LL_mDelay(1000.0 * interval);
+            LL_mDelay(1000 * interval);
 #else
             std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));
 #endif
