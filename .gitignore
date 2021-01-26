@@ -1,6 +1,6 @@
 *~
 /build
-/dep_build
+/dep_build*
 .DS_Store
 *.d
 *.o
