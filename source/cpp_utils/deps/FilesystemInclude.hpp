@@ -8,9 +8,13 @@
 
 #pragma once
 
+#include "Target.hpp"
+
 #ifndef __MINGW32__
 
-    #if __has_include(<filesystem>)
+    #ifdef ANDROID_BUILD
+
+    #elif __has_include(<filesystem>)
         #include "Target.hpp"
         #ifdef IOS_BUILD
         #else
