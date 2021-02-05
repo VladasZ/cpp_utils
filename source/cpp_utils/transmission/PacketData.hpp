@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "DataUtils.hpp"
 #include "NonCopyable.hpp"
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
-
 
 namespace cu {
 
