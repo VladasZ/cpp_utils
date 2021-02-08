@@ -33,7 +33,7 @@ using namespace std;
 void System::alert(const std::string& message) {
 #ifdef _WIN32
     MessageBox(0, message.c_str(), "System alert.", MB_OK);
-#elif __APPLE__
+#elif USING_OBJC
     obj_c::show_alert(message);
 #else
     execute(string() + "zenity --info --text=\"" + message + "\"");

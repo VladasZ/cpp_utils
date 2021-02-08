@@ -13,9 +13,13 @@
 #include <fstream>
 
 #include "Time.hpp"
-#include "File.hpp"
+#include "Target.hpp"
 #include "LogUtils.hpp"
 #include "AndroidSystem.hpp"
+
+#ifndef EMBEDDED
+#include "File.hpp"
+#endif
 
 
 namespace cu::log {
@@ -72,7 +76,9 @@ namespace cu::log {
 
     private:
 
-		static inline std::once_flag once;
+#ifndef EMBEDDED
+        static inline std::once_flag once;
+#endif
 
         static void system_log(const std::string& message) {
 			if (settings.disabled || settings.temp_disabled) return;
@@ -86,12 +92,14 @@ namespace cu::log {
 				std::cout << message << std::flush;
 #endif
 			}
+#ifndef EMBEDDED
             if (settings.log_to_file) {
 				std::call_once(once, [&] {
 					File::remove(settings.log_file_name);
 				});
                 File::append(settings.log_file_name, message);
             }
+#endif
         }
 
     };

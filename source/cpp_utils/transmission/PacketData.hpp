@@ -13,7 +13,6 @@
 #include "PacketHeader.hpp"
 #include "PacketFooter.hpp"
 
-
 namespace cu {
 
     class PacketData : NonCopyable {
