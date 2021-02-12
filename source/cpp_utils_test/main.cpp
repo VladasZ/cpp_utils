@@ -3,51 +3,39 @@
 
 #include "Log.hpp"
 
-class ITest {
-public:
-    virtual std::string info() = 0;
+class Foo {
+private:
+    void test() {
+        Log << "Hello";
+    }
 };
 
+template <class T, auto member_pointer>
+struct RobMember {
 
-class ATest : public ITest {
-public:
-    std::string info() override { return "A test"; }
-};
-
-class BTest : public ITest {
-public:
-    std::string info() override { return "B test"; }
-};
-
-class IntHolder {
-
-    using Ptr = std::shared_ptr<ITest>;
+    using Member = typename T::FunctionMember;
 
 private:
-
-    Ptr ptr;
-
-public:
-
-    IntHolder() {
-        ptr = std::shared_ptr<ITest>(new ATest);
+    friend Member GetPrivateMember(T) {
+        return member_pointer;
     }
-
-    Ptr value() {
-        return ptr;
-    }
-
 };
+
+struct Rob {
+    using FunctionMember = void (Foo::*)();
+private:
+    friend FunctionMember GetPrivateMember(Rob);
+};
+
+template struct RobMember<Rob, &Foo::test>;
+
 
 int main() {
 
-    IntHolder spes;
-
-    //*spes.value() = BTest();
-
-    new (spes.value().get()) BTest();
-
-    Log << spes.value()->info();
+    Foo foo;
+    GetPrivateMember(Rob());
+    auto member = GetPrivateMember(Rob());
+    (foo.*member)();
 
     return 0;
 
