@@ -68,7 +68,11 @@ const Path& System::home() {
     static const Path result = [] {
 #ifdef _WIN32
 
-        auto _home = std::getenv("HOME");
+        auto _home = std::getenv("HOME");		
+
+		if (!_home) {
+			_home = std::getenv("HOMEPATH");
+		}
 
         if (_home) {
             return Path { _home };
