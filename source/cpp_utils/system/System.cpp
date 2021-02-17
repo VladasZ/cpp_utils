@@ -71,7 +71,7 @@ const Path& System::home() {
         auto _home = std::getenv("HOME");		
 
 		if (!_home) {
-			_home = std::getenv("HOMEPATH");
+			_home = std::getenv("USERPROFILE");
 		}
 
         if (_home) {
