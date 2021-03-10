@@ -36,6 +36,11 @@ namespace cu {
 
     template <class T, class U> constexpr bool is_related_v = is_base_of_v<T, U> || is_same_v<T, U>;
 
+    template <class T> constexpr bool is_int = std::is_same_v<T, int>;
+
+    template <class Class, class Value>
+    using add_const = std::conditional_t<std::is_const_v<Class>, const Value, Value>;
+
     template <class  > struct __is_optional                   : std::false_type { };
     template <class T> struct __is_optional<std::optional<T>> : std::true_type { };
     template <class T> constexpr bool is_std_optional_v = __is_optional<remove_all_t<T>>::value;
