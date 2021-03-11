@@ -70,10 +70,6 @@ namespace cu {
 
     //MARK: - Pointer to member tools
 
-    template <class           > struct __is_pointer_to_member         : std::false_type { };
-    template <class T, class U> struct __is_pointer_to_member<T U::*> : std::true_type  { };
-    template <class T> constexpr bool is_pointer_to_member_v = __is_pointer_to_member<remove_all_t<T>>::value;
-
     template<class T> struct pointer_to_member_class;
     template<class Class, class Value> struct pointer_to_member_class<Value Class::*> { using type = Class; };
 
@@ -84,17 +80,33 @@ namespace cu {
     template<class Class, class Value> struct pointer_to_member_value<Value Class::*> { using type = Value; };
 
 #ifdef __OBJC__
-    template <typename T> struct is_objc_object : std::integral_constant<bool, std::is_convertible_v<T, id> && !std::is_null_pointer_v<T>> { };
-    template <typename T> constexpr bool is_objc_object_v = is_objc_object<T>::value;
+    template <class T> struct is_objc_object : std::integral_constant<bool, std::is_convertible_v<T, id> && !std::is_null_pointer_v<T>> { };
+    template <class T> constexpr bool is_objc_object_v = is_objc_object<T>::value;
 #else
-    template <typename T> constexpr bool is_objc_object_v = false;
+    template <class T> constexpr bool is_objc_object_v = false;
 #endif
 
     template <class T>
     struct pointer_to_member_info {
-        static_assert(is_pointer_to_member_v<T>);
+
         using Class = typename pointer_to_member_class<T>::type;
-        using Value = typename pointer_to_member_value<T>::type;
+        using Member = typename pointer_to_member_value<T>::type;
+
+    private:
+
+        template<class U> static auto invoke_result(U*) -> decltype((std::declval<Class>().*std::declval<U>())());
+        template<class  > static auto invoke_result(...) -> void;
+
+        static_assert(std::is_member_pointer_v<T>);
+
+    public:
+
+        static constexpr bool is_method = std::is_member_function_pointer_v<T>;
+
+        using InvokeResult = decltype(pointer_to_member_info<T>::invoke_result<T>(nullptr));
+
+        using Value = std::conditional_t<is_method, InvokeResult, Member>;
+
     };
 
     //MARK: - Tuple tools
@@ -135,6 +147,8 @@ namespace cu {
         });
     }
 
+
+
     template<class Class>
     class has_to_string {
         template<class T> static auto check(T*) -> std::is_same<decltype(std::declval<const T>().to_string()), std::string>;
@@ -147,3 +161,5 @@ namespace cu {
     inline constexpr bool has_to_string_v = has_to_string<Class>::value;
 
 }
+
+#define REVEAL_TEMPLATE(type) using __aaaa = typename type::____NoType;

@@ -3,40 +3,15 @@
 
 #include "Log.hpp"
 
-class Foo {
-private:
-    void test() {
-        Log << "Hello";
-    }
-};
 
-template <class T, auto member_pointer>
-struct RobMember {
+template <int I> struct A {};
 
-    using Member = typename T::FunctionMember;
+char xxx(int);
+char xxx(float);
 
-private:
-    friend Member GetPrivateMember(T) {
-        return member_pointer;
-    }
-};
-
-struct Rob {
-    using FunctionMember = void (Foo::*)();
-private:
-    friend FunctionMember GetPrivateMember(Rob);
-};
-
-template struct RobMember<Rob, &Foo::test>;
-
+template <class T> A<sizeof(xxx((T)0))> f(T){}
 
 int main() {
-
-    Foo foo;
-    GetPrivateMember(Rob());
-    auto member = GetPrivateMember(Rob());
-    (foo.*member)();
-
+    f(1);
     return 0;
-
 }
