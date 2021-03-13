@@ -25,7 +25,7 @@ namespace cu::String {
 
     std::string from_bool(bool value);
 
-    bool contains(const std::string& string, const std::string& part);
+    bool contains(const std::string& string, const std::string& part, bool case_sensetive = true);
 
     std::string remove(const std::string& string, char symbol);
 

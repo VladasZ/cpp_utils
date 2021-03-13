@@ -12,6 +12,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include "Log.hpp"
 #include "StringUtils.hpp"
 
 using namespace cu;
@@ -41,7 +42,12 @@ string String::from_float(float val, int precision) {
 }
 
 string String::find_regexpr_match(const string& str, const string& query) {
-    return find_regexpr_matches(str, query).front();
+    auto matches = find_regexpr_matches(str, query);
+    if (matches.empty()) {
+        Log << "No match for:" << query << "in" << str;
+        return "";
+    }
+    return matches.front();
 }
 
 vector<string> String::find_regexpr_matches(const string& str, const string& query) {
@@ -64,10 +70,15 @@ string String::from_bool(bool value) {
     return value ? "true" : "false";
 }
 
-bool String::contains(const string& str, const string& part) {
-    string _part = to_lower(part);
-    string _str = to_lower(str);
-    return _str.find(_part) != string::npos;
+bool String::contains(const string& str, const string& part, bool case_sensetive) {
+    if (case_sensetive) {
+        return str.find(part) != string::npos;
+    }
+    else {
+        string _part = to_lower(part);
+        string _str = to_lower(str);
+        return _str.find(_part) != string::npos;
+    }
 }
 
 string String::remove(const string& str, char symbol) {
