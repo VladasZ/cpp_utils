@@ -122,3 +122,5 @@ inline const cu::log::Logger& operator<<(const cu::log::Logger& logger, const T&
 #define Logvar(variable) Log << VarString(variable)
 
 #define LogReturn(value) LogMessage("return: " + cu::log::to_string(value)); return value
+
+#define Separator Log << "=========================="

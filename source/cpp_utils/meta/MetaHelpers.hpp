@@ -25,7 +25,8 @@ namespace cu {
     template <class T> using remove_all_t = std::remove_cv_t<std::remove_reference_t<std::remove_pointer_t<T>>>;
 
 #ifndef EMBEDDED
-    template <class T> std::string class_name() { return demangle(typeid(T).name()); };
+    template <class T> std::string class_name() { return demangle(typeid(T).name()); }
+    template <class T> std::string class_name(const T& obj) { return class_name<T>(); }
 #endif
 
     template <class T, class U> constexpr bool is_same_v = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
