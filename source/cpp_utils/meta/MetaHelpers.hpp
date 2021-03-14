@@ -27,13 +27,15 @@ namespace cu {
 #ifndef EMBEDDED
     template <class T> std::string class_name() { return demangle(typeid(T).name()); }
     template <class T> std::string class_name(const T& obj) { return class_name<T>(); }
+
+#define CU_CLASS_NAME(type) class_name<type>()
 #endif
 
     template <class T, class U> constexpr bool is_same_v = std::is_same<cu::remove_all_t<T>, cu::remove_all_t<U>>::value;
 
-    template <class T, class U> constexpr bool is_base_of_v = 
-        std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value ||
-        std::is_base_of<cu::remove_all_t<U>, cu::remove_all_t<T>>::value;
+    template <class T, class U> constexpr bool is_base_of_v =
+            std::is_base_of<cu::remove_all_t<T>, cu::remove_all_t<U>>::value ||
+            std::is_base_of<cu::remove_all_t<U>, cu::remove_all_t<T>>::value;
 
     template <class T, class U> constexpr bool is_related_v = is_base_of_v<T, U> || is_same_v<T, U>;
 
@@ -108,6 +110,19 @@ namespace cu {
 
         using Value = std::conditional_t<is_method, InvokeResult, Member>;
 
+        static constexpr bool is_ref     = std::is_reference_v<Value>;
+        static constexpr bool is_const   = std::is_const_v<std::remove_reference_t<Value>>;
+        static constexpr bool is_pointer = std::is_pointer_v<Value>;
+        
+        static constexpr bool is_const_ref = std::is_pointer_v<Value>;
+
+        static std::string to_string() {
+            return std::string() + "\n" +
+                   "is_ref: "     + (is_ref     ? "true" : "false") + "\n" +
+                   "is_const: "   + (is_const   ? "true" : "false") + "\n" +
+                   "is_pointer: " + (is_pointer ? "true" : "false");
+        }
+
     };
 
     //MARK: - Tuple tools
@@ -123,14 +138,14 @@ namespace cu {
     constexpr void static_for_range([[maybe_unused]] const Lambda& f) {
         if constexpr (First < Last) {
             f(std::integral_constant<int, First> { });
-			static_for_range<First + 1, Last>(f);
+            static_for_range<First + 1, Last>(f);
         }
     }
 
-	template <int Last, class Lambda>
-	constexpr void static_for([[maybe_unused]] const Lambda& f) {
-		static_for_range<0, Last>(f);
-	}
+    template <int Last, class Lambda>
+    constexpr void static_for([[maybe_unused]] const Lambda& f) {
+        static_for_range<0, Last>(f);
+    }
 
     template <class Tuple, class Lambda>
     constexpr void iterate_tuple(Tuple& tup, const Lambda& f) {
@@ -147,8 +162,6 @@ namespace cu {
             f(i, std::get<i>(tup));
         });
     }
-
-
 
     template<class Class>
     class has_to_string {
