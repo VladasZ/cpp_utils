@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "Log.hpp"
+#include "TypeInfo.hpp"
 
 
 int main() {
