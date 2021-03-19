@@ -20,9 +20,9 @@ namespace cu {
 
 		using Type = T;
 
-		static constexpr bool is_ref = std::is_reference_v<Type>;
-		static constexpr bool is_const = std::is_const_v<std::remove_reference_t<Type>>;
-		static constexpr bool is_pointer = std::is_pointer_v<Type>;
+		static constexpr bool is_ref     = std::is_reference_v<Type>;
+		static constexpr bool is_const   = std::is_const_v<std::remove_reference_t<Type>>;
+		static constexpr bool is_pointer = std::is_pointer_v<std::remove_reference_t<Type>>;
 
 		static constexpr bool is_const_ref = is_const && is_ref;
 
