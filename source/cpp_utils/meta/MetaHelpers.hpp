@@ -148,7 +148,7 @@ namespace cu {
     }
 
     template <class Tuple, class Lambda>
-    constexpr void iterate_tuple(Tuple& tup, const Lambda& f) {
+    constexpr void iterate_tuple(const Tuple& tup, const Lambda& f) {
         static_assert(is_tuple_v<Tuple>);
         cu::static_for<std::tuple_size<Tuple>::value>([&](auto i) {
             f(std::get<i>(tup));
