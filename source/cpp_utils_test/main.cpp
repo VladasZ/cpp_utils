@@ -28,14 +28,12 @@ constexpr void iterate_tuple(const Tuple& tup, const Lambda& f) {
 
 using JSON = nlohmann::json;
 
-
 template <auto _pointer_to_member>
 struct Property {
     static constexpr auto pointer_to_member = _pointer_to_member;
     const std::string_view name;
     constexpr explicit Property(std::string_view name) : name(name) { }
     std::string name_string() const { return std::string(name); }
-
     template<class Target, class T>
     static constexpr auto get_value(const T* pointer) {
         return static_cast<const Target*>(pointer)->*pointer_to_member;
@@ -54,8 +52,11 @@ public:
     static constexpr auto all_properties() { return std::make_tuple(); }
 };
 
+struct is_mappable_base { };
+template <class T> constexpr bool is_mappable_v = std::is_base_of_v<is_mappable_base, T>;
+
 template <class T, class Base = Empty>
-struct Mappable : public Base {
+struct Mappable : public Base, is_mappable_base {
 
     template <class Action>
     constexpr static void iterate_properties(Action action) {
@@ -70,7 +71,13 @@ struct Mappable : public Base {
 
     void print_values() const {
         iterate_properties([this](auto property) {
-           std::cout << property.name_string() << " : " << property.template get_value<T>(this) << std::endl;
+            auto value = property.template get_value<T>(this);
+            if constexpr (is_mappable_v<decltype(value)>) {
+                value.print_values();
+            }
+            else {
+                std::cout << property.name_string() << " : " << property.template get_value<T>(this) << std::endl;
+            }
         });
     }
 
@@ -79,17 +86,26 @@ struct Mappable : public Base {
     };
 };
 
+struct is_json_mappable_base { };
+template <class T> constexpr bool is_json_mappable_v = std::is_base_of_v<is_json_mappable_base, T>;
+
 template <class T, class Base = Empty>
-struct JSONMappable : public Mappable<T, Base> {
+struct JSONMappable : public Mappable<T, Base>, is_json_mappable_base {
 
     using Map = Mappable<T, Base>;
 
-    std::string to_json() const {
+    JSON to_json() const {
         JSON json;
         Map::iterate_properties([&, this](auto property) {
-            json[property.name_string()] = property.template get_value<T>(this);
+            auto value = property.template get_value<T>(this);
+            if constexpr (is_json_mappable_v<decltype(value)>) {
+                json[property.name_string()] = value.to_json();
+            }
+            else {
+                json[property.name_string()] = value;
+            }
         });
-        return json.dump(4);
+        return json;
     }
 
     static T from_json(const std::string str) {
@@ -98,7 +114,12 @@ struct JSONMappable : public Mappable<T, Base> {
         Map::iterate_properties([&](auto property) {
             auto& value = property.template get_reference<T>(&result);
             using Value = std::remove_reference_t<decltype(value)>;
-            value = json[property.name_string()].template get<Value>();
+            if constexpr (is_json_mappable_v<Value>) {
+                value = Value::from_json(json[property.name_string()].dump());
+            }
+            else {
+                value = json[property.name_string()].template get<Value>();
+            }
         });
         return result;
     }
@@ -125,10 +146,20 @@ public:
     );
 };
 
+class Nested : public JSONMappable<Nested> {
+    int nested_int = 312321;
+public:
+    DECLARE_PROPERTIES(
+        MAKE_PROPERTY(Nested, nested_int)
+    );
+};
+
 class Child : public Mappable<Child, Base> {
+    Nested nested;
     int child_int = 200;
 public:
     DECLARE_PROPERTIES(
+        MAKE_PROPERTY(Child, nested),
         MAKE_PROPERTY(Child, child_int)
     );
 };
@@ -171,7 +202,8 @@ int main() {
     std::string json = "{\n"
                        "    \"base_int\": 100,\n"
                        "    \"child_int\": 200,\n"
-                       "    \"grand_child_int\": 300\n"
+                       "    \"grand_child_int\": 300,\n"
+                       "    \"nested\":{\"nested_int\":312321}"
                        "}";
 
     std::cout << sizeof(GrandChild) << std::endl;
