@@ -3,6 +3,8 @@
 #include <iostream>
 #include "nlohmann/json.hpp"
 
+using namespace std;
+
 #define DECLARE_PROPERTIES(...) static constexpr auto properties() { return std::make_tuple(__VA_ARGS__); }
 #define MAKE_PROPERTY(type, name) Property<&type::name>(#name)
 
@@ -65,7 +67,7 @@ struct Mappable : public Base, is_mappable_base {
 
     static void print_properties() {
         iterate_properties([](auto property) {
-            std::cout << property.name_string() << std::endl;
+            cout << property.name_string() << endl;
         });
     }
 
@@ -76,7 +78,7 @@ struct Mappable : public Base, is_mappable_base {
                 value.print_values();
             }
             else {
-                std::cout << property.name_string() << " : " << property.template get_value<T>(this) << std::endl;
+                cout << property.name_string() << " : " << property.template get_value<T>(this) << endl;
             }
         });
     }
@@ -96,7 +98,7 @@ struct JSONMappable : public Mappable<T, Base>, is_json_mappable_base {
 
     JSON to_json() const {
         JSON json;
-        Map::iterate_properties([&, this](auto property) {
+        Map::iterate_properties([&](auto property) {
             auto value = property.template get_value<T>(this);
             if constexpr (is_json_mappable_v<decltype(value)>) {
                 json[property.name_string()] = value.to_json();
@@ -142,7 +144,7 @@ class Base : public Mappable<Base> {
     int base_int = 100;
 public:
     DECLARE_PROPERTIES(
-        MAKE_PROPERTY(Base, base_int)
+            MAKE_PROPERTY(Base, base_int)
     );
 };
 
@@ -150,7 +152,7 @@ class Nested : public JSONMappable<Nested> {
     int nested_int = 312321;
 public:
     DECLARE_PROPERTIES(
-        MAKE_PROPERTY(Nested, nested_int)
+            MAKE_PROPERTY(Nested, nested_int)
     );
 };
 
@@ -159,8 +161,8 @@ class Child : public Mappable<Child, Base> {
     int child_int = 200;
 public:
     DECLARE_PROPERTIES(
-        MAKE_PROPERTY(Child, nested),
-        MAKE_PROPERTY(Child, child_int)
+            MAKE_PROPERTY(Child, nested),
+            MAKE_PROPERTY(Child, child_int)
     );
 };
 
@@ -168,7 +170,7 @@ class GrandChild : public JSONMappable<GrandChild, Child> {
     int grand_child_int = 300;
 public:
     DECLARE_PROPERTIES(
-        MAKE_PROPERTY(GrandChild, grand_child_int)
+            MAKE_PROPERTY(GrandChild, grand_child_int)
     );
 };
 
@@ -189,28 +191,27 @@ static_assert(Summ(5, 5).summ() == 10);
 
 int main() {
 
-
     GrandChild::print_properties();
 
+    cout << "=========" << endl;
 
     GrandChild a;
 
     a.print_values();
 
-    std::cout << a.to_json() << std::endl;
+    cout << "=========" << endl;
 
-    std::string json = "{\n"
-                       "    \"base_int\": 100,\n"
-                       "    \"child_int\": 200,\n"
-                       "    \"grand_child_int\": 300,\n"
-                       "    \"nested\":{\"nested_int\":312321}"
-                       "}";
+    cout << a.to_json() << endl;
 
-    std::cout << sizeof(GrandChild) << std::endl;
+    string json = "{\n"
+                  "    \"base_int\": 100,\n"
+                  "    \"child_int\": 200,\n"
+                  "    \"grand_child_int\": 300,\n"
+                  "    \"nested\":{\"nested_int\":312321}"
+                  "}";
 
     GrandChild parsed = GrandChild::from_json(json);
-
-    std::cout << parsed.to_json() << std::endl;
+    cout << parsed.to_json() << endl;
 
     return 0;
 }
