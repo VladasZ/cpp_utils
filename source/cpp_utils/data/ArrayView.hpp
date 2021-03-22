@@ -28,7 +28,7 @@ namespace cu {
         explicit ArrayView(const T* data, size_t size) : _data(data), _size(size) { }
 
         template<class Container, class Value = typename Container::value_type>
-        ArrayView(const Container& container)
+        constexpr ArrayView(const Container& container)
         : _data(reinterpret_cast<const T*>(container.data())),
           _size(container.size() * (sizeof(Value) / sizeof(T))) { }
 
