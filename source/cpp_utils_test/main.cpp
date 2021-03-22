@@ -34,7 +34,7 @@ template <auto _pointer_to_member>
 struct Property {
     static constexpr auto pointer_to_member = _pointer_to_member;
     const std::string_view name;
-    constexpr explicit Property(std::string_view name) : name(name) { }
+    constexpr explicit Property(const std::string_view& name) : name(name) { }
     std::string name_string() const { return std::string(name); }
     template<class Target, class T>
     static constexpr auto get_value(const T* pointer) {
@@ -45,7 +45,6 @@ struct Property {
     static constexpr auto& get_reference(T* pointer) {
         return static_cast<Target*>(pointer)->*pointer_to_member;
     }
-
 };
 
 class Empty {
@@ -140,6 +139,9 @@ struct Summable : public Mappable<T, Base> {
     }
 };
 
+template <class T, class Base>
+using TeslaMappable = JSONMappable<T, Base>;
+
 class Base : public Mappable<Base> {
     int base_int = 100;
 public:
@@ -166,7 +168,7 @@ public:
     );
 };
 
-class GrandChild : public JSONMappable<GrandChild, Child> {
+class GrandChild : public TeslaMappable<GrandChild, Child> {
     int grand_child_int = 300;
 public:
     DECLARE_PROPERTIES(
