@@ -8,7 +8,7 @@
 
 #pragma once
 
-#if USE_FULL_LL_DRIVER
+#ifdef USE_FULL_LL_DRIVER
 #include <stm32f7xx_ll_utils.h>
 #else
 #include <thread>
@@ -25,7 +25,7 @@ namespace cu {
         static void sleep(float interval) {
 #ifdef ARDUINO
             delay(1000 * interval);
-#elif USE_FULL_LL_DRIVER
+#elif defined(USE_FULL_LL_DRIVER)
             LL_mDelay(1000 * interval);
 #else
             std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint64_t>(interval * 1000)));

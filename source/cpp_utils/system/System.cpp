@@ -32,7 +32,7 @@ using namespace std;
 
 void System::alert(const std::string& message) {
 #ifdef _WIN32
-    MessageBox(0, message.c_str(), "System alert.", MB_OK);
+    MessageBox(nullptr, message.c_str(), "System alert.", MB_OK);
 #elif USING_OBJC
     obj_c::show_alert(message);
 #else
@@ -109,9 +109,9 @@ Path System::pwd() {
 std::vector<Path> System::ls(const std::string& path) {
 #ifdef _WIN32
     std::vector<Path> names;
-    string search_path = path + "/*.*";
+    const string search_path = path + "/*.*";
     WIN32_FIND_DATA fd;
-    HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
+    const HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
             if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -174,7 +174,7 @@ vector<string> System::get_com_ports() {
     for (auto i = 0; i < 255; i++) {
         std::string name = "COM" + std::to_string(i);
 
-        if (QueryDosDevice(name.c_str(), (LPSTR)path, 5000)) {
+        if (QueryDosDevice(name.c_str(), static_cast<LPSTR>(path), 5000)) {
             result.push_back(name);
         }
 
