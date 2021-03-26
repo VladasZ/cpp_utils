@@ -74,11 +74,7 @@ bool String::contains(const string& str, const string& part, bool case_sensetive
     if (case_sensetive) {
         return str.find(part) != string::npos;
     }
-    else {
-        string _part = to_lower(part);
-        string _str = to_lower(str);
-        return _str.find(_part) != string::npos;
-    }
+    return to_lower(str).find(to_lower(part)) != string::npos;
 }
 
 string String::remove(const string& str, char symbol) {

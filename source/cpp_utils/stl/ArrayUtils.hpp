@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <memory>
 #include <vector>
 #include <numeric>
 #include <iostream>
@@ -17,52 +16,52 @@
 #include <type_traits>
 
 
-namespace cu::array {
+namespace cu::container {
 
     template <class Array>
-    constexpr inline size_t bytes_size(const Array& array) {
+    constexpr size_t bytes_size(const Array& array) {
         return sizeof(typename Array::value_type) * array.size();
     }
 
     template <class Type, class Array>
-    constexpr inline size_t size_in(const Array& array) {
+    constexpr size_t size_in(const Array& array) {
         return bytes_size(array) / sizeof(Type);
     }
 
     template <class Array>
-    inline std::string to_string(const Array& array) {
+    std::string to_string(const Array& array) {
         if (array.empty()) return "[]";
         std::string result = "[";
         for (auto& val : array) {
-            result += std::to_string((int)val) + " ";
+            result += std::to_string(static_cast<int>(val)) + " ";
         }
         result.pop_back();
         return result + "]";
     }
 
     template <class Array>
-    inline void print(const Array& array) {
+    void print(const Array& array) {
         for (const auto& val : array) {
             std::cout << val.to_string() << std::endl;
         }
     }
 
     template <class Array, class Value = typename Array::value_type>
-    inline void remove(Array& array, const Value& value) {
+    void remove(Array& array, const Value& value) {
         auto position = std::find(array.begin(), array.end(), value);
         if (position == array.end()) return;
         array.erase(position);
     }
 
     template <class Array, class ArrayToRemove>
-    inline void remove_from(Array& array, const ArrayToRemove& objects_to_remove) {
+    void remove_from(Array& array, const ArrayToRemove& objects_to_remove) {
         for (const auto& object : objects_to_remove) {
             remove(array, object);
         }
     }
 
     template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
-    inline void remove_where(Array& array, Predicate predicate) {
+    void remove_where(Array& array, Predicate predicate) {
         auto position = std::find_if(array.begin(), array.end(), predicate);
         if (position != array.end()) {
             array.erase(position);
@@ -70,12 +69,12 @@ namespace cu::array {
     }
 
     template <class Array, class Value = typename Array::value_type, class Predicate = std::function<bool(const Value&)>>
-    inline const Value& where(Array& array, Predicate predicate) {
+    const Value& where(Array& array, Predicate predicate) {
         return *std::find_if(array.begin(), array.end(), predicate);
     }
 
     template <class Array, class Value = typename Array::value_type>
-    constexpr inline bool contains(const Array& array, const Value& value) {
+    constexpr bool contains(const Array& array, const Value& value) {
         return std::find(array.begin(), array.end(), value) != array.end();
     }
 
@@ -84,17 +83,17 @@ namespace cu::array {
         T& _arr;
     public:
         explicit backwards(T &arr) : _arr(arr) { }
-        auto begin() { return _arr.rbegin(); }
-        auto end() { return _arr.rend(); }
+        auto begin() const { return _arr.rbegin(); }
+        auto end() const { return _arr.rend(); }
     };
 
     template <class A, class B>
-    constexpr inline void append(A& a, const B& b) {
+    constexpr void append(A& a, const B& b) {
         a.insert(std::end(a), std::begin(b), std::end(b));
     }
 
     template <class Array, class Transform>
-    constexpr inline auto transform(const Array& array, const Transform& transform) {
+    constexpr auto transform(const Array& array, const Transform& transform) {
         using Value = typename Array::value_type;
         using TransformedValue = typename std::result_of<Transform>::type;
         std::vector<TransformedValue> result;
@@ -103,7 +102,7 @@ namespace cu::array {
     }
 
 	template <class Array>
-	constexpr inline auto summ(const Array& array) {
+	constexpr auto summ(const Array& array) {
 		return std::accumulate(array.begin(), array.end(), 0.0f);
 	}
 

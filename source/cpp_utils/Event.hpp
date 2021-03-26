@@ -47,7 +47,7 @@ namespace cu {
         }
 
         void unsubscribe(void* object) {
-            cu::array::remove_where(object_subscribers, [&](const ObjectSubscriber& subscriber) {
+            cu::container::remove_where(object_subscribers, [&](const ObjectSubscriber& subscriber) {
                 return subscriber.object == object;
             });
         }

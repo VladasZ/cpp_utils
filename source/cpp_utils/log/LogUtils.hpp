@@ -10,7 +10,6 @@
 
 #include <string>
 #include <sstream>
-#include <functional>
 
 #include "StringUtils.hpp"
 #include "MetaHelpers.hpp"
