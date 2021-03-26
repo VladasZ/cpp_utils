@@ -11,6 +11,7 @@
 #include <mutex>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #include "Time.hpp"
 #include "LogUtils.hpp"
