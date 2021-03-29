@@ -29,8 +29,6 @@ namespace cu {
             ObjectSubscriber(void* o, Callback c) : object(o), callback(c) { }
         };
 
-    private:
-
         static constexpr auto params_count = sizeof...(Params);
         static constexpr bool one_param = params_count == 1;
 

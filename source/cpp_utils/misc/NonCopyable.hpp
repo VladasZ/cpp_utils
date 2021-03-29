@@ -15,10 +15,9 @@ namespace cu {
     protected:
         NonCopyable() = default;
         ~NonCopyable() = default;
-
-    private:
-        NonCopyable(NonCopyable const&);
-        const NonCopyable& operator=(NonCopyable const&);
+    public:
+        NonCopyable(NonCopyable const&) = delete;
+        const NonCopyable& operator=(NonCopyable const&) = delete;
     };
 
 }
