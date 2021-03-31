@@ -8,7 +8,7 @@
 
 #pragma once
 
-#if __has_include(<SOIL2/SOIL2.h>)
+#if __has_include(<soil2/SOIL2.h>)
 #define USING_SOIL
-#include <SOIL2/SOIL2.h>
+#include <soil2/SOIL2.h>
 #endif
